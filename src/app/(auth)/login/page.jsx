@@ -5,9 +5,9 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
-  const [userData,setUserData]=useState({
-      email:"",
-      password:"",
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
   })
   const router = useRouter();
 
@@ -18,8 +18,8 @@ const LoginPage = () => {
     // TODO: call your login API here
   };
 
-  const handleOnChange=(e)=>{
-      const { name, value } = e.target;
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
     setUserData((prevData) => ({
       ...prevData,
       [name]: value
@@ -116,7 +116,7 @@ const LoginPage = () => {
           <p className="text-gray-600 text-sm">Don’t have an account?</p>
           <motion.button
             whileHover={{ scale: 1.05 }}
-            className="mt-2 text-indigo-600 font-medium hover:underline"
+            className="mt-2 text-indigo-600 font-medium hover:underline hover:text-indigo-700"
             onClick={() => router.push("/signup")}
           >
             Sign Up
