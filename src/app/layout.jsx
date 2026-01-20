@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "../../providers/queryProvider";
+import { Toaster } from "react-hot-toast";
 
 
 const geistSans = Geist({
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
         <QueryProvider>
           {children}
         </QueryProvider>
+        <Toaster/>
       </body>
     </html>
   );

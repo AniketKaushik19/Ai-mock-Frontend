@@ -1,130 +1,226 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { toast } from "react-hot-toast";
+import {
+  User,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  Loader2,
+  ArrowRight,
+} from "lucide-react";
 
-const LoginPage = () => {
-  const [userData,setUserData]=useState({
-      email:"",
-      password:"",
-  })
-  const router = useRouter();
+import { SignUpSchema, validateField } from "@/utils/validation";
+import { useSignup } from "@/hooks/user";
 
-  const handleSubmit = (e) => {
+export default function SignUpPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showOtp, setShowOtp] = useState(false);
 
-    e.preventDefault();
-    console.log("Login attempt:", { userData });
-    // TODO: call your login API here
-  };
+  const { mutateAsync: signupUser, isPending } = useSignup(setShowOtp);
 
-  const handleOnChange=(e)=>{
-      const { name, value } = e.target;
-    setUserData((prevData) => ({
-      ...prevData,
-      [name]: value
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+
+
+  
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
     }));
 
+    validateField(name, value,setErrors);
+
+    if (name === "confirmPassword") {
+      if (value !== formData.password) {
+        setErrors((prev) => ({
+          ...prev,
+          confirmPassword: "Passwords do not match.",
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          confirmPassword: undefined,
+        }));
+      }
+    }
+  };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+     if (isPending) return; 
+
+    const parsed = SignUpSchema.safeParse(formData);
+
+    if (!parsed.success) {
+      const fieldErrors = parsed.error.formErrors.fieldErrors;
+      setErrors({
+        fullName: fieldErrors.fullName?.[0],
+        email: fieldErrors.email?.[0],
+        password: fieldErrors.password?.[0],
+        confirmPassword: fieldErrors.confirmPassword?.[0],
+      });
+      toast.error("Please fix the highlighted errors.");
+      return;
+    }
+
+    try {
+      await signupUser({
+        name: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
+
+  
+
+  if (showOtp) {
+    return <h1 className="text-center mt-20">OTP Screen Here</h1>;
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen ">
+    <div className="min-h-screen flex items-center justify-center bg-brand-lightBlue px-4">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="bg-white shadow-2xl rounded-xl p-8 w-full max-w-md"
+        className="max-w-md w-full bg-white p-10 rounded-2xl shadow-xl"
       >
-        <motion.h2
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-2xl font-bold text-center text-indigo-700 mb-6"
-        >
-          Login
-        </motion.h2>
+        <h2 className="text-3xl font-bold text-center text-brand-blue">
+          AIMock<span className="text-brand-orange">.</span>
+        </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+         
+          <Input
+            icon={<User size={18} />}
+            name="fullName"
+            placeholder="Full Name"
+            value={formData.fullName}
+            onChange={handleChange}
+            error={errors.fullName}
+          />
+
           {/* Email */}
-          <div className="relative">
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={userData.email}
-              onChange={handleOnChange}
-              placeholder=" "
-              required
-              className="peer w-full px-3 pt-5 pb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            <label
-              htmlFor="email"
-              className="absolute left-3 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-sm peer-focus:text-indigo-600"
-            >
-              Email
-            </label>
-          </div>
+          <Input
+            icon={<Mail size={18} />}
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            error={errors.email}
+          />
 
           {/* Password */}
-          <div className="relative">
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={userData.password}
-              onChange={handleOnChange}
-              placeholder=" "
-              required
-              className="peer w-full px-3 pt-5 pb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            <label
-              htmlFor="password"
-              className="absolute left-3 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-sm peer-focus:text-indigo-600"
-            >
-              Password
-            </label>
-          </div>
+          <PasswordInput
+            label="Password"
+            show={showPassword}
+            toggle={() => setShowPassword(!showPassword)}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            error={errors.password}
+          />
 
-          {/* Forgot Password */}
-          <motion.button
-            type="button"
-            whileHover={{ scale: 1.05 }}
-            className="text-sm text-indigo-600 hover:underline"
-            onClick={() => router.push("/forget-password")}
-          >
-            Forgot Password?
-          </motion.button>
+          {/* Confirm Password */}
+          <PasswordInput
+            label="Confirm Password"
+            show={showConfirmPassword}
+            toggle={() =>
+              setShowConfirmPassword(!showConfirmPassword)
+            }
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            error={errors.confirmPassword}
+          />
 
-          {/* Submit Button */}
-          <motion.button
-            type="submit"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-300"
+          <button
+            disabled={isPending}
+            className="w-full py-3 bg-blue-500 text-white rounded-lg flex justify-center"
           >
-            Sign In
-          </motion.button>
+            {isPending ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <>
+                Create Account <ArrowRight className="ml-2" />
+              </>
+            )}
+          </button>
         </form>
 
-        {/* Sign Up Redirect */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="mt-6 text-center"
-        >
-          <p className="text-gray-600 text-sm">Don’t have an account?</p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            className="mt-2 text-indigo-600 font-medium hover:underline"
-            onClick={() => router.push("/signup")}
-          >
-            Sign Up
-          </motion.button>
-        </motion.div>
+        <p className="text-sm text-center mt-4">
+          Already have an account?{" "}
+          <Link href="/login" className="text-brand-blue font-semibold">
+            Sign in
+          </Link>
+        </p>
       </motion.div>
     </div>
   );
-};
+}
 
-export default LoginPage;
+
+
+function Input({ icon, error, ...props }) {
+  return (
+    <div>
+      <div className="flex items-center border rounded-lg px-3">
+        {icon}
+        <input {...props} className="w-full py-3 outline-none ml-2" />
+      </div>
+      {error && <p className="text-[10px] text-red-500">{error}</p>}
+    </div>
+  );
+}
+
+function PasswordInput({
+  label,
+  show,
+  toggle,
+  error,
+  ...props
+}) {
+  return (
+    <div>
+      <div className="flex items-center border rounded-lg px-3 relative">
+        <Lock size={18} />
+        <input
+          type={show ? "text" : "password"}
+          {...props}
+          className="w-full py-3 outline-none ml-2 pr-10"
+        />
+        <button
+          type="button"
+          onClick={toggle}
+          className="absolute right-3"
+        >
+          {show ? <EyeOff /> : <Eye />}
+        </button>
+      </div>
+      {error && <p className="text-[10px] text-red-500">{error}</p>}
+    </div>
+  );
+}
