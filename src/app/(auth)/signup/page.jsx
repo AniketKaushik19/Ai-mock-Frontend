@@ -35,7 +35,7 @@ export default function SignUpPage() {
 
 
 
-  
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,7 +45,7 @@ export default function SignUpPage() {
       [name]: value,
     }));
 
-    validateField(name, value,setErrors);
+    validateField(name, value, setErrors);
 
     if (name === "confirmPassword") {
       if (value !== formData.password) {
@@ -65,7 +65,7 @@ export default function SignUpPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-     if (isPending) return; 
+    if (isPending) return;
 
     const parsed = SignUpSchema.safeParse(formData);
 
@@ -88,14 +88,14 @@ export default function SignUpPage() {
         password: formData.password,
       });
 
-      
+
     } catch (err) {
       console.error(err);
-      toast.error("Something went wrong. Please try again.");
+
     }
   };
 
-  
+
 
   if (showOtp) {
     return <h1 className="text-center mt-20">OTP Screen Here</h1>;
@@ -113,7 +113,7 @@ export default function SignUpPage() {
         </h2>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-         
+
           <Input
             icon={<User size={18} />}
             name="fullName"
