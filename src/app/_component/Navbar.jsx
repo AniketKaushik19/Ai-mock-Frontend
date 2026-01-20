@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 import {
   Sheet,
   SheetContent,
@@ -64,7 +64,7 @@ const Navbar = () => {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-
+            
             <SheetContent side="right" className="w-64 bg-white">
               <div className="flex flex-col gap-6 mt-8">
                 {navItems.map((item, index) => (

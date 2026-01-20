@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query"
 import React from "react"
 
-let browserQueryClient:QueryClient | undefined=undefined;
+let browserQueryClient=undefined;
 
 
 
@@ -32,7 +32,7 @@ function getQueryClient(){
 }
 
 const queryClient=getQueryClient();
-export const QueryProvider=({children}:{children:React.ReactNode})=>{
+export const QueryProvider=({children})=>{
 
 return (
     <QueryClientProvider client={queryClient}>

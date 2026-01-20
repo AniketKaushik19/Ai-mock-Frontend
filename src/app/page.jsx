@@ -1,7 +1,7 @@
 "use client"
-import Navbar from '@/components/Navbar'
-import useAuthStore from '@/store/authStore'
-import { redirect } from 'next/navigation';
+import Navbar from '@/app/_component/Navbar'
+import useAuthStore from '../../store/authStore'
+
 import React from 'react'
 
 const page = () => {
