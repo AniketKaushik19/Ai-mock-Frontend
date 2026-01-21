@@ -1,0 +1,120 @@
+'use client';
+
+import { useState } from 'react';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
+export default function OnboardingPage() {
+    const [preview, setPreview] = useState(null);
+    const [formData, setFormData] = useState({
+        college: '',
+        year: '',
+        linkedin: '',
+    });
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setPreview(URL.createObjectURL(file));
+        }
+    };
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log({ ...formData, profileImage: preview });
+        // send to backend later
+    };
+
+    return (
+        <main className="min-h-screen bg-[#0B1C2D] flex items-center justify-center px-6">
+            <div className="w-full max-w-md bg-[#112A46] rounded-xl p-8 border border-white/10">
+
+                <h1 className="text-2xl font-bold text-white text-center mb-6">
+                    Complete Your Profile
+                </h1>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+
+                    {/* Profile Picture */}
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="relative w-28 h-28 rounded-full overflow-hidden border border-white/20">
+                            <Image
+                                src={preview || '/image/avatar.png'}
+                                alt="Profile Preview"
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
+
+                        <Label className="cursor-pointer text-[#CBD5E1] text-sm">
+                            Upload Profile Picture
+                            <Input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={handleImageUpload}
+                            />
+                        </Label>
+                    </div>
+
+                    {/* College Name */}
+                    <div>
+                        <Label className="text-white">College Name</Label>
+                        <Input
+                            name="college"
+                            placeholder="Enter your college name"
+                            value={formData.college}
+                            onChange={handleChange}
+                            className="mt-2 bg-[#0B1C2D] text-white border-white/10"
+                            required
+                        />
+                    </div>
+
+                    {/* Year of Passing */}
+                    <div>
+                        <Label className="text-white">Year of Passing</Label>
+                        <Input
+                            name="year"
+                            type="number"
+                            placeholder="2026"
+                            value={formData.year}
+                            onChange={handleChange}
+                            className="mt-2 bg-[#0B1C2D] text-white border-white/10"
+                            required
+                        />
+                    </div>
+
+                    {/* LinkedIn */}
+                    <div>
+                        <Label className="text-white">LinkedIn Profile</Label>
+                        <Input
+                            name="linkedin"
+                            placeholder="https://linkedin.com/in/username"
+                            value={formData.linkedin}
+                            onChange={handleChange}
+                            className="mt-2 bg-[#0B1C2D] text-white border-white/10"
+                        />
+                    </div>
+
+                    {/* Submit */}
+                    <Button
+                        type="submit"
+                        className="w-full bg-[#386bed] hover:bg-[#274fcf] text-white font-semibold"
+                    >
+                        Continue
+                    </Button>
+
+                </form>
+            </div>
+        </main>
+    );
+}
