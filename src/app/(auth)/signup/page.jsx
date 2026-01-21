@@ -5,6 +5,7 @@ import {validateField } from "@/utils/validation";
 import Signup from "./_component/Signup";
 import Otpverify from "./_component/Otpverify";
 
+
 export default function SignUpPage() {
   const [showOtp, setShowOtp] = useState(false);
   const [formData, setFormData] = useState({
@@ -46,7 +47,7 @@ export default function SignUpPage() {
   }
 
   return (
-   <Signup  handleChange={handleChange}
+    <Signup  handleChange={handleChange}
      formData={formData}
       errors={errors}
       setErrors={setErrors}
