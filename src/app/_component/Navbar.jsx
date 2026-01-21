@@ -13,12 +13,13 @@ import { Menu } from 'lucide-react';
 const navItems = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
+  { name: 'Login', path: '/login' },
 ];
 
 const Navbar = () => {
   return (
     <nav className="w-full border-b bg-[#0D2B5B]">
-     <div className="container mx-auto flex h-16 items-center justify-between px-0 my-0">
+      <div className="container mx-auto flex h-16 items-center justify-between px-0 my-0">
 
 
         {/* Logo */}
@@ -64,7 +65,7 @@ const Navbar = () => {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            
+
             <SheetContent side="right" className="w-64 bg-white">
               <div className="flex flex-col gap-6 mt-8">
                 {navItems.map((item, index) => (

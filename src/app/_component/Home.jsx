@@ -1,5 +1,5 @@
 'use client';
-
+import { motion } from 'motion/react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
@@ -52,16 +52,44 @@ export default function Home() {
                 </p>
 
                 <div className="mt-8 flex justify-center gap-4">
-                    <Button className="bg-[#386bed] text-white hover:bg-[#274fcf] font-semibold">
-                        Start Your Free Mock Interview
-                    </Button>
-
-                    <Button
-                        variant="outline"
-                        className="border-white text-gray-700 hover:bg-white hover:text-[#0B1C2D]"
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.5 }}
                     >
-                        How It Works
-                    </Button>
+                        <Button
+                            size="lg"
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-6 text-lg rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                        >
+                            Start Mock Interview
+                            <motion.span
+                                animate={{ x: [0, 5, 0] }}
+                                transition={{ duration: 1.5, repeat: Infinity }}
+                                className="ml-2"
+                            >
+                                →
+                            </motion.span>
+                        </Button>
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.5 }}
+                    >
+                        <Button
+                            size="lg"
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-6 text-lg rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                        >
+                            How It Works
+                            <motion.span
+                                animate={{ x: [0, 5, 0] }}
+                                transition={{ duration: 1.5, repeat: Infinity }}
+                                className="ml-2"
+                            >
+                                →
+                            </motion.span>
+                        </Button>
+                    </motion.div>
                 </div>
             </section>
 

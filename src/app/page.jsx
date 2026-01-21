@@ -3,9 +3,11 @@ import Navbar from '@/app/_component/Navbar'
 import useAuthStore from '../../store/authStore'
 
 import React from 'react'
+import Home from './_component/Home'
+import { Footer } from './_component/Footer'
 
 const page = () => {
-  const {isLoggedIn ,sAuthenticated}=useAuthStore();
+  const { isLoggedIn, sAuthenticated } = useAuthStore();
   // console.log(isLoggedIn());
   // if(!isLoggedIn()){
   //   redirect('/signup')
@@ -13,16 +15,8 @@ const page = () => {
   return (
     <div className="min-h-screen bg-[#0f0d1d]">
       <Navbar />
-
-      <main className="container mx-auto px-6 py-10">
-        <h1 className="text-2xl text-white font-bold">
-          Welcome to AI Mock Interview
-        </h1>
-
-        <p className="mt-2 text-white text-muted-foreground">
-          Practice interviews with AI and get instant feedback.
-        </p>
-      </main>
+      <Home />
+      <Footer />
     </div>
   )
 }
