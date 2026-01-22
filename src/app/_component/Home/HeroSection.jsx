@@ -1,12 +1,14 @@
 "use client";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
+  const router=useRouter();
   return (
     <section className="relative container mx-auto px-6 py-24 md:py-32 text-center">
       
-      {/* Background Glow Effect */}
+     
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#386bed] opacity-10 blur-[120px] rounded-full pointer-events-none" />
 
       <motion.div 
@@ -36,6 +38,9 @@ export default function HeroSection() {
           <Button
             size="lg"
             className="bg-[#386bed] hover:bg-[#2563EB] text-white px-8 py-6 text-lg rounded-full shadow-lg shadow-blue-900/20 transition-all hover:scale-105"
+            onClick={()=>router.push('/dashboard')}
+            
+            
           >
             Start Mock Interview
           </Button>

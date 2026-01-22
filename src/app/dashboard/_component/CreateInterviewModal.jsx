@@ -1,116 +1,148 @@
-'use client';
+"use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { useGenerateQuestion } from "@/hooks/interview";
+import Loading from "@/app/_component/Loading";
 
 export default function CreateInterviewModal({ open, setOpen }) {
   const [form, setForm] = useState({
-    role: '',
-    description: '',
-    experience: '',
+    jobRole: "",
+    jobDescription: "",
+    techStack: "",
+    yearsOfExperience: "",
+    numberOfQuestions: 5,
   });
 
-  // ✅ MISSING FUNCTION — FIX
+  const {mutateAsync,isPending}=useGenerateQuestion()
+
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ✅ MISSING FUNCTION — FIX
-  const handleSubmit = () => {
-    console.log('Interview Data:', form);
-
-    // TODO: Call backend API here
-
+  const handleSubmit = async() => {
+    console.log("Interview Data:", form);
+  await mutateAsync(form)
     setOpen(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="bg-[#112A46] text-white border border-white/10 max-w-lg">
+      <DialogContent className="bg-[#112A46] text-white border border-white/10 max-w-lg w-[95vw]">
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.25 }}
         >
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">
+            <DialogTitle className="text-lg font-semibold text-white">
               Tell us more about your job interviewing
             </DialogTitle>
-            <p className="text-sm text-[#CBD5E1]">
-              Add details about your job position/role, job description and years of experience
+            <p className="text-xs text-[#CBD5E1]">
+              Add details about your role and experience
             </p>
           </DialogHeader>
 
-          <div className="mt-6 space-y-5">
+          <div className="mt-4 space-y-4">
 
-            {/* Job Role */}
             <div>
-              <label className="text-sm text-[#CBD5E1]">
-                Job Role / Job Position
-              </label>
+              <label className="text-xs text-[#CBD5E1]">Job Role</label>
               <Input
-                name="role"
-                placeholder="Ex. Full Stack Developer"
-                value={form.role}
+                name="jobRole"
+                placeholder="Full Stack Developer"
+                value={form.jobRole}
                 onChange={handleChange}
-                className="mt-2 bg-[#0B1C2D] border-white/10 text-white"
+                className="mt-1 bg-[#0B1C2D] border-white/10 text-white h-9"
               />
             </div>
 
-            {/* Tech Stack */}
             <div>
-              <label className="text-sm text-[#CBD5E1]">
-                Job Description / Tech Stack (In Short)
+              <label className="text-xs text-[#CBD5E1] flex items-center gap-1">
+                Job Description
+                <span className="text-[10px] text-[#94A3B8]">(Optional)</span>
               </label>
               <Textarea
-                name="description"
-                placeholder="Ex. React, Angular, Node.js, MySQL etc"
-                value={form.description}
+                name="jobDescription"
+                placeholder="Optional"
+                value={form.jobDescription}
                 onChange={handleChange}
-                className="mt-2 bg-[#0B1C2D] border-white/10 text-white min-h-[90px]"
+                className="mt-1 bg-[#0B1C2D] border-white/10 text-white min-h-15"
               />
             </div>
 
-            {/* Experience */}
+            
             <div>
-              <label className="text-sm text-[#CBD5E1]">
-                Years of Experience
-              </label>
-              <Input
-                name="experience"
-                type="number"
-                placeholder="Ex. 5"
-                value={form.experience}
+              <label className="text-xs text-[#CBD5E1]">Tech Stack</label>
+              <Textarea
+                name="techStack"
+                placeholder="React, Node.js"
+                value={form.techStack}
                 onChange={handleChange}
-                className="mt-2 bg-[#0B1C2D] border-white/10 text-white"
+                className="mt-1 bg-[#0B1C2D] border-white/10 text-white min-h-15"
               />
             </div>
 
-            {/* Buttons */}
-            <div className="flex justify-end gap-4 pt-2">
+            
+            <div className="grid grid-cols-2 gap-3 items-center">
+              <div>
+                <label className="text-xs text-[#CBD5E1]">Experience</label>
+                <Input
+                  name="yearsOfExperience"
+                  type="number"
+                  placeholder="3"
+                  value={form.yearsOfExperience}
+                  onChange={handleChange}
+                  className="mt-1 bg-[#0B1C2D] border-white/10 text-white h-9"
+                />
+              </div>
+
+              <div className="relative flex flex-col justify-center">
+                <label className="text-xs text-[#CBD5E1] flex items-center gap-1">
+                  Questions
+                  <span className="text-[10px] text-[#4F7DFF] font-medium">
+                    (Subscription Only)
+                  </span>
+                </label>
+
+               <div className="flex flex-row relative">
+                 <Input
+                  value={5}
+                  disabled
+                  className="mt-1 bg-[#0B1C2D] border-white/10 text-white h-9 opacity-70 cursor-not-allowed"
+                />
+
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[#4F7DFF] text-sm">
+                  🔒
+                </span>
+               </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-3">
               <Button
                 variant="ghost"
                 onClick={() => setOpen(false)}
-                className="text-[#CBD5E1] hover:text-white"
+                className="text-[#CBD5E1] hover:text-white h-9"
               >
                 Cancel
               </Button>
-
               <Button
                 onClick={handleSubmit}
-                className="bg-[#4F7DFF] hover:bg-[#3A64E0] text-white px-6"
+                className="bg-[#4F7DFF] hover:bg-[#3A64E0] text-white px-5 h-9"
               >
-                Start Interview
+               {isPending ? <Loading/> : "Start Interview"}
               </Button>
             </div>
-
           </div>
         </motion.div>
       </DialogContent>
