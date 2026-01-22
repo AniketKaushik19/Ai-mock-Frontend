@@ -1,28 +1,34 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
 export default function InterviewCard({ item, variants }) {
+   
+    
     const router = useRouter();
 
     return (
-        <motion.div
-            variants={variants}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+        <div
+          
             className="bg-[#112A46] border border-white/10 rounded-xl p-5 shadow-md hover:shadow-xl hover:shadow-[#4F7DFF]/10 transition-all cursor-pointer flex flex-col"
         >
             <div className="flex-1">
                 <h3 className="font-bold text-[#4F7DFF] text-lg">
-                    {item.role}
+                    {item?.job_role}
                 </h3>
                 <p className="text-sm text-[#CBD5E1] mt-1">
-                    {item.experience}
+                    {item?.experience_level
+}
                 </p>
                 <p className="text-xs text-gray-400 mt-1">
-                    Created At: {item.createdAt}
+                    Created At:    {new Date(item?.created_at).toLocaleString('en-GB', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })}
                 </p>
             </div>
 
@@ -42,6 +48,6 @@ export default function InterviewCard({ item, variants }) {
                     Start Again
                 </Button>
             </div>
-        </motion.div>
+        </div>
     );
 }

@@ -3,33 +3,9 @@
 import { motion } from 'framer-motion';
 import InterviewCard from './_component/InterviewCard';
 import AddNewInterview from './_component/AddNewInterview';
+import { useGetAllInterviews } from '@/hooks/interview';
 
-const interviews = [
-    {
-        id: 1,
-        role: 'Full Stack Frontend Developer',
-        experience: '7 Years of Experience',
-        createdAt: '05-06-2024',
-    },
-    {
-        id: 2,
-        role: 'Backend Java Developer',
-        experience: '8 Years of Experience',
-        createdAt: '05-06-2024',
-    },
-    {
-        id: 3,
-        role: 'Full Stack Angular Developer',
-        experience: '3 Years of Experience',
-        createdAt: '04-06-2024',
-    },
-    {
-        id: 4,
-        role: 'Full Stack Developer',
-        experience: '4 Years of Experience',
-        createdAt: '03-06-2024',
-    },
-];
+
 
 export default function Dashboard() {
 
@@ -40,6 +16,17 @@ export default function Dashboard() {
             transition: { staggerChildren: 0.1 }
         }
     };
+
+      const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetAllInterviews();
+
+  console.log(data);
+  
 
     const itemVariants = {
         hidden: { y: 20, opacity: 0 },
@@ -68,10 +55,8 @@ export default function Dashboard() {
                 </p>
             </motion.div>
 
-            {/* Add New */}
-            <AddNewInterview />
+            <AddNewInterview/>
 
-            {/* Previous Interviews */}
             <motion.h2
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -88,10 +73,10 @@ export default function Dashboard() {
                 animate="visible"
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-                {interviews.map((item) => (
+                {data?.interviews?.map((data) => (
                     <InterviewCard
-                        key={item.id}
-                        item={item}
+                        key={data.id}
+                        item={data}
                         variants={itemVariants}
                     />
                 ))}
