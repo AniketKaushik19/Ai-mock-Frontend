@@ -6,9 +6,12 @@ import { ShieldCheck, ArrowRight, Loader2, RefreshCw } from "lucide-react";
 import toast from "react-hot-toast";
 import { useResendOtp, useVerifyOtp } from "@/hooks/user";
 import { email, set } from "zod";
+import useAuthStore from "../../../../../store/authStore";
+import { redirect } from "next/dist/server/api-utils";
 
 export default function OtpVerify({formData}) {
   const [otp, setOtp] = useState(Array(6).fill(""));
+  const {login}=useAuthStore();
   
   const [timer, setTimer] = useState(60);
    const { mutateAsync, isPending:loading } = useVerifyOtp();
@@ -49,7 +52,6 @@ export default function OtpVerify({formData}) {
       toast.error("Please enter a valid 6-digit OTP");
       return;
     }
-
     try {
 
       const data={ name: formData.fullName,
@@ -57,12 +59,15 @@ export default function OtpVerify({formData}) {
         password: formData.password,
        otp: otp.join('')
 
-      }
-      console.log(data);
-      
-    await mutateAsync(data);
+      }  
+    const result=await mutateAsync(data); 
+  
+    if(result?.user){
+      login(result.user);
+      redirect('/onboarding');
+    }
     
-      
+ 
     } catch {
       toast.error("Invalid OTP");
     } 

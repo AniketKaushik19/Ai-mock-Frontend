@@ -14,6 +14,7 @@ import {
 import { SignUpSchema } from "@/utils/validation";
 import { useSignup } from "@/hooks/user";
 import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 const Signup = ({ handleChange, formData, setShowOtp, errors, setErrors }) => {
   const { mutateAsync: signupUser, isPending } = useSignup(setShowOtp);
@@ -49,6 +50,8 @@ const Signup = ({ handleChange, formData, setShowOtp, errors, setErrors }) => {
     }
   };
 
+
+  
   return (
    
     <div className="min-h-screen relative flex items-center justify-center bg-[#0B0F19] overflow-hidden px-4 py-12">

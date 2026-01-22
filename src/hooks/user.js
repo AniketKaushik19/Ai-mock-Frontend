@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
-import { signup, login, OtpVerify, OtpResend } from "../libs/api"
+import { signup, login, OtpVerify, OtpResend, onboarding } from "../libs/api"
 import toast from "react-hot-toast";
+import { redirect } from "next/navigation";
 
 
 export const useSignup = (setShowOtp) => {
@@ -44,8 +45,8 @@ export const useVerifyOtp = () => {
   return useMutation({
     mutationFn: OtpVerify,
     onSuccess: (data) => {
-      toast.success("Otp Verify!!!")
-    
+      toast.success("Otp Verify!!!");
+      return data;
     },
     onError: (error) => {
       if (error?.response?.status === 429) {
@@ -62,8 +63,6 @@ export const useResendOtp = (setTimer) => {
     onSuccess: (data) => {
      toast.success("OTP resent to your email");
     setTimer(60);
-  
-
     },
     onError: (error) => {
         toast.error(error?.response?.data?.message || "Error while otp resending");
@@ -71,4 +70,17 @@ export const useResendOtp = (setTimer) => {
   });
 };
 
+
+export const useOnBoarding=()=>{
+   return useMutation({
+    mutationFn:onboarding,
+    onSuccess:(data)=>{
+       toast.success("Onboarding successfully")
+       console.log(data)
+    },
+    onError:(error)=>{
+      toast.error(error?.response?.data?.message || "Error while onboarding")
+    }
+   })
+}
 

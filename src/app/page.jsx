@@ -3,14 +3,12 @@ import HowItWorks from "./_component/Home/HowItWorks";
 import TargetAudience from "./_component/Home/TargetAudience";
 import FeaturesGrid from "./_component/Home/FeaturesGrid";
 import Testimonial from "./_component/Home/Testimonial";
-import Navbar from "./_component/Navbar";
-import { Button } from "@/components/ui/button";
+
 import  Footer  from "./_component/Footer";
 
 export default function Home() {
   return (
     <main className="bg-[#0B0F19] text-white overflow-hidden">
-      <Navbar />
 
       <HeroSection />
       

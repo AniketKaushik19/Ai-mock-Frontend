@@ -28,6 +28,14 @@ export const OtpResend=async(userData)=>{
    }
 }
 
+export const onboarding=async(onboardingData)=>{
+  try {
+     const res=await axiosInstance.post("/onboarding",onboardingData)
+     return res?.data
+  } catch (error) {
+     throw error
+  }
+}
 export const login = async (loginData) => {
   const res = await axiosInstance.post(`login`, loginData)
   return res.data;

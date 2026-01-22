@@ -7,32 +7,28 @@ const useAuthStore = create(
   persist(
     immer((set, get) => ({
       user: null,
-      token: null,
-      phone: null,
 
       login: (data) => {
         set((state) => {
           state.user = {
             name: data.name,
-            userId: data.userId,
+            userId: data.id,
             email: data.email,
-            phone: data.phone,
+            
           };
-          state.token = data.token;
+          
         });
       },
 
       logout: () => {
         set((state) => {
           state.user = null;
-          state.token = null;
-          state.phone = null;
         });
       },
 
       isLoggedIn: () => {
-        const { token } = get();
-        return !!token;
+        const { user } = get();
+        return !!user;
       },
 
     
@@ -45,7 +41,7 @@ const useAuthStore = create(
             });
           });
         }
-        return !!get().token;
+        return !!get().user;
       },
     })),
     {
