@@ -5,14 +5,17 @@ import { motion } from "framer-motion";
 import { ShieldCheck, ArrowRight, Loader2, RefreshCw } from "lucide-react";
 import toast from "react-hot-toast";
 import { useResendOtp, useVerifyOtp } from "@/hooks/user";
-import { email, set } from "zod";
+import { useRouter } from "next/navigation";
 import useAuthStore from "../../../../../store/authStore";
-import { redirect } from "next/dist/server/api-utils";
+
+
 
 export default function OtpVerify({formData}) {
+
+  const router=useRouter();
   const [otp, setOtp] = useState(Array(6).fill(""));
-  const {login}=useAuthStore();
   
+    const {login}=useAuthStore();
   const [timer, setTimer] = useState(60);
    const { mutateAsync, isPending:loading } = useVerifyOtp();
    const { mutateAsync:sendOtp, isPending:sendOtpLoading } = useResendOtp(setTimer);
@@ -60,13 +63,13 @@ export default function OtpVerify({formData}) {
        otp: otp.join('')
 
       }  
-    const result=await mutateAsync(data); 
-  
-    if(result?.user){
-      login(result.user);
-      redirect('/onboarding');
+
+      const result=await mutateAsync(data);
+    if (!result?.user) {
+      throw new Error("Invalid OTP");
     }
-    
+    login(result.user);
+    router.replace("/onboarding");
  
     } catch {
       toast.error("Invalid OTP");

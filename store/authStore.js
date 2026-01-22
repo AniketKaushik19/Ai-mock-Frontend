@@ -8,12 +8,13 @@ const useAuthStore = create(
     immer((set, get) => ({
       user: null,
 
-      login: (data) => {
+      login:(data) => {
         set((state) => {
           state.user = {
             name: data.name,
             userId: data.id,
             email: data.email,
+            isOnboarding:data.isBoarding
             
           };
           

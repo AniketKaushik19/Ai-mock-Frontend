@@ -44,19 +44,20 @@ export const uselogin = () => {
 export const useVerifyOtp = () => {
   return useMutation({
     mutationFn: OtpVerify,
-    onSuccess: (data) => {
-      toast.success("Otp Verify!!!");
-      return data;
+    onSuccess: () => {
+      toast.success("OTP verified successfully");
     },
     onError: (error) => {
       if (error?.response?.status === 429) {
-        toast.error("Too many login attempts. Please try again later.");
+        toast.error("Too many attempts. Try later.");
       } else {
-        toast.error(error?.response?.data?.message || "Error while otp verify");
+        toast.error(error?.response?.data?.message || "OTP verification failed");
       }
     }
   });
 };
+
+
 export const useResendOtp = (setTimer) => {
   return useMutation({
     mutationFn: OtpResend,
@@ -76,6 +77,7 @@ export const useOnBoarding=()=>{
     mutationFn:onboarding,
     onSuccess:(data)=>{
        toast.success("Onboarding successfully")
+     
     },
     onError:(error)=>{
       toast.error(error?.response?.data?.message || "Error while onboarding")
