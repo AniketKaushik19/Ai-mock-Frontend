@@ -43,7 +43,7 @@ export default function OnboardingPage() {
             const data= new FormData();
 
             data.append("college_name",formData.college)
-            data.append("year_passinge",formData.year)
+            data.append("year_passing",formData.year)
             data.append("linkedin_url",formData.linkedin)
             data.append("img",preview)
             await onboarding(data)

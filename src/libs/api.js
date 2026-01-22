@@ -44,3 +44,8 @@ export const logout = async () => {
   const res = await axiosInstance.post(`logout`,)
   return res.data;
 }
+
+export const forgotPassword=async(email)=>{
+   const res=await axiosInstance.post('forgot-password', email)
+   return res.data
+}
