@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -11,48 +11,107 @@ import {
   ArrowLeft,
   Loader2,
   AlertCircle,
+  ArrowRight,
+  RotateCcw,
   CheckCircle2,
-  ArrowRight
 } from "lucide-react";
-import { useForgotPassword } from "@/hooks/user";
-
+import { useForgotOtpResend, useForgotOtpVerify, useForgotPassword, useResetPassword } from "@/hooks/user";
+import toast from "react-hot-toast";
 
 const MotionButton = motion(Button);
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
-  const { mutateAsync: forgotPassword, isPending:loading , isError:error } = useForgotPassword();
+  const { mutateAsync: forgotPassword, isPending:loading, isError } =useForgotPassword();
+  const {mutateAsync:forgotPasswordVerifyOtp , isPending:verifyOtpPending}=useForgotOtpVerify()
+  const {mutateAsync:forgotOtpResend , isPending:OtpResendPending}=useForgotOtpResend()
+  const {mutateAsync:resetPassword , isPending:OtpresetPending}=useResetPassword()
+
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
+  const [timer, setTimer] = useState(60);
+  const [canResend, setCanResend] = useState(false);
+
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
+  const [isOtpVerified, setIsOtpVerified] = useState(false);
+
+  useEffect(() => {
+    if (step !== 2) return;
+    if (timer === 0) {
+      setCanResend(true);
+      return;
+    }
+    const interval = setInterval(() => setTimer((t) => t - 1), 1000);
+    return () => clearInterval(interval);
+  }, [timer, step]);
+
   const handleRequestOtp = async (e) => {
     e.preventDefault();
-    try {   
-      const res=await forgotPassword({email})
-      console.log(res)
-    } catch (err) {
-      console.log(err.message || "Reset failed");
-    } 
+    try {
+      const res = await forgotPassword({ email });
+      if (!res) {
+        toast.error("Otp not send");
+        return;
+      }
+      if (res.message) {
+        setStep(2);
+        setTimer(60);
+        setCanResend(false);
+        setOtp("");
+        setIsOtpVerified(false);
+      }
+    } catch(error) {
+      toast.error("Failed to send OTP");
+    }
   };
 
+  const handleResendOtp = async () => {
+    try {
+      const res=await forgotOtpResend({email });
+      if(res.message){
+        setTimer(60);
+        setCanResend(false);
+        setOtp("");
+        setIsOtpVerified(false);
+      }
+    } catch(error) {
+      toast.error("Resend failed");
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (otp.length !== 6) return;
+    try {
+      setVerifyingOtp(true);
+      const res=await forgotPasswordVerifyOtp({email,otp})
+      if(res.message){
+        setIsOtpVerified(true);
+        setVerifyingOtp(false)
+        toast.success("OTP Verified");
+      }
+    } catch {
+      toast.error("Invalid OTP");
+    } 
+  };
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
-    try {   
-      const res=await forgotPassword(email)
-      console.log(res)
-    } catch (err) {
-      console.log(err.message || "Reset failed");
-    } 
+    if (!isOtpVerified) return;
+     try {
+      const res=await resetPassword({email ,newPassword });
+      if(res.message){
+        router.push("/login");
+      }
+    } catch {
+      toast.error("Resend failed");
+    }
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center bg-[#0B0F19] px-4">
-      {/* Ambient Glow */}
-      <div className="absolute w-[600px] h-[600px] bg-indigo-600/20 blur-[120px] rounded-full -z-10" />
-
+    <div className="min-h-screen flex items-center justify-center bg-[#0B0F19] px-4">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -61,16 +120,16 @@ export default function ForgotPasswordPage() {
       >
         <div className="text-center mb-8 space-y-2">
           <h2 className="text-2xl font-bold text-white">
-            {step === 1 ? "Forgot Password" : "Reset Password"}
+            {step === 1 ? "Forgot Password" : "Verify OTP"}
           </h2>
           <p className="text-sm text-gray-400">
             {step === 1
-              ? "Enter your email to receive a verification code."
-              : `Enter the code sent to ${email} and your new password.`}
+              ? "Enter your email to receive an OTP"
+              : `OTP sent to ${email}`}
           </p>
         </div>
 
-        {step === 1 ? (
+        {step === 1 && (
           <form onSubmit={handleRequestOtp} className="space-y-4">
             <Input
               icon={<Mail size={18} className="text-gray-400" />}
@@ -81,56 +140,97 @@ export default function ForgotPasswordPage() {
               required
             />
 
-             <button
+            <button
+              type="submit"
               disabled={loading}
-              className="w-full py-3.5 bg-[#386bed] hover:bg-[#2563EB] text-white font-bold rounded-lg flex items-center justify-center transition-all duration-300 shadow-lg disabled:opacity-70 disabled:cursor-not-allowed relative overflow-hidden group"
-              onClick={handleRequestOtp}
+              className="w-full py-3.5 bg-[#386bed] hover:bg-[#2563EB] text-white font-bold rounded-lg flex items-center justify-center disabled:opacity-70"
             >
               {loading ? (
                 <Loader2 className="animate-spin h-5 w-5" />
               ) : (
                 <>
                   Send OTP
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </>
               )}
             </button>
           </form>
-        ) : (
+        )}
+
+        {step === 2 && (
           <form onSubmit={handleResetPassword} className="space-y-4">
-            <Input
-              icon={<KeyRound size={18} className="text-gray-400" />}
-              placeholder="Enter 6-digit OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              maxLength={6}
-              required
-              className="text-center tracking-widest"
-            />
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <Input
+                  icon={<KeyRound size={18} className="text-gray-400" />}
+                  placeholder="Enter 6-digit OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  maxLength={6}
+                  required
+                  className="text-center tracking-widest"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleVerifyOtp}
+                disabled={otp.length !== 6 || verifyingOtp || isOtpVerified}
+                className="px-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium disabled:opacity-50 flex items-center justify-center"
+              >
+                {verifyingOtp ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : isOtpVerified ? (
+                  <CheckCircle2 className="h-4 w-4" />
+                ) : (
+                  "Verify"
+                )}
+              </button>
+            </div>
 
-            <Input
-              icon={<Lock size={18} className="text-gray-400" />}
-              type="password"
-              placeholder="New Password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
+            <div className="flex justify-between items-center text-sm text-gray-400">
+              <span>
+                {canResend
+                  ? "Didn't receive OTP?"
+                  : `Resend OTP in ${timer}s`}
+              </span>
+              <button
+                type="button"
+                onClick={handleResendOtp}
+                disabled={!canResend}
+                className="flex items-center gap-1 text-indigo-400 hover:text-indigo-300 disabled:opacity-50"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Resend
+              </button>
+            </div>
 
-            <MotionButton
-              type="submit"
-              loading={loading}
-              whileTap={{ scale: 0.97 }}
-            >
-              Reset Password
-            </MotionButton>
+            {isOtpVerified && (
+              <>
+                <Input
+                  icon={<Lock size={18} className="text-gray-400" />}
+                  type="password"
+                  placeholder="New Password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                />
+
+                <MotionButton
+                  type="submit"
+                  loading={loading}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Reset Password
+                </MotionButton>
+              </>
+            )}
           </form>
         )}
 
-        {error && (
-          <div className="flex items-center gap-2 mt-4 p-3 text-sm text-red-400 bg-red-500/10 rounded-lg">
+        {isError && (
+          <div className="flex gap-2 mt-4 p-3 text-sm text-red-400 bg-red-500/10 rounded-lg">
             <AlertCircle className="h-4 w-4" />
-            {error}
+            Something went wrong
           </div>
         )}
 
@@ -147,7 +247,6 @@ export default function ForgotPasswordPage() {
     </div>
   );
 }
-
 
 function Input({ icon, className = "", ...props }) {
   return (
@@ -166,7 +265,7 @@ function Button({ children, loading, ...props }) {
     <button
       {...props}
       disabled={loading}
-      className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-lg shadow-lg flex items-center justify-center disabled:opacity-70"
+      className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-lg flex items-center justify-center disabled:opacity-70"
     >
       {loading ? (
         <>
