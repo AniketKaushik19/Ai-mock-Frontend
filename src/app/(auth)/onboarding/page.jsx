@@ -1,16 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useOnBoarding } from '@/hooks/user';
 import toast from 'react-hot-toast';
+import useAuthStore from '../../../../store/authStore';
+import { useRouter } from 'next/navigation';
 
 export default function OnboardingPage() {
+    const router=useRouter();
     const [preview, setPreview] = useState(null);
+    const {login,user}=useAuthStore();
+    const [image, setImage] = useState(null);
     const { mutateAsync: onboarding, isPending } = useOnBoarding();
+
+    
+
+    useEffect(()=>{
+        if(!user){
+            router.replace('/');
+        }
+
+        if(user && user.isOnboarding==1){
+            router.replace('/')
+
+        }
+    },[user])
+    
 
     const [formData, setFormData] = useState({
         college: '',
@@ -20,6 +39,7 @@ export default function OnboardingPage() {
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
+        setImage(file);
         if (file) {
             setPreview(URL.createObjectURL(file));
         }
@@ -36,22 +56,33 @@ export default function OnboardingPage() {
         e.preventDefault();
         if(isPending) return 
         try {
-            if(!formData.college || !formData.year || !formData.linkedin || !preview){
+            if(!formData.college || !formData.year || !formData.linkedin || !image){
                 toast.error("fill all necessary details.") 
                 return;
             }
             const data= new FormData();
 
             data.append("college_name",formData.college)
-            data.append("year_passinge",formData.year)
+            data.append("year_passing",formData.year)
             data.append("linkedin_url",formData.linkedin)
-            data.append("img",preview)
-            await onboarding(data)
+            data.append("img",image)
+
+
+            const result=await onboarding(data);
+    if (!result?.user) {
+      throw new Error("Onboarding failed");
+    }
+
+    login(result.user);
+    router.replace("/");
+            
+
+        
+            
         } catch (error) {
             console.log(error)
         }
-        // console.log({ ...formData, profileImage: preview });
-        // send to backend later
+      
     };
 
     return (
@@ -64,7 +95,7 @@ export default function OnboardingPage() {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
 
-                    {/* Profile Picture */}
+                 
                     <div className="flex flex-col items-center gap-4">
                         <div className="relative w-28 h-28 rounded-full overflow-hidden border border-white/20">
                             <Image
@@ -86,7 +117,7 @@ export default function OnboardingPage() {
                         </Label>
                     </div>
 
-                    {/* College Name */}
+                   
                     <div>
                         <Label className="text-white">College Name</Label>
                         <Input
