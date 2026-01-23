@@ -43,7 +43,7 @@ export default function InterviewCard({ item, variants }) {
 
                 <Button
                     className="w-full bg-[#4F7DFF] hover:bg-[#3A64E0] text-white"
-                    onClick={() => router.push(`/interview/${item.id}`)}
+                    onClick={() => router.push(`/startInterview/${item.id}`)}
                 >
                     Start Again
                 </Button>

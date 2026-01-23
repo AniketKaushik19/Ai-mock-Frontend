@@ -10,43 +10,74 @@ import {
   Clock,
   Code,
 } from "lucide-react";
+import { useGetInterviewDetail } from "../_utils/hooks";
+import { useRouter } from "next/navigation";
+import { capitalize } from "@/utils";
 
-export default function GetStartedPage() {
+export default  function GetStartedPage({id}) {
+
   const videoRef = useRef(null);
   const [cameraEnabled, setCameraEnabled] = useState(false);
   const [micEnabled, setMicEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const enableDevices = async () => {
-    try {
-      setLoading(true);
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
+  const streamRef = useRef(null);
 
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
 
-      setCameraEnabled(true);
-      setMicEnabled(true);
-    } catch (err) {
-      alert("Camera or Microphone permission denied");
-    } finally {
-      setLoading(false);
-    }
-  };
+const enableDevices = async () => {
+  try {
+    setLoading(true);
 
-  useEffect(() => {
-    return () => {
-      if (videoRef.current?.srcObject) {
-        videoRef.current.srcObject
-          .getTracks()
-          .forEach((track) => track.stop());
-      }
-    };
-  }, []);
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    });
+
+    streamRef.current = stream;
+    setCameraEnabled(true);
+    setMicEnabled(true);
+  } catch (err) {
+    alert("Camera or Microphone permission denied");
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  if (cameraEnabled && videoRef.current && streamRef.current) {
+    videoRef.current.srcObject = streamRef.current;
+  }
+}, [cameraEnabled]);
+
+const isReady = cameraEnabled && micEnabled && !!streamRef.current;
+
+const router = useRouter();
+const { data, isLoading ,isError} = useGetInterviewDetail(id);
+
+if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white">
+        Loading interview details...
+      </div>
+    );
+  }
+
+  if (isError || !data?.interview) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-400">
+        Interview not found
+      </div>
+    );
+  }
+
+    const {
+    jobRole,
+    experienceLevel,
+    techStack,
+    totalQuestions,
+  } = data.interview;
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0B0F19] to-[#020617] text-white flex items-center justify-center px-6">
@@ -75,7 +106,7 @@ export default function GetStartedPage() {
                 JOB ROLE / POSITION
               </p>
               <p className="text-lg font-semibold">
-                Full Stack Developer
+                {capitalize(jobRole)}
               </p>
             </div>
 
@@ -84,14 +115,12 @@ export default function GetStartedPage() {
                 JOB DESCRIPTION / TECH STACK
               </p>
               <div className="flex gap-2 flex-wrap">
-                {["React", "Node.js", "PostgreSQL"].map((t) => (
-                  <span
-                    key={t}
+               <span
+                  
                     className="px-3 py-1 text-sm bg-indigo-500/10 text-indigo-400 rounded-full"
                   >
-                    {t}
+                    {capitalize(techStack)}
                   </span>
-                ))}
               </div>
             </div>
 
@@ -100,19 +129,19 @@ export default function GetStartedPage() {
                 JOB EXPERIENCE
               </p>
               <p className="text-lg font-semibold">
-                3+ Years
+                {experienceLevel}+ Years
               </p>
             </div>
 
             <div className="flex justify-between pt-4 border-t border-white/10 text-gray-300">
               <div className="flex items-center gap-2">
                 <Briefcase size={18} />
-                <span>5 Questions</span>
+                <span>{totalQuestions} Questions</span>
               </div>
 
               <div className="flex items-center gap-2">
                 <Clock size={18} />
-                <span>45 Minutes</span>
+                <span>~45 Minutes</span>
               </div>
 
               <div className="flex items-center gap-2">
@@ -121,6 +150,7 @@ export default function GetStartedPage() {
               </div>
             </div>
           </motion.div>
+
 
           <motion.div
             initial={{ opacity: 0, x: 30 }}
@@ -166,21 +196,34 @@ export default function GetStartedPage() {
           </motion.div>
          
         </div>
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.4 }}
+  className="flex justify-end mt-6"
+>
+  {!isReady ? (
+    <button
+      onClick={enableDevices}
+      disabled={loading}
+      className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold flex items-center gap-2 disabled:opacity-60"
+    >
+      {loading ? "Enabling..." : "Enable Web Cam and Microphone"}
+    </button>
+  ) : (
+    <button
+      onClick={() => {
+        // navigate to interview page
+        // router.push(`/interview/${id}`)
+        console.log("Start Interview");
+      }}
+      className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-semibold flex items-center gap-2"
+    >
+      Start Interview 🚀
+    </button>
+  )}
+</motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="flex justify-end mt-6"
-        >
-          <button
-            onClick={enableDevices}
-            disabled={loading}
-            className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold flex items-center gap-2 disabled:opacity-60"
-          >
-            {loading ? "Enabling..." : "Enable Web Cam and Microphone"}
-          </button>
-        </motion.div>
       </motion.div>
     </div>
   );

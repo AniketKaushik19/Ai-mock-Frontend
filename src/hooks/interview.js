@@ -8,7 +8,7 @@ export const useGenerateQuestion=()=>{
     
     onSuccess:(data)=>{
        toast.success("Question generated successfully");
-       console.log(data);
+      
        
      
     },

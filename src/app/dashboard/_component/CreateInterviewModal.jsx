@@ -13,8 +13,10 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { useGenerateQuestion } from "@/hooks/interview";
 import Loading from "@/app/_component/Loading";
+import { useRouter } from "next/navigation";
 
 export default function CreateInterviewModal({ open, setOpen }) {
+  const router=useRouter();
   const [form, setForm] = useState({
     jobRole: "",
     jobDescription: "",
@@ -23,7 +25,7 @@ export default function CreateInterviewModal({ open, setOpen }) {
     numberOfQuestions: 5,
   });
 
-  const {mutateAsync,isPending}=useGenerateQuestion()
+  const {mutateAsync,isPending}=useGenerateQuestion();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,9 +33,17 @@ export default function CreateInterviewModal({ open, setOpen }) {
   };
 
   const handleSubmit = async() => {
-    console.log("Interview Data:", form);
-  await mutateAsync(form)
+    
+ const result= await mutateAsync(form);
+
+ 
+
     setOpen(false);
+    if(result){
+ router.push(`/startInterview/${result.interviewId}`);
+    }
+   
+
   };
 
   return (
