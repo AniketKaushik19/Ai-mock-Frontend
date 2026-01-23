@@ -43,7 +43,7 @@ export default function SignUpPage() {
   };
 
   if (showOtp) {
-    return <Otpverify/>;
+    return <Otpverify formData={formData}/>;
   }
 
   return (

@@ -4,21 +4,39 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
-import Link from "next/link";
+import { uselogin } from "@/hooks/user";
 
 const LoginPage = () => {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
   })
-
+   
+  const { mutateAsync: loginUser, isPending } = uselogin();
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async(e) => {
 
     e.preventDefault();
+    try{
+       if(!userData.email || !userData.password){
+          toast.error("Fill all required field")
+          return 
+       }
+       const data ={
+          email:userData.email,
+          password:userData.password
+       } 
+      const res= await loginUser(data)
+      if(res.user.id){
+        router.replace('/dashboard')
+      }
+    }
+    catch(error){
+       console.log(error)
+    }
     console.log("Login attempt:", { userData });
     // TODO: call your login API here
   };

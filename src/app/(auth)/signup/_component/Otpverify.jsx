@@ -4,12 +4,21 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck, ArrowRight, Loader2, RefreshCw } from "lucide-react";
 import toast from "react-hot-toast";
+import { useResendOtp, useVerifyOtp } from "@/hooks/user";
+import { useRouter } from "next/navigation";
+import useAuthStore from "../../../../../store/authStore";
 
-export default function OtpVerify() {
+
+
+export default function OtpVerify({formData}) {
+
+  const router=useRouter();
   const [otp, setOtp] = useState(Array(6).fill(""));
-  const [loading, setLoading] = useState(false);
+  
+    const {login}=useAuthStore();
   const [timer, setTimer] = useState(60);
-
+   const { mutateAsync, isPending:loading } = useVerifyOtp();
+   const { mutateAsync:sendOtp, isPending:sendOtpLoading } = useResendOtp(setTimer);
   const inputsRef = useRef([]);
   const timerRef = useRef(null);
 
@@ -46,21 +55,38 @@ export default function OtpVerify() {
       toast.error("Please enter a valid 6-digit OTP");
       return;
     }
-
     try {
-      setLoading(true);
-      await new Promise((res) => setTimeout(res, 1500));
-      toast.success("OTP verified successfully!");
+
+      const data={ name: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+       otp: otp.join('')
+
+      }  
+
+      const result=await mutateAsync(data);
+    if (!result?.user) {
+      throw new Error("Invalid OTP");
+    }
+    login(result.user);
+    router.replace("/onboarding");
+ 
     } catch {
       toast.error("Invalid OTP");
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
-  const handleResend = () => {
-    toast.success("OTP resent to your email");
-    setTimer(60);
+  const handleResend = async() => {
+    try {
+      const data={
+        name:formData.fullName,
+        email:formData.email,
+      }
+       await sendOtp(data)
+    } catch (error) {
+       console.log(error)
+    }
+    
   };
 
   return (
@@ -153,3 +179,5 @@ export default function OtpVerify() {
     </div>
   );
 }
+
+
