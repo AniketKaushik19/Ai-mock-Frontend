@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
-import { signup, login, OtpVerify, OtpResend, onboarding, forgotPassword } from "../libs/api"
+import { signup, login, OtpVerify, OtpResend, onboarding, forgotPassword, forgotOtpverify, forgotOtpResend, resetPassword } from "../libs/api"
 import toast from "react-hot-toast";
-import { redirect } from "next/navigation";
+
 
 
 
@@ -93,6 +93,42 @@ export const useForgotPassword=()=>{
     },
     onError:(error)=>{
       toast.error(error?.response?.data?.message || "Error while Forgot password")
+    }
+  })
+}
+
+export const useForgotOtpVerify=()=>{
+  return useMutation({
+    mutationFn:forgotOtpverify,
+    onSuccess:(data)=>{
+       toast.success("OTP verified Successfully")
+    },
+    onError:(error)=>{
+      toast.error(error?.response?.data?.message || "Error while verifing  OTP")
+    }
+  })
+}
+
+export const useForgotOtpResend=()=>{
+  return useMutation({
+    mutationFn:forgotOtpResend,
+    onSuccess:(data)=>{
+      toast.success("OTP resend successfully")
+    },
+    onError:(error)=>{
+      toast.error(error?.response?.data?.message || "Error in Otp resend")
+    }
+  })
+}
+
+export const useResetPassword=()=>{
+  return useMutation({
+    mutationFn:resetPassword,
+    onSuccess:(data)=>{
+      toast.success("Password reset successfully")
+    },
+    onError:(error)=>{
+      toast.error(error?.response?.data?.message || "Error in reset password")
     }
   })
 }
