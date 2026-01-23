@@ -22,10 +22,10 @@ const MotionButton = motion(Button);
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
-  const { mutateAsync: forgotPassword, isPending:loading, isError } =useForgotPassword();
-  const {mutateAsync:forgotPasswordVerifyOtp , isPending:verifyOtpPending}=useForgotOtpVerify()
-  const {mutateAsync:forgotOtpResend , isPending:OtpResendPending}=useForgotOtpResend()
-  const {mutateAsync:resetPassword , isPending:OtpresetPending}=useResetPassword()
+  const { mutateAsync: forgotPassword, isPending: loading, isError } = useForgotPassword();
+  const { mutateAsync: forgotPasswordVerifyOtp, isPending: verifyOtpPending } = useForgotOtpVerify()
+  const { mutateAsync: forgotOtpResend, isPending: OtpResendPending } = useForgotOtpResend()
+  const { mutateAsync: resetPassword, isPending: OtpresetPending } = useResetPassword()
 
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
@@ -63,21 +63,24 @@ export default function ForgotPasswordPage() {
         setOtp("");
         setIsOtpVerified(false);
       }
-    } catch(error) {
+    } catch (error) {
       toast.error("Failed to send OTP");
     }
   };
 
   const handleResendOtp = async () => {
     try {
-      const res=await forgotOtpResend({email });
-      if(res.message){
+      if (!email) {
+        return toast.error("Enter a  vaild Email ")
+      }
+      const res = await forgotOtpResend({ email });
+      if (res.message) {
         setTimer(60);
         setCanResend(false);
         setOtp("");
         setIsOtpVerified(false);
       }
-    } catch(error) {
+    } catch (error) {
       toast.error("Resend failed");
     }
   };
@@ -86,23 +89,23 @@ export default function ForgotPasswordPage() {
     if (otp.length !== 6) return;
     try {
       setVerifyingOtp(true);
-      const res=await forgotPasswordVerifyOtp({email,otp})
-      if(res.message){
+      const res = await forgotPasswordVerifyOtp({ email, otp })
+      if (res.message) {
         setIsOtpVerified(true);
         setVerifyingOtp(false)
         toast.success("OTP Verified");
       }
     } catch {
       toast.error("Invalid OTP");
-    } 
+    }
   };
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
     if (!isOtpVerified) return;
-     try {
-      const res=await resetPassword({email ,newPassword });
-      if(res.message){
+    try {
+      const res = await resetPassword({ email, newPassword });
+      if (res.message) {
         router.push("/login");
       }
     } catch {
@@ -186,23 +189,25 @@ export default function ForgotPasswordPage() {
                 )}
               </button>
             </div>
-
-            <div className="flex justify-between items-center text-sm text-gray-400">
-              <span>
-                {canResend
-                  ? "Didn't receive OTP?"
-                  : `Resend OTP in ${timer}s`}
-              </span>
-              <button
-                type="button"
-                onClick={handleResendOtp}
-                disabled={!canResend}
-                className="flex items-center gap-1 text-indigo-400 hover:text-indigo-300 disabled:opacity-50"
-              >
-                <RotateCcw className="h-4 w-4" />
-                Resend
-              </button>
-            </div>
+            {!isOtpVerified
+              &&
+              (<div className="flex justify-between items-center text-sm text-gray-400">
+                <span>
+                  {canResend
+                    ? "Didn't receive OTP?"
+                    : `Resend OTP in ${timer}s`}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={!canResend || OtpResendPending}
+                  className="flex items-center gap-1 text-indigo-400 hover:text-indigo-300 disabled:opacity-50"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  Resend
+                </button>
+              </div>)
+            }
 
             {isOtpVerified && (
               <>

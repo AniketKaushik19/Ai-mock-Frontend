@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 import { uselogin } from "@/hooks/user";
+import Loading from "@/app/_component/Loading";
 
 const LoginPage = () => {
   const [userData, setUserData] = useState({
@@ -130,7 +131,11 @@ const LoginPage = () => {
               whileTap={{ scale: 0.98 }}
               className="w-full py-3.5 bg-[#386bed] hover:bg-[#2563EB] text-white font-bold rounded-lg shadow-lg transition-all duration-300 flex items-center justify-center group"
             >
-              Sign In <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              {isPending ? <Loading/> :
+             <>
+             Sign In <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />  
+             </>
+              }
             </motion.button>
           </form>
 
