@@ -53,6 +53,7 @@ export default function Dashboard() {
     return (
         <main className="min-h-screen bg-[#0B1C2D] text-white p-4 md:p-10">
 
+
             {/* Header */}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}

@@ -45,3 +45,4 @@ export default function InterviewCard({ item, variants }) {
         </motion.div>
     );
 }
+
