@@ -90,27 +90,46 @@ export default function OtpVerify({formData}) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
+    // MAIN DARK BACKGROUND
+    <div className="min-h-screen relative flex items-center justify-center bg-[#0B0F19] overflow-hidden px-4">
+      
+      {/* --- BACKGROUND DECORATION: Ambient Glow --- */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none -z-10" />
+
+      {/* --- BACKGROUND DECORATION: RIGHT WAVES --- */}
+      <div className="absolute top-0 right-0 h-full w-1/2 pointer-events-none opacity-20 z-0">
+        <svg className="h-full w-full" viewBox="0 0 400 800" preserveAspectRatio="none">
+          <path d="M400,0 C300,200 100,200 100,400 C100,600 300,600 400,800" stroke="white" strokeWidth="1" fill="none" />
+          <path d="M420,0 C320,200 120,200 120,400 C120,600 320,600 420,800" stroke="white" strokeWidth="1" fill="none" />
+        </svg>
+      </div>
+
+      {/* GLASSMORPHISM CARD */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="bg-white w-full max-w-md p-8 rounded-2xl shadow-xl"
+        className="w-full max-w-md bg-[#111827]/70 backdrop-blur-xl p-8 rounded-2xl shadow-2xl relative z-10 border border-white/10 overflow-hidden"
       >
-        <div className="flex flex-col items-center">
-          <div className="bg-blue-100 p-3 rounded-full mb-4">
-            <ShieldCheck className="text-blue-600" size={28} />
+        {/* GLARE EFFECT */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50 pointer-events-none" />
+
+        <div className="relative z-20 flex flex-col items-center">
+          {/* Header Icon */}
+          <div className="bg-indigo-500/10 p-4 rounded-full mb-6 border border-indigo-500/20 shadow-inner">
+            <ShieldCheck className="text-indigo-400" size={32} />
           </div>
 
-          <h2 className="text-2xl font-bold text-gray-800">
+          <h2 className="text-2xl font-bold text-white text-center">
             Verify OTP
           </h2>
-          <p className="text-sm text-gray-500 text-center mt-1">
+          <p className="text-sm text-gray-400 text-center mt-2">
             Enter the 6-digit code sent to your email
           </p>
         </div>
 
-        <div className="flex justify-between gap-2 mt-6">
+        {/* OTP Inputs */}
+        <div className="flex justify-between gap-2 mt-8 relative z-20">
           {otp.map((digit, index) => (
             <input
               key={index}
@@ -119,34 +138,38 @@ export default function OtpVerify({formData}) {
               onChange={(e) => handleChange(e.target.value, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               maxLength={1}
-              className="w-12 h-12 text-center text-lg font-semibold border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold bg-[#0F172A]/50 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-inner"
             />
           ))}
         </div>
 
-        <button
-          disabled={loading}
-          onClick={handleVerify}
-          className="w-full mt-6 py-3 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition disabled:opacity-60"
-        >
-          {loading ? (
-            <Loader2 className="animate-spin" />
-          ) : (
-            <>
-              Verify OTP <ArrowRight size={18} />
-            </>
-          )}
-        </button>
+        {/* Verify Button */}
+        <div className="relative z-20 mt-8">
+            <button
+            disabled={loading}
+            onClick={handleVerify}
+            className="w-full py-3.5 bg-[#386bed] hover:bg-[#2563EB] text-white font-bold rounded-lg shadow-lg  transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group"
+            >
+            {loading ? (
+                <Loader2 className="animate-spin h-5 w-5" />
+            ) : (
+                <>
+                Verify OTP <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </>
+            )}
+            </button>
+        </div>
 
-        <div className="mt-4 text-center text-sm text-gray-600">
+        {/* Resend Logic */}
+        <div className="mt-6 text-center text-sm text-gray-400 relative z-20">
           {timer > 0 ? (
             <p>
-              Resend OTP in <span className="font-semibold">{timer}s</span>
+              Resend OTP in <span className="font-semibold text-indigo-400">{timer}s</span>
             </p>
           ) : (
             <button
               onClick={handleResend}
-              className="text-blue-600 flex items-center justify-center gap-1 mx-auto hover:underline"
+              className="text-indigo-400 font-bold flex items-center justify-center gap-2 mx-auto hover:text-indigo-300 transition-colors"
             >
               <RefreshCw size={14} /> Resend OTP
             </button>
