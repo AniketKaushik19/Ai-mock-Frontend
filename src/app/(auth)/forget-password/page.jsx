@@ -63,8 +63,8 @@ export default function ForgotPasswordPage() {
         setOtp("");
         setIsOtpVerified(false);
       }
-    } catch (error) {
-    } catch (error) {
+    } 
+    catch (error) {
       toast.error("Failed to send OTP");
     }
   };
@@ -81,8 +81,7 @@ export default function ForgotPasswordPage() {
         setOtp("");
         setIsOtpVerified(false);
       }
-    } catch (error) {
-    } catch (error) {
+    }  catch (error) {
       toast.error("Resend failed");
     }
   };
