@@ -1,21 +1,32 @@
 'use client';
 
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog,DialogTitle, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { LogOut } from 'lucide-react';
+import useAuthStore from '../../../store/authStore';
+import { useLogout } from '@/hooks/user';
+import Loading from './Loading';
 
 export default function ProfileModal({ open, setOpen }) {
-    //   const { user, logout } = useAuthStore();
-    const user = {
-        name: "John Doe",
-        email: "user@gmail.com"
+      const { user,logout } = useAuthStore();
+      const {mutateAsync,isPending}=useLogout();
 
-    }
+      const handleLogout=async()=>{
+        const result=await mutateAsync();
+        if(result.message){
+            logout();
+            setOpen(false);
+        }
+
+      }
+
+   
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTitle/>
             <DialogContent className="bg-[#112A46] text-white border border-white/10 w-[340px] p-0 overflow-hidden rounded-2xl">
 
                 <motion.div
@@ -29,7 +40,7 @@ export default function ProfileModal({ open, setOpen }) {
 
                         <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#4F7DFF]">
                             <Image
-                                src={'/image/avatar.png'}
+                                src={user?.img}
                                 alt="Profile"
                                 fill
                                 className="object-cover"
@@ -37,11 +48,11 @@ export default function ProfileModal({ open, setOpen }) {
                         </div>
 
                         <h3 className="mt-4 text-xl font-bold">
-                            Hi, {'User'} 👋
+                            Hi, {user?.name} 👋
                         </h3>
 
                         <p className="text-sm text-[#CBD5E1] mt-1">
-                            {'user@email.com'}
+                            {user?.email}
                         </p>
                     </div>
 
@@ -60,10 +71,10 @@ export default function ProfileModal({ open, setOpen }) {
 
                         <Button
                             className="bg-[#4F7DFF] hover:bg-[#3A64E0] flex gap-2"
-                        //   onClick={logout}
+                          onClick={()=>handleLogout()}
                         >
                             <LogOut className="w-4 h-4" />
-                            Logout
+                          {isPending?<Loading/> :"Logout"}
                         </Button>
 
                     </div>

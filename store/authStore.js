@@ -14,7 +14,8 @@ const useAuthStore = create(
             name: data.name,
             userId: data.id,
             email: data.email,
-            isOnboarding:data.isBoarding
+            isOnboarding:data.isBoarding,
+            img: data?.img || null
             
           };
           

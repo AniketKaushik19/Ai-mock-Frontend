@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { Menu, X, Home, Info, LogIn } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, Home, Info } from "lucide-react";
 import ProfileModal from "./profilemodal";
 import useAuthStore from "../../../store/authStore";
+import { useGetProfile } from "@/hooks/user";
 
 const navItems = [
   { name: "Home", path: "/", icon: Home },
@@ -15,15 +16,38 @@ const navItems = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [mounted, setMounted] = useState(false); 
+ 
 
-  const { user, isLoggedIn } = useAuthStore();
-  // console.log(isLoggedIn())
+  const { user, isLoggedIn,login } = useAuthStore();
+  
+
+
+
+
+const { data } = useGetProfile({
+  enabled: !!user, 
+});
+
+
+
+  useEffect(()=>{
+    if(data?.user){
+      login(data?.user);
+    }
+
+  },[data])
+  
+  
+
+  useEffect(() => {
+    setMounted(true); 
+  }, []);
 
   return (
     <nav className="w-full border-b border-white/10 bg-[#0D2B5B]">
       <div className="container mx-auto flex h-20 items-center justify-between px-4">
-
-        {/* Logo */}
+     
         <Link href="/" className="flex items-center">
           <Image
             src="/image/celogo.png"
@@ -35,7 +59,7 @@ const Navbar = () => {
           />
         </Link>
 
-        {/* Desktop Menu */}
+   
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item, index) => (
             <Link
@@ -47,7 +71,7 @@ const Navbar = () => {
             </Link>
           ))}
 
-          {!isLoggedIn() && (
+          {mounted && !isLoggedIn() && (
             <>
               <Link
                 href="/login"
@@ -65,37 +89,34 @@ const Navbar = () => {
             </>
           )}
 
-          {isLoggedIn() && (
+          {mounted && isLoggedIn() && (
             <div
               onClick={() => setProfileOpen(true)}
               className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#4F7DFF] cursor-pointer hover:scale-105 transition"
             >
-              <Image
-                src={user?.avatar || "/image/avatar.png"}
-                alt="Profile"
-                width={48}
-                height={48}
-                className="object-cover"
-              />
+             <Image
+  src={user?.img || "/image/avatar.png"}
+  alt="Profile"
+  width={48}
+  height={48}
+  className="object-cover rounded-full"
+  priority={true}
+/>
+
             </div>
           )}
         </div>
 
-        {/* Mobile Menu Toggle */}
+      
         <div className="md:hidden">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="text-white p-2"
-          >
+          <button onClick={() => setIsOpen(!isOpen)} className="text-white p-2">
             {isOpen ? <X /> : <Menu />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isOpen && (
+      {isOpen && mounted && (
         <div className="md:hidden bg-white absolute top-20 left-0 w-full z-50 shadow-xl py-8 px-6 flex flex-col gap-6 items-center">
-
           {navItems.map((item, index) => (
             <Link
               key={index}
@@ -145,7 +166,7 @@ const Navbar = () => {
         </div>
       )}
 
-      {/* Profile Modal */}
+      
       <ProfileModal open={profileOpen} setOpen={setProfileOpen} />
     </nav>
   );

@@ -1,5 +1,5 @@
-import { useMutation } from "@tanstack/react-query"
-import { signup, login, OtpVerify, OtpResend, onboarding, forgotPassword, forgotOtpverify, forgotOtpResend, resetPassword } from "../libs/api"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { signup, login, OtpVerify, OtpResend, onboarding, forgotPassword, forgotOtpverify, forgotOtpResend, resetPassword, profile, logout } from "../libs/api"
 import toast from "react-hot-toast";
 
 
@@ -131,4 +131,31 @@ export const useResetPassword=()=>{
       toast.error(error?.response?.data?.message || "Error in reset password")
     }
   })
-}
+};
+export const useLogout=()=>{
+  return useMutation({
+    mutationFn:logout,
+    onSuccess:(data)=>{
+      toast.success("Logout Successfully");
+    },
+    onError:(error)=>{
+      toast.error(error?.response?.data?.message || "Error in logout")
+    }
+  })
+};
+
+
+export const useGetProfile = (options = {}) => {
+  return useQuery({
+    queryKey: ['profile'],
+    queryFn: profile,
+    staleTime: 5 * 60 * 1000,
+    enabled: options.enabled, 
+    onSuccess: (data) => {
+      console.log("Data", data);
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || 'Error while fetching profile');
+    },
+  });
+};

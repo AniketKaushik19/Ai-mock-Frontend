@@ -44,6 +44,14 @@ export const login = async (loginData) => {
       throw error
    }
 }
+export const profile = async () => {
+   try {
+      const res = await axiosInstance.get(`profile`);
+      return res?.data;
+   } catch (error) {
+      throw error
+   }
+}
 export const logout = async () => {
    try {
       const res = await axiosInstance.post(`logout`,)

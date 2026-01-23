@@ -1,5 +1,6 @@
 'use client'
 
+import Navbar from "@/app/_component/Navbar";
 import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query"
 import React from "react"
 
@@ -36,6 +37,7 @@ export const QueryProvider=({children})=>{
 
 return (
     <QueryClientProvider client={queryClient}>
+      <Navbar/>
 {children}
         </QueryClientProvider>
 )     
