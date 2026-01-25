@@ -11,12 +11,12 @@ import {
   ArrowLeft,
   Loader2,
   AlertCircle,
+  CheckCircle2,
   ArrowRight,
   RotateCcw,
-  CheckCircle2,
 } from "lucide-react";
-import { useForgotOtpResend, useForgotOtpVerify, useForgotPassword, useResetPassword } from "@/hooks/user";
 import toast from "react-hot-toast";
+import { useForgotOtpResend, useForgotOtpVerify, useForgotPassword, useResetPassword } from "@/hooks/user";
 
 const MotionButton = motion(Button);
 
@@ -63,7 +63,8 @@ export default function ForgotPasswordPage() {
         setOtp("");
         setIsOtpVerified(false);
       }
-    } catch (error) {
+    } 
+    catch (error) {
       toast.error("Failed to send OTP");
     }
   };
@@ -80,7 +81,7 @@ export default function ForgotPasswordPage() {
         setOtp("");
         setIsOtpVerified(false);
       }
-    } catch (error) {
+    }  catch (error) {
       toast.error("Resend failed");
     }
   };
@@ -92,7 +93,7 @@ export default function ForgotPasswordPage() {
       const res = await forgotPasswordVerifyOtp({ email, otp })
       if (res.message) {
         setIsOtpVerified(true);
-        setVerifyingOtp(false)
+        setVerifyingOtp(false);
         toast.success("OTP Verified");
       }
     } catch {
@@ -109,7 +110,7 @@ export default function ForgotPasswordPage() {
         router.push("/login");
       }
     } catch {
-      toast.error("Resend failed");
+      toast.error("Reset failed");
     }
   };
 
@@ -252,6 +253,8 @@ export default function ForgotPasswordPage() {
     </div>
   );
 }
+
+// --- HELPER COMPONENTS (Consistent Dark/Glass Theme) ---
 
 function Input({ icon, className = "", ...props }) {
   return (

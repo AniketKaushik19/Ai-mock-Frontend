@@ -42,9 +42,8 @@ export default function CreateInterviewModal({ open, setOpen }) {
     if(result){
  router.push(`/startInterview/${result.interviewId}`);
     }
-   
-
   };
+  
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
