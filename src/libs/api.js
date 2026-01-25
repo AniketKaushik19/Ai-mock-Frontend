@@ -54,7 +54,7 @@ export const profile = async () => {
 }
 export const logout = async () => {
    try {
-      const res = await axiosInstance.post(`logout`,)
+      const res = await axiosInstance.post(`logout`);
       return res?.data;
    } catch (error) {
       throw error
