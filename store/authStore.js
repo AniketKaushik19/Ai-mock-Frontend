@@ -26,6 +26,7 @@ const useAuthStore = create(
         set((state) => {
           state.user = null;
         });
+         useAuthStore.persist.clearStorage();
       },
 
       isLoggedIn: () => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +9,7 @@ import { useOnBoarding } from '@/hooks/user';
 import toast from 'react-hot-toast';
 import useAuthStore from '../../../../store/authStore';
 import { useRouter } from 'next/navigation';
+import Loading from '@/app/_component/Loading';
 
 export default function OnboardingPage() {
     const router=useRouter();
@@ -16,6 +17,8 @@ export default function OnboardingPage() {
     const {login,user}=useAuthStore();
     const [image, setImage] = useState(null);
     const { mutateAsync: onboarding, isPending } = useOnBoarding();
+    const fileInputRef = useRef(null);
+
 
     
 
@@ -97,18 +100,20 @@ export default function OnboardingPage() {
 
                  
                     <div className="flex flex-col items-center gap-4">
-                        <div className="relative w-28 h-28 rounded-full overflow-hidden border border-white/20">
+                        <div className="relative w-28 h-28 rounded-full overflow-hidden border border-white/20" onClick={() => fileInputRef.current?.click()}>
                             <Image
                                 src={preview || '/image/avatar.png'}
                                 alt="Profile Preview"
                                 fill
                                 className="object-cover"
+                                name=""
                             />
                         </div>
 
                         <Label className="cursor-pointer text-[#CBD5E1] text-sm">
                             Upload Profile Picture
                             <Input
+                                ref={fileInputRef}
                                 type="file"
                                 accept="image/*"
                                 className="hidden"
@@ -130,7 +135,7 @@ export default function OnboardingPage() {
                         />
                     </div>
 
-                    {/* Year of Passing */}
+                    
                     <div>
                         <Label className="text-white">Year of Passing</Label>
                         <Input
@@ -144,7 +149,7 @@ export default function OnboardingPage() {
                         />
                     </div>
 
-                    {/* LinkedIn */}
+                    
                     <div>
                         <Label className="text-white">LinkedIn Profile</Label>
                         <Input
@@ -156,12 +161,12 @@ export default function OnboardingPage() {
                         />
                     </div>
 
-                    {/* Submit */}
                     <Button
+                    disabled={isPending}
                         type="submit"
                         className="w-full bg-[#386bed] hover:bg-[#274fcf] text-white font-semibold"
                     >
-                        Continue
+                      {isPending ? <Loading/> : "Continue"}
                     </Button>
 
                 </form>
