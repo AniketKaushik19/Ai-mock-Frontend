@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 import { uselogin } from "@/hooks/user";
 import Loading from "@/app/_component/Loading";
+import useAuthStore from "../../../../store/authStore";
 
 const LoginPage = () => {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
-  })
+  });
+  const {login}=useAuthStore();
    
   const { mutateAsync: loginUser, isPending } = uselogin();
   const [showPassword, setShowPassword] = useState(false);
@@ -30,8 +32,11 @@ const LoginPage = () => {
           email:userData.email,
           password:userData.password
        } 
-      const res= await loginUser(data)
+      const res= await loginUser(data);
+      console.log(res);
+      
       if(res.user.id){
+        login(res.user);
         router.replace('/dashboard')
       }
     }
