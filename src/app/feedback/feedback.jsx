@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { useFeedback } from '@/hooks/feedback';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -20,6 +21,11 @@ const itemVariants = {
 };
 
 export default function FeedbackPage({ feedbackId }) {
+  const {data , isLoading}=useFeedback(feedbackId);
+  console.log(data);
+  
+  console.log(feedbackId);
+  
   const questions = [
     {
       question: "Explain the difference between REST and GraphQL.",
