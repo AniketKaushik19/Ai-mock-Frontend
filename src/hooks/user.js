@@ -27,10 +27,24 @@ export const useSignup = (setShowOtp) => {
 export const uselogin = () => {
   return useMutation({
     mutationFn: async (userData) => login(userData),
-    retry: 0,
-    onSuccess: (data) => {
-      toast.success("Login Successsfully!!!") 
+
+    retry: (failureCount, error) => {
+      
+      if (error?.response?.status === 429) return false;
+
+      
+      return failureCount < 3;
     },
+
+    retryDelay: (attempt) => {
+      
+      return Math.min(1000 * 2 ** attempt, 5000);
+    },
+
+    onSuccess: () => {
+      toast.success("Login successfully!!!");
+    },
+
     onError: (error) => {
       if (error?.response?.status === 429) {
         toast.error("Too many login attempts. Please try again later.");
@@ -40,6 +54,7 @@ export const uselogin = () => {
     }
   });
 };
+
 
 export const useVerifyOtp = () => {
   return useMutation({

@@ -34,10 +34,10 @@ const Navbar = () => {
     }
   }, [data, login]);
 
-  // 🚨 CRITICAL: never evaluate auth before mount
-  const UserLoggedIn = mounted && isLoggedIn();
+  
+  const UserLoggedIn = mounted && user;
 
-  // 🧊 Prevent hydration mismatch
+  
   if (!mounted) {
     return (
       <nav className="w-full border-b border-white/10 bg-[#0D2B5B]">
