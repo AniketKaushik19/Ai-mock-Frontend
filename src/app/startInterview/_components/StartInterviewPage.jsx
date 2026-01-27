@@ -10,7 +10,7 @@ import {
   Clock,
   Code,
 } from "lucide-react";
-import { useGetInterviewDetail } from "../_utils/hooks";
+import { useGetInterviewDetail } from "@/hooks/interview";
 import { useRouter } from "next/navigation";
 import { capitalize } from "@/utils";
 
@@ -213,9 +213,7 @@ if (isLoading) {
   ) : (
     <button
       onClick={() => {
-        // navigate to interview page
-        // router.push(`/interview/${id}`)
-        console.log("Start Interview");
+        router.push(`/interviewQues/${id}`)
       }}
       className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-semibold flex items-center gap-2"
     >
@@ -228,3 +226,9 @@ if (isLoading) {
     </div>
   );
 }
+
+
+
+
+
+

@@ -1,0 +1,402 @@
+"use client";
+
+import "regenerator-runtime/runtime";
+import React, { useState, useEffect } from "react";
+import {
+  Lightbulb,
+  WebcamIcon,
+  Volume2,
+  Mic,
+  StopCircle,
+} from "lucide-react";
+import Webcam from "react-webcam";
+import { toast } from "sonner";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
+import { useGetInterviewDetail } from "@/hooks/interview";
+import { useSubmitInterview } from "./_hooks/hooks";
+
+const InterviewPage = ({ interviewId }) => {
+  const [mounted, setMounted] = useState(false);
+  const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
+  const [webCamEnabled, setWebCamEnabled] = useState(true);
+  const [userAnswer, setUserAnswer] = useState("");
+  const [answers, setAnswers] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+
+  const { data, isLoading, isError } = useGetInterviewDetail(interviewId);
+  const questions = data?.interview?.questions || [];
+  const activeQuestion = questions[activeQuestionIndex];
+
+  const { mutateAsync, isPending } = useSubmitInterview();
+
+  useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    if (transcript && !isTyping) {
+      setUserAnswer(transcript);
+    }
+  }, [transcript, isTyping]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.speechSynthesis.onvoiceschanged = () =>
+      window.speechSynthesis.getVoices();
+  }, []);
+
+  const textToSpeech = (text) => {
+    if (!text || typeof window === "undefined") return;
+
+    const synth = window.speechSynthesis;
+    synth.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = synth.getVoices();
+
+    utterance.voice =
+      voices.find((v) => v.lang === "en-US") || voices[0];
+    utterance.rate = 1;
+    utterance.pitch = 1.50;
+
+    synth.speak(utterance);
+  };
+
+  const saveCurrentAnswer = () => {
+    const finalAnswer = userAnswer || transcript || "";
+
+    setAnswers((prev) => {
+      const exists = prev.find(
+        (a) => a.questionId === activeQuestion.id
+      );
+
+      const payload = {
+        questionId: activeQuestion.id,
+        question: activeQuestion.question,
+        answer: finalAnswer,
+      };
+
+      if (exists) {
+        return prev.map((a) =>
+          a.questionId === activeQuestion.id ? payload : a
+        );
+      }
+
+      return [...prev, payload];
+    });
+  };
+
+  const saveUserAnswer = () => {
+    if (!webCamEnabled) {
+      toast.error("Please enable Camera & Microphone first.");
+      return;
+    }
+
+    if (listening) {
+      SpeechRecognition.stopListening();
+      saveCurrentAnswer();
+
+      if (!userAnswer && !transcript) {
+        toast.warning("No answer recorded.");
+      } else {
+        toast.success("Answer recorded!");
+      }
+    } else {
+      setIsTyping(false);
+      setUserAnswer("");
+      resetTranscript();
+      SpeechRecognition.startListening({
+        continuous: true,
+        language: "en-IN",
+      });
+    }
+  };
+
+  const handleEndInterview = async () => {
+    if (listening) SpeechRecognition.stopListening();
+
+    const finalAnswers = questions.map((q) => {
+      const existing = answers.find(
+        (a) => a.questionId === q.id
+      );
+      return {
+        questionId: q.id,
+        answer: existing?.answer || "",
+      };
+    });
+
+    try {
+     const result= await mutateAsync({ interviewId, answers: finalAnswers });
+     console.log(result);
+     
+      toast.success("Interview submitted successfully!");
+    } catch (err) {
+      toast.error("Failed to submit interview");
+      console.error(err);
+    }
+  };
+
+  if (!mounted) return null;
+
+  if (!browserSupportsSpeechRecognition) {
+    return (
+      <div className="p-10 text-white">
+        Speech recognition not supported. Use Chrome.
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white">
+        Loading interview...
+      </div>
+    );
+  }
+
+  if (isError || !questions.length) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-400">
+        No questions found.
+      </div>
+    );
+  }
+
+  const progress =
+    ((activeQuestionIndex + 1) / questions.length) * 100;
+
+  return (
+    <div className="min-h-screen bg-[#0B0F19] text-white px-10 py-10 flex flex-col gap-8">
+      <div>
+        <div className="flex justify-between bg-[#111827] p-5 rounded-lg">
+          <div>
+            <h2 className="font-bold text-xl text-[#386bed]">
+              Mock Interview Session
+            </h2>
+            <p className="text-sm text-gray-400">
+              Question {activeQuestionIndex + 1} of {questions.length}
+            </p>
+          </div>
+        </div>
+
+        <div className="w-full h-3 bg-gray-700 rounded-full mt-4">
+          <div
+            className="h-full bg-gradient-to-r from-[#386bed] to-purple-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-8">
+        <div>
+          <div className="bg-[#111827] p-6 rounded-xl">
+            <Volume2
+              className="cursor-pointer text-[#386bed]"
+              onClick={() =>
+                textToSpeech(activeQuestion.question)
+              }
+            />
+
+            <h2 className="text-xl font-semibold mt-3">
+              {activeQuestion.question}
+            </h2>
+
+            <div className="mt-6 bg-gray-900/50 p-4 rounded-lg">
+              <h3 className="text-xs text-gray-500 uppercase font-bold mb-2">
+                Your Answer (Speak or Type)
+              </h3>
+
+              <textarea
+                value={userAnswer}
+                onChange={(e) => {
+                  setIsTyping(true);
+                  setUserAnswer(e.target.value);
+                  if (listening)
+                    SpeechRecognition.stopListening();
+                }}
+                onBlur={() => setIsTyping(false)}
+                placeholder={
+                  listening
+                    ? "Listening..."
+                    : "Type your answer or record..."
+                }
+                className="w-full min-h-[100px] bg-transparent text-gray-300 resize-none outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="mt-4 bg-blue-500/10 p-4 rounded-xl flex gap-2">
+            <Lightbulb />
+            <p className="text-sm">
+              Speak clearly or edit your response by typing.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div className="bg-[#111827] p-1 rounded-xl h-[350px] flex items-center justify-center">
+            {webCamEnabled ? (
+              <Webcam
+                mirrored
+                onUserMedia={() => setWebCamEnabled(true)}
+                onUserMediaError={() => setWebCamEnabled(false)}
+                style={{
+                  height: 350,
+                  width: "100%",
+                  objectFit: "cover",
+                  borderRadius: "10px",
+                }}
+              />
+            ) : (
+              <button
+                onClick={() => setWebCamEnabled(true)}
+                className="bg-white/10 px-6 py-3 rounded-lg"
+              >
+                Enable Camera
+              </button>
+            )}
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              onClick={saveUserAnswer}
+              className={`flex-1 py-3 rounded-lg font-bold flex justify-center gap-2 ${
+                listening
+                  ? "bg-red-500 animate-pulse"
+                  : "bg-[#386bed]"
+              }`}
+            >
+              {listening ? (
+                <>
+                  <StopCircle /> Stop
+                </>
+              ) : (
+                <>
+                  <Mic /> Record
+                </>
+              )}
+            </button>
+
+            {activeQuestionIndex === questions.length - 1 ? (
+              <button
+                onClick={handleEndInterview}
+                disabled={isPending}
+                className="bg-red-500/10 border border-red-500 px-4 rounded-lg"
+              >
+                End Interview
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  if (listening)
+                    SpeechRecognition.stopListening();
+                  saveCurrentAnswer();
+
+                  const next = activeQuestionIndex + 1;
+                  setActiveQuestionIndex(next);
+
+                  const nextAnswer = answers.find(
+                    (a) =>
+                      a.questionId === questions[next].id
+                  );
+                  setUserAnswer(nextAnswer?.answer || "");
+                  resetTranscript();
+                }}
+                className="bg-[#111827] border border-white/10 px-6 rounded-lg"
+              >
+                Next
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default InterviewPage;
+
+
+// modular code fix all error 27-01-2026
+
+
+// "use client";
+
+// import { useGetInterviewDetail } from "@/hooks/interview";
+
+
+// import { useInterviewSession } from "./_hooks/useInterviewSession";
+// import InterviewHeader from "./_components/InterviewHeader";
+// import QuestionCard from "./_components/QuestionCard";
+// import AnswerInput from "./_components/AnswerInput";
+// import WebcamPanel from "./_components/WebcamPanel";
+// import ControlButtons from "./_components/ControlButtons";
+
+// const InterviewPage = ({ interviewId }) => {
+//   const { data } = useGetInterviewDetail(interviewId);
+//   const questions = data?.interview?.questions || [];
+//   const { mutateAsync } = useSubmitInterview();
+
+//   const session = useInterviewSession(questions);
+
+//   const handleEndInterview = async () => {
+//     await mutateAsync({
+//       interviewId,
+//       answers: questions.map((q) => ({
+//         questionId: q.id,
+//         answer:
+//           session.answers.find((a) => a.questionId === q.id)
+//             ?.answer || "",
+//       })),
+    
+//   })};
+
+//   if (!questions.length) return null;
+
+//   return (
+//     <div className="min-h-screen bg-[#0B0F19] text-white p-10">
+//       <InterviewHeader
+//         index={session.activeIndex}
+//         total={questions.length}
+//       />
+
+//       <div className="grid md:grid-cols-2 gap-8 mt-8">
+//         <div>
+//           <QuestionCard
+//             question={session.activeQuestion}
+//           />
+//           <AnswerInput
+//             value={session.userAnswer}
+//             setValue={session.setUserAnswer}
+//             setIsTyping={session.setIsTyping}
+//             listening={session.listening}
+//           />
+//         </div>
+
+//         <div>
+//           <WebcamPanel />
+//           <ControlButtons
+//             listening={session.listening}
+//             onRecord={session.recordToggle}
+//             onNext={() =>
+//               session.goToQuestion(session.activeIndex + 1)
+//             }
+//             onEnd={handleEndInterview}
+//             isLast={
+//               session.activeIndex === questions.length - 1
+//             }
+//           />
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default InterviewPage;

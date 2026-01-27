@@ -1,5 +1,5 @@
 import { profile } from "@/libs/api";
-import { generateQuestion, getAllInterviews } from "@/libs/interviewApi"
+import { generateQuestion, getAllInterviews, getInterviewDetail } from "@/libs/interviewApi"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import toast from "react-hot-toast";
 
@@ -30,3 +30,19 @@ export const useGetAllInterviews = () => {
     },
   });
 };
+
+export const useGetInterviewDetail = (id) => {
+    return useQuery({
+      queryKey: ["interviewDetail", id],
+      queryFn: () => getInterviewDetail(id),
+      enabled: !!id, 
+      staleTime: 5 * 60 * 1000, 
+  
+      onError: (error) => {
+        toast.error(
+          error?.response?.data?.message ||
+          "Error while fetching interview details"
+        );
+      },
+    });
+  };
