@@ -54,7 +54,7 @@ export default function FeedbackPage({ feedbackId }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#1e293b] px-4 py-6 sm:px-6 lg:px-8 text-[#386bed]">
+    <div className="min-h-screen bg-[#0B1C2D] px-4 py-6 sm:px-6 lg:px-8 text-white">
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -63,25 +63,25 @@ export default function FeedbackPage({ feedbackId }) {
       >
         {/* Overall Score */}
         <motion.div variants={itemVariants}>
-          <Card className="rounded-2xl bg-white/90 backdrop-blur border shadow-lg">
+          <Card className="rounded-2xl bg-[#112A46] border border-white/10 shadow-lg">
             <CardHeader className="space-y-3">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <CardTitle className="text-xl sm:text-2xl font-bold text-gray-900">
+                <CardTitle className="text-xl sm:text-2xl font-bold text-white">
                   Interview Feedback
                 </CardTitle>
 
-                <Badge className="w-fit bg-blue-600 text-white text-sm sm:text-base">
+                <Badge className="w-fit bg-[#4F7DFF] text-white text-sm sm:text-base">
                   {totalScore} / {maxScore}
                 </Badge>
               </div>
 
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#CBD5E1]">
                 AI-evaluated performance summary
               </p>
 
               <Progress
                 value={percentage}
-                className="h-2 [&>div]:bg-blue-600"
+                className="h-2 bg-white/10 [&>div]:bg-[#4F7DFF]"
               />
             </CardHeader>
           </Card>
@@ -95,10 +95,10 @@ export default function FeedbackPage({ feedbackId }) {
             whileHover={{ scale: 1.015 }}
             transition={{ type: "spring", stiffness: 180 }}
           >
-            <Card className="rounded-2xl bg-white border shadow-md">
+            <Card className="rounded-2xl bg-[#112A46] border border-white/10 shadow-md">
               <CardHeader className="space-y-2">
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <CardTitle className="text-base sm:text-lg font-semibold text-gray-900">
+                  <CardTitle className="text-base sm:text-lg font-semibold text-white">
                     Question {index + 1}
                   </CardTitle>
 
@@ -111,37 +111,37 @@ export default function FeedbackPage({ feedbackId }) {
                   </Badge>
                 </div>
 
-                <p className="text-sm sm:text-base text-gray-600">
+                <p className="text-sm sm:text-base text-[#CBD5E1]">
                   {item.question}
                 </p>
               </CardHeader>
 
               <CardContent className="space-y-4 sm:space-y-5">
-                <Separator />
+                <Separator className="bg-white/10" />
 
                 <section className="space-y-1.5">
-                  <h3 className="font-semibold text-blue-600 text-sm sm:text-base">
+                  <h3 className="font-bold text-[#4F7DFF] text-sm sm:text-base">
                     Your Answer
                   </h3>
-                  <p className="rounded-xl bg-slate-100 p-3 sm:p-4 text-sm sm:text-base text-gray-800">
+                  <p className="rounded-xl bg-[#0B1C2D] p-3 sm:p-4 text-sm sm:text-base text-white border border-[#4F7DFF]">
                     {item.userAnswer}
                   </p>
                 </section>
 
                 <section className="space-y-1.5">
-                  <h3 className="font-semibold text-emerald-600 text-sm sm:text-base">
+                  <h3 className="font-bold text-emerald-400 text-sm sm:text-base">
                     Correct Answer
                   </h3>
-                  <p className="rounded-xl bg-slate-100 p-3 sm:p-4 text-sm sm:text-base text-gray-800">
+                  <p className="rounded-xl bg-[#0B1C2D] p-3 sm:p-4 text-sm sm:text-base text-white border border-emerald-400">
                     {item.correctAnswer}
                   </p>
                 </section>
 
                 <section className="space-y-1.5">
-                  <h3 className="font-semibold text-fuchsia-600 text-sm sm:text-base">
+                  <h3 className="font-bold text-fuchsia-400 text-sm sm:text-base">
                     AI Feedback
                   </h3>
-                  <p className="rounded-xl bg-slate-100 p-3 sm:p-4 text-sm sm:text-base text-gray-800">
+                  <p className="rounded-xl bg-[#0B1C2D] p-3 sm:p-4 text-sm sm:text-base text-white border border-fuchsia-400">
                     {item.feedback}
                   </p>
                 </section>
