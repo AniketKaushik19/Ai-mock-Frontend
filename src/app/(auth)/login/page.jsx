@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
@@ -17,6 +17,8 @@ const LoginPage = () => {
    
   const { mutateAsync: loginUser, isPending } = uselogin();
   const [showPassword, setShowPassword] = useState(false);
+  
+  const { login, isLoggedIn } = useAuthStore();
 
   const router = useRouter();
 
@@ -44,7 +46,7 @@ const LoginPage = () => {
        console.log(error)
     }
     console.log("Login attempt:", { userData });
-    // TODO: call your login API here
+    
   };
 
   const handleOnChange = (e) => {
@@ -54,7 +56,15 @@ const LoginPage = () => {
       [name]: value
     }));
 
-  }
+  };
+   const UserLoggedIn=isLoggedIn();
+
+  useEffect(()=>{
+    if(UserLoggedIn){
+      router.replace('/dashboard');
+    }
+
+  },[UserLoggedIn])
 
   return (
     // 1. MAIN DARK BACKGROUND

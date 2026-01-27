@@ -2,8 +2,14 @@
 const nextConfig = {
   reactCompiler: true,
   images: {
-    domains: ['gurusharan.s3.tebi.io'], 
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'gurusharan.s3.tebi.io',
+        pathname: '/**',
+      },
+    ],
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig
