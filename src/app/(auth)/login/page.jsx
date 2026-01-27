@@ -13,7 +13,6 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-  const {login}=useAuthStore();
    
   const { mutateAsync: loginUser, isPending } = uselogin();
   const [showPassword, setShowPassword] = useState(false);
