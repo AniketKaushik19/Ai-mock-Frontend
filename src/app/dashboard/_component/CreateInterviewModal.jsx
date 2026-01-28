@@ -141,13 +141,13 @@ export default function CreateInterviewModal({ open, setOpen }) {
               <Button
                 variant="ghost"
                 onClick={() => setOpen(false)}
-                className="text-[#CBD5E1] hover:text-white h-9"
+                className="text-[#CBD5E1] hover:text-blue-500 hover:font-bold hover:cursor-pointer h-9"
               >
                 Cancel
               </Button>
               <Button
                 onClick={handleSubmit}
-                className="bg-[#4F7DFF] hover:bg-[#3A64E0] text-white px-5 h-9"
+                className="bg-[#4F7DFF] hover:bg-[#3A64E0] text-white px-5 h-9 cursor-pointer"
               >
                {isPending ? <Loading/> : "Start Interview"}
               </Button>

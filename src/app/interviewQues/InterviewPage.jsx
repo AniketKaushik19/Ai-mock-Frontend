@@ -16,6 +16,9 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import { useGetInterviewDetail } from "@/hooks/interview";
 import { useSubmitInterview } from "./_hooks/hooks";
+import { is } from "zod/v4/locales";
+import Loading from "../_component/Loading";
+import { useRouter } from "next/navigation";
 
 const InterviewPage = ({ interviewId }) => {
   const [mounted, setMounted] = useState(false);
@@ -24,6 +27,7 @@ const InterviewPage = ({ interviewId }) => {
   const [userAnswer, setUserAnswer] = useState("");
   const [answers, setAnswers] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
+  const router=useRouter();
 
   const {
     transcript,
@@ -135,8 +139,13 @@ const InterviewPage = ({ interviewId }) => {
     try {
      const result= await mutateAsync({ interviewId, answers: finalAnswers });
      console.log(result);
+     if(result?.message){
+toast.success("Interview submitted successfully!");
+router.replace(`/feedback/${interviewId}`);
+
+     }
      
-      toast.success("Interview submitted successfully!");
+      
     } catch (err) {
       toast.error("Failed to submit interview");
       console.error(err);
@@ -290,7 +299,10 @@ const InterviewPage = ({ interviewId }) => {
                 disabled={isPending}
                 className="bg-red-500/10 border border-red-500 px-4 rounded-lg"
               >
-                End Interview
+                {
+                  isPending ? <Loading/> :"End Interview"
+                }
+                
               </button>
             ) : (
               <button

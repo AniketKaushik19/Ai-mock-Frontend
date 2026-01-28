@@ -8,8 +8,10 @@ import { LogOut } from 'lucide-react';
 import useAuthStore from '../../../store/authStore';
 import { useLogout } from '@/hooks/user';
 import Loading from './Loading';
+import { useRouter } from 'next/navigation';
 
 export default function ProfileModal({ open, setOpen }) {
+     const router=useRouter();
       const { user,logout } = useAuthStore();
       const {mutateAsync,isPending}=useLogout();
 
@@ -18,6 +20,7 @@ export default function ProfileModal({ open, setOpen }) {
         if(result.message){
             logout();
             setOpen(false);
+            router.replace('/');
         }
 
       }
@@ -40,7 +43,7 @@ export default function ProfileModal({ open, setOpen }) {
 
                         <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#4F7DFF]">
                             <Image
-                                src={user?.img}
+                                src={user?.img ? user.img : "/image/avatar.png"} 
                                 alt="Profile"
                                 fill
                                 className="object-cover"

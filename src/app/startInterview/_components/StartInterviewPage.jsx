@@ -138,16 +138,6 @@ if (isLoading) {
                 <Briefcase size={18} />
                 <span>{totalQuestions} Questions</span>
               </div>
-
-              <div className="flex items-center gap-2">
-                <Clock size={18} />
-                <span>~45 Minutes</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Code size={18} />
-                <span>Live Coding</span>
-              </div>
             </div>
           </motion.div>
 
