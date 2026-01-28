@@ -49,7 +49,7 @@ export default function FeedbackPage({ feedbackId }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B1C2D] px-4 py-6 sm:px-6 lg:px-8 text-white">
+    <div className="min-h-screen bg-Primary px-4 py-6 sm:px-6 lg:px-8 text-white">
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -58,7 +58,7 @@ export default function FeedbackPage({ feedbackId }) {
       >
         {/* Overall Score */}
         <motion.div variants={itemVariants}>
-          <Card className="rounded-2xl bg-[#112A46] border border-white/10 shadow-lg">
+          <Card className="rounded-2xl bg-Secondary border border-white/10 shadow-lg">
             <CardHeader className="space-y-3">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <CardTitle className="text-xl sm:text-2xl font-bold text-white">
@@ -87,7 +87,7 @@ export default function FeedbackPage({ feedbackId }) {
           <div
             key={index}
           >
-            <Card className="rounded-2xl bg-[#112A46] border border-white/10 shadow-md">
+            <Card className="rounded-2xl bg-Secondary border border-white/10 shadow-md">
               <CardHeader className="space-y-2">
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <CardTitle className="text-base sm:text-lg font-semibold text-white">
@@ -115,7 +115,7 @@ export default function FeedbackPage({ feedbackId }) {
                   <h3 className="font-bold text-[#4F7DFF] text-sm sm:text-base">
                     Your Answer
                   </h3>
-                  <p className="rounded-xl bg-[#0B1C2D] p-3 sm:p-4 text-sm sm:text-base text-white border border-[#4F7DFF]">
+                  <p className="rounded-xl bg-Primary p-3 sm:p-4 text-sm sm:text-base text-white border border-[#4F7DFF]">
                     {item?.userAnswer || "User not given any answer."} 
                   </p>
                 </section>
@@ -124,7 +124,7 @@ export default function FeedbackPage({ feedbackId }) {
                   <h3 className="font-bold text-emerald-400 text-sm sm:text-base">
                     Correct Answer
                   </h3>
-                  <p className="rounded-xl bg-[#0B1C2D] p-3 sm:p-4 text-sm sm:text-base text-white border border-emerald-400">
+                  <p className="rounded-xl bg-Primary p-3 sm:p-4 text-sm sm:text-base text-white border border-emerald-400">
                     {item?.correctAnswer}
                   </p>
                 </section>
@@ -133,7 +133,7 @@ export default function FeedbackPage({ feedbackId }) {
                   <h3 className="font-bold text-fuchsia-400 text-sm sm:text-base">
                     AI Feedback
                   </h3>
-                  <p className="rounded-xl bg-[#0B1C2D] p-3 sm:p-4 text-sm sm:text-base text-white border border-fuchsia-400">
+                  <p className="rounded-xl bg-Primary p-3 sm:p-4 text-sm sm:text-base text-white border border-fuchsia-400">
                     {item?.feedback}
                   </p>
                 </section>
