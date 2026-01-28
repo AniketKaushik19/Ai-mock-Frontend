@@ -24,9 +24,6 @@ export default function ProfileModal({ open, setOpen }) {
         }
 
       }
-
-   
-
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTitle/>
@@ -68,6 +65,9 @@ export default function ProfileModal({ open, setOpen }) {
                         <Button
                             variant="outline"
                             className="border-white/20 text-[#4F7DFF] hover:bg-white hover:text-[#0B1C2D]"
+                            onClick={()=>{
+                                setOpen(false)
+                                router.push('/profile')}}
                         >
                             View Profile
                         </Button>
