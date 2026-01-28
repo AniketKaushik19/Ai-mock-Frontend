@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 
 
 export default function Dashboard() {
-    const router=useRouter();
+    const router = useRouter();
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -21,18 +21,18 @@ export default function Dashboard() {
         }
     };
 
-      const {data} = useGetAllInterviews();
+    const { data } = useGetAllInterviews();
     const { isLoggedIn } = useAuthStore();
 
 
-  useEffect(()=>{
-    if(!isLoggedIn()){
-        router.replace('/login');
-    };
-  },[]);
+    useEffect(() => {
+        if (!isLoggedIn()) {
+            router.replace('/login');
+        };
+    }, []);
 
- 
-  
+
+
 
     const itemVariants = {
         hidden: { y: 20, opacity: 0 },
@@ -44,10 +44,10 @@ export default function Dashboard() {
     };
 
     return (
-        <main className="min-h-screen bg-[#0B1C2D] text-white p-4 md:p-10">
+        <main className="min-h-screen bg-Primary text-white p-4 md:p-10">
 
 
-            
+
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -62,7 +62,7 @@ export default function Dashboard() {
                 </p>
             </motion.div>
 
-            <AddNewInterview/>
+            <AddNewInterview />
 
             <motion.h2
                 initial={{ opacity: 0 }}

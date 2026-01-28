@@ -16,7 +16,7 @@ import Loading from "@/app/_component/Loading";
 import { useRouter } from "next/navigation";
 
 export default function CreateInterviewModal({ open, setOpen }) {
-  const router=useRouter();
+  const router = useRouter();
   const [form, setForm] = useState({
     jobRole: "",
     jobDescription: "",
@@ -25,29 +25,29 @@ export default function CreateInterviewModal({ open, setOpen }) {
     numberOfQuestions: 5,
   });
 
-  const {mutateAsync,isPending}=useGenerateQuestion();
+  const { mutateAsync, isPending } = useGenerateQuestion();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async() => {
-    
- const result= await mutateAsync(form);
+  const handleSubmit = async () => {
 
- 
+    const result = await mutateAsync(form);
+
+
 
     setOpen(false);
-    if(result){
- router.push(`/startInterview/${result.interviewId}`);
+    if (result) {
+      router.push(`/startInterview/${result.interviewId}`);
     }
   };
-  
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="bg-[#112A46] text-white border border-white/10 max-w-lg w-[95vw]">
+      <DialogContent className="bg-Secondary text-white border border-white/10 max-w-lg w-[95vw]">
         <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -71,7 +71,7 @@ export default function CreateInterviewModal({ open, setOpen }) {
                 placeholder="Full Stack Developer"
                 value={form.jobRole}
                 onChange={handleChange}
-                className="mt-1 bg-[#0B1C2D] border-white/10 text-white h-9"
+                className="mt-1 bg-Primary border-white/10 text-white h-9"
               />
             </div>
 
@@ -85,11 +85,11 @@ export default function CreateInterviewModal({ open, setOpen }) {
                 placeholder="Optional"
                 value={form.jobDescription}
                 onChange={handleChange}
-                className="mt-1 bg-[#0B1C2D] border-white/10 text-white min-h-15"
+                className="mt-1 bg-Primary border-white/10 text-white min-h-15"
               />
             </div>
 
-            
+
             <div>
               <label className="text-xs text-[#CBD5E1]">Tech Stack</label>
               <Textarea
@@ -97,11 +97,11 @@ export default function CreateInterviewModal({ open, setOpen }) {
                 placeholder="React, Node.js"
                 value={form.techStack}
                 onChange={handleChange}
-                className="mt-1 bg-[#0B1C2D] border-white/10 text-white min-h-15"
+                className="mt-1 bg-Primary border-white/10 text-white min-h-15"
               />
             </div>
 
-            
+
             <div className="grid grid-cols-2 gap-3 items-center">
               <div>
                 <label className="text-xs text-[#CBD5E1]">Experience</label>
@@ -111,7 +111,7 @@ export default function CreateInterviewModal({ open, setOpen }) {
                   placeholder="3"
                   value={form.yearsOfExperience}
                   onChange={handleChange}
-                  className="mt-1 bg-[#0B1C2D] border-white/10 text-white h-9"
+                  className="mt-1 bg-Primary border-white/10 text-white h-9"
                 />
               </div>
 
@@ -123,17 +123,17 @@ export default function CreateInterviewModal({ open, setOpen }) {
                   </span>
                 </label>
 
-               <div className="flex flex-row relative">
-                 <Input
-                  value={5}
-                  disabled
-                  className="mt-1 bg-[#0B1C2D] border-white/10 text-white h-9 opacity-70 cursor-not-allowed"
-                />
+                <div className="flex flex-row relative">
+                  <Input
+                    value={5}
+                    disabled
+                    className="mt-1 bg-Primary border-white/10 text-white h-9 opacity-70 cursor-not-allowed"
+                  />
 
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[#4F7DFF] text-sm">
-                  🔒
-                </span>
-               </div>
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[#4F7DFF] text-sm">
+                    🔒
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -149,7 +149,7 @@ export default function CreateInterviewModal({ open, setOpen }) {
                 onClick={handleSubmit}
                 className="bg-[#4F7DFF] hover:bg-[#3A64E0] text-white px-5 h-9 cursor-pointer"
               >
-               {isPending ? <Loading/> : "Start Interview"}
+                {isPending ? <Loading /> : "Start Interview"}
               </Button>
             </div>
           </div>

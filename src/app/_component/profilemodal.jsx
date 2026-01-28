@@ -1,6 +1,6 @@
 'use client';
 
-import { Dialog,DialogTitle, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogTitle, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -11,26 +11,26 @@ import Loading from './Loading';
 import { useRouter } from 'next/navigation';
 
 export default function ProfileModal({ open, setOpen }) {
-     const router=useRouter();
-      const { user,logout } = useAuthStore();
-      const {mutateAsync,isPending}=useLogout();
+    const router = useRouter();
+    const { user, logout } = useAuthStore();
+    const { mutateAsync, isPending } = useLogout();
 
-      const handleLogout=async()=>{
-        const result=await mutateAsync();
-        if(result.message){
+    const handleLogout = async () => {
+        const result = await mutateAsync();
+        if (result.message) {
             logout();
             setOpen(false);
             router.replace('/');
         }
 
-      }
+    }
 
-   
+
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTitle/>
-            <DialogContent className="bg-[#112A46] text-white border border-white/10 w-[340px] p-0 overflow-hidden rounded-2xl">
+            <DialogTitle />
+            <DialogContent className="bg-Secondary text-white border border-white/10 w-[340px] p-0 overflow-hidden rounded-2xl">
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -43,7 +43,7 @@ export default function ProfileModal({ open, setOpen }) {
 
                         <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#4F7DFF]">
                             <Image
-                                src={user?.img ? user.img : "/image/avatar.png"} 
+                                src={user?.img ? user.img : "/image/avatar.png"}
                                 alt="Profile"
                                 fill
                                 className="object-cover"
@@ -67,17 +67,17 @@ export default function ProfileModal({ open, setOpen }) {
 
                         <Button
                             variant="outline"
-                            className="border-white/20 text-[#4F7DFF] hover:bg-white hover:text-[#0B1C2D]"
+                            className="border-white/20 text-[#4F7DFF] hover:bg-white hover:text-Primary"
                         >
                             View Profile
                         </Button>
 
                         <Button
                             className="bg-[#4F7DFF] hover:bg-[#3A64E0] flex gap-2"
-                          onClick={()=>handleLogout()}
+                            onClick={() => handleLogout()}
                         >
                             <LogOut className="w-4 h-4" />
-                          {isPending?<Loading/> :"Logout"}
+                            {isPending ? <Loading /> : "Logout"}
                         </Button>
 
                     </div>
