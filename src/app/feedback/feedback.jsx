@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { useFeedback } from '@/hooks/feedback';
+import Loading from '../_component/Loading';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -22,35 +23,23 @@ const itemVariants = {
 
 export default function FeedbackPage({ feedbackId }) {
   const {data , isLoading}=useFeedback(feedbackId);
-  console.log(data);
-  
-  console.log(feedbackId);
-  
-  const questions = [
-    {
-      question: "Explain the difference between REST and GraphQL.",
-      userAnswer:
-        "REST uses multiple endpoints while GraphQL uses a single endpoint.",
-      correctAnswer:
-        "REST has multiple endpoints with fixed responses, while GraphQL uses a single endpoint allowing clients to fetch exactly the data they need.",
-      feedback:
-        "Good core idea. Mentioning over-fetching and schema flexibility would strengthen your answer.",
-      score: 8,
-    },
-    {
-      question: "What is closure in JavaScript?",
-      userAnswer:
-        "A closure is when a function remembers variables from its outer scope.",
-      correctAnswer:
-        "A closure is a function that retains access to its lexical scope even after the outer function has finished executing.",
-      feedback:
-        "Correct definition. You could improve by adding a real-world use case example.",
-      score: 7,
-    },
-  ];
+  if (isLoading) {
 
-  const totalScore = questions.reduce((acc, q) => acc + q.score, 0);
-  const maxScore = questions.length * 10;
+    return <div className="min-h-screen flex items-center justify-center bg-Primary">
+      <Loading /> 
+    </div>  ;
+  }
+  
+  
+
+  
+  const questions =data?.questions || [];
+
+ 
+  
+
+  const totalScore = data?.overallScore;
+  const maxScore = questions?.length * 10;
   const percentage = (totalScore / maxScore) * 100;
 
   const getScoreColor = (score) => {
@@ -94,12 +83,9 @@ export default function FeedbackPage({ feedbackId }) {
         </motion.div>
 
         {/* Question Cards */}
-        {questions.map((item, index) => (
-          <motion.div
+        {questions?.map((item, index) => (
+          <div
             key={index}
-            variants={itemVariants}
-            whileHover={{ scale: 1.015 }}
-            transition={{ type: "spring", stiffness: 180 }}
           >
             <Card className="rounded-2xl bg-[#112A46] border border-white/10 shadow-md">
               <CardHeader className="space-y-2">
@@ -113,12 +99,12 @@ export default function FeedbackPage({ feedbackId }) {
                       item.score
                     )}`}
                   >
-                    {item.score} / 10
+                    {item?.score} / 10
                   </Badge>
                 </div>
 
                 <p className="text-sm sm:text-base text-[#CBD5E1]">
-                  {item.question}
+                  {item?.question}
                 </p>
               </CardHeader>
 
@@ -130,7 +116,7 @@ export default function FeedbackPage({ feedbackId }) {
                     Your Answer
                   </h3>
                   <p className="rounded-xl bg-[#0B1C2D] p-3 sm:p-4 text-sm sm:text-base text-white border border-[#4F7DFF]">
-                    {item.userAnswer}
+                    {item?.userAnswer || "User not given any answer."} 
                   </p>
                 </section>
 
@@ -139,7 +125,7 @@ export default function FeedbackPage({ feedbackId }) {
                     Correct Answer
                   </h3>
                   <p className="rounded-xl bg-[#0B1C2D] p-3 sm:p-4 text-sm sm:text-base text-white border border-emerald-400">
-                    {item.correctAnswer}
+                    {item?.correctAnswer}
                   </p>
                 </section>
 
@@ -148,12 +134,12 @@ export default function FeedbackPage({ feedbackId }) {
                     AI Feedback
                   </h3>
                   <p className="rounded-xl bg-[#0B1C2D] p-3 sm:p-4 text-sm sm:text-base text-white border border-fuchsia-400">
-                    {item.feedback}
+                    {item?.feedback}
                   </p>
                 </section>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
         ))}
       </motion.div>
     </div>
