@@ -1,9 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { QueryProvider } from "../../providers/queryProvider";
+
 import { Toaster } from "react-hot-toast";
-
-
+import  { QueryProvider } from "@/providers/queryProvider";
+import Navbar from "./_component/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,11 +26,15 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        
+
         <QueryProvider>
+          <Navbar />
+
           {children}
+
         </QueryProvider>
-        <Toaster/>
+
+        <Toaster />
       </body>
     </html>
   );

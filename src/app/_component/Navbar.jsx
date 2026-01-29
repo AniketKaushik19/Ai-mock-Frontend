@@ -58,7 +58,9 @@ export default function Navbar() {
     if (data?.user) login(data.user);
   }, [data, login]);
 
-  const UserLoggedIn = mounted && user;
+  const UserLoggedIn = mounted && !!user;
+  const isDesktop =
+    typeof window !== "undefined" && window.innerWidth >= 768;
 
   const filteredNavItems = navItems.filter((item) => {
     if (item.name === "Dashboard") return UserLoggedIn;
@@ -71,11 +73,10 @@ export default function Navbar() {
     return true;
   });
 
-  if (!mounted) return <div className="h-20 bg-Ternary" />;
+  if (!mounted) return <div className="h-20 bg-[#0D2B5B]" />;
 
   return (
-    <nav className="fixed md:relative top-0 left-0 w-full z-[999] border-b border-white/10 bg-Ternary">
-
+    <nav className="sticky top-0 z-[999] w-full bg-[#0D2B5B] border-b border-white/10">
       {/* Desktop Navbar */}
       {!isOpen && (
         <div className="container mx-auto flex h-20 items-center justify-between px-4">
@@ -86,18 +87,19 @@ export default function Navbar() {
               width={200}
               height={50}
               priority
-              className="object-contain h-8 md:h-12 w-auto"
+              className="h-8 md:h-12 w-auto object-contain"
             />
           </Link>
 
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
             {filteredNavItems.map((item) => {
               const isActive = pathname === item.path;
-
               return (
                 <Link
                   key={item.name}
                   href={item.path}
+<<<<<<< HEAD
                   className={`relative text-sm font-bold transition ${isActive
                     ? "text-orange-500"
                     : "text-white hover:text-[#4F7DFF]"
@@ -106,6 +108,17 @@ export default function Navbar() {
                   {item.name}
                   {isActive && (
                     <span className="absolute left-0 -bottom-2 w-full h-[2px] bg-orange-500 rounded-full" />
+=======
+                  className={`relative text-sm font-bold transition ${
+                    isActive
+                      ? "text-[#4F7DFF]"
+                      : "text-white hover:text-[#386bed]"
+                  }`}
+                >
+                  {item.name}
+                  {isActive && (
+                    <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-[#4F7DFF]" />
+>>>>>>> guru
                   )}
                 </Link>
               );
@@ -115,46 +128,56 @@ export default function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className={`relative text-sm font-bold transition ${pathname === "/login"
-                    ? "text-[#4F7DFF]"
-                    : "text-white hover:text-[#386bed]"
-                    }`}
+                  className={`text-sm font-bold ${
+                    pathname === "/login"
+                      ? "text-[#4F7DFF]"
+                      : "text-white hover:text-[#386bed]"
+                  }`}
                 >
                   Login
-                  {pathname === "/login" && (
-                    <span className="absolute left-0 -bottom-2 w-full h-[2px] bg-[#4F7DFF] rounded-full" />
-                  )}
                 </Link>
 
                 <Link
                   href="/signup"
-                  className="bg-[#386bed] text-white font-bold py-2 px-6 rounded-md hover:bg-[#2b52b8] transition"
+                  className="rounded-md bg-[#386bed] px-6 py-2 font-bold text-white hover:bg-[#2b52b8]"
                 >
                   Signup
                 </Link>
               </>
             )}
 
+            {/* Avatar + Hover Card */}
             {UserLoggedIn && (
               <div
                 className="relative"
-                onMouseEnter={() => setHoverOpen(true)}
-                onMouseLeave={() => setHoverOpen(false)}
+                onMouseEnter={() => isDesktop && setHoverOpen(true)}
+                onMouseLeave={() => isDesktop && setHoverOpen(false)}
               >
                 <div
                   onClick={() => setProfileOpen(true)}
-                  className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#4F7DFF] cursor-pointer hover:scale-105 transition"
+                  className="h-12 w-12 cursor-pointer overflow-hidden rounded-full border-2 border-[#4F7DFF] hover:scale-105 transition"
                 >
                   <Image
                     src={user?.img || "/image/avatar.png"}
                     alt="Profile"
                     width={48}
                     height={48}
-                    className="object-cover rounded-full"
+                    className="rounded-full object-cover"
                   />
                 </div>
 
-                {hoverOpen && <ProfileHoverCard user={user} />}
+               <AnimatePresence>
+  {hoverOpen && (
+    <motion.div
+      className="absolute right-0 top-14 z-50"
+      onMouseEnter={() => setHoverOpen(true)}
+      onMouseLeave={() => setHoverOpen(false)}
+    >
+      <ProfileHoverCard onClose={() => setHoverOpen(false)} />
+    </motion.div>
+  )}
+</AnimatePresence>
+
               </div>
             )}
           </div>
@@ -164,22 +187,19 @@ export default function Navbar() {
             {UserLoggedIn && (
               <div
                 onClick={() => setProfileOpen(true)}
-                className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#4F7DFF]"
+                className="h-10 w-10 overflow-hidden rounded-full border-2 border-[#4F7DFF]"
               >
                 <Image
                   src={user?.img || "/image/avatar.png"}
                   alt="Profile"
                   width={40}
                   height={40}
-                  className="object-cover rounded-full"
+                  className="rounded-full object-cover"
                 />
               </div>
             )}
 
-            <button
-              onClick={() => setIsOpen(true)}
-              className="text-white p-2"
-            >
+            <button onClick={() => setIsOpen(true)} className="text-white">
               <Menu />
             </button>
           </div>
@@ -194,48 +214,30 @@ export default function Navbar() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 140, damping: 22 }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 200 }}
-            onDragEnd={(e, info) => {
-              if (info.offset.x > 120) setIsOpen(false);
-            }}
-            className="fixed inset-0 bg-[#0B1C2D] z-[999] flex flex-col px-6 py-10 md:hidden"
+            className="fixed inset-0 z-[999] flex flex-col bg-[#0B1C2D] px-6 py-10 md:hidden"
           >
-            <div className="flex justify-between items-center">
-              <span className="text-white font-bold text-xl"></span>
-
-              <motion.button
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 1.35 }}
-                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            <div className="flex justify-end">
+              <button
                 onClick={() => setIsOpen(false)}
-                className="text-white text-4xl font-bold"
+                className="text-white"
               >
-                <motion.span
-                  whileTap={{ color: "#4F7DFF" }}
-                  className="flex items-center justify-center"
-                >
-                  <X className="w-8 h-8" />
-                </motion.span>
-              </motion.button>
+                <X size={32} />
+              </button>
             </div>
-
 
             <div className="flex flex-1 flex-col items-center justify-center gap-10">
               {filteredMobileNav.map((item) => {
                 const isActive = pathname === item.path;
-
                 return (
                   <Link
                     key={item.name}
                     href={item.path}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-4 text-4xl font-semibold transition ${isActive
-                      ? "text-[#4F7DFF]"
-                      : "text-white hover:text-[#4F7DFF]"
-                      }`}
+                    className={`flex items-center gap-4 text-4xl font-semibold ${
+                      isActive ? "text-[#4F7DFF]" : "text-white"
+                    }`}
                   >
-                    <item.icon className="h-7 w-7" />
+                    <item.icon />
                     {item.name}
                   </Link>
                 );
@@ -248,9 +250,9 @@ export default function Navbar() {
                   logout();
                   setIsOpen(false);
                 }}
-                className="flex items-center justify-center gap-3 w-full py-4 rounded-xl bg-red-600 hover:bg-red-700 font-bold text-white text-lg"
+                className="mt-auto flex items-center justify-center gap-3 rounded-xl bg-red-600 py-4 font-bold text-white"
               >
-                <LogOut className="h-6 w-6" />
+                <LogOut />
                 Logout
               </button>
             )}

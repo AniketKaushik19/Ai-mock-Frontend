@@ -12,7 +12,7 @@ import { useUpdateProfile } from "@/hooks/user";
 import Loading from "../_component/Loading";
 
 export default function ProfilePage() {
-  const { user } = useAuthStore();
+  const { user,login } = useAuthStore();
 
   const [mounted, setMounted] = useState(false);
   const [image, setImage] = useState(null);
@@ -75,7 +75,15 @@ export default function ProfilePage() {
       data.append("linkedin_url", profile?.linkedin);
 
       if (image) data.append("img", image);
-      await mutateAsync(data);
+     const result= await mutateAsync(data);
+     if(!result.success){
+     toast.error("Something went wrong ");
+      
+    }
+      login(result?.user);
+     
+      
+    
     } catch (err) {
       console.error(err);
     }
