@@ -16,7 +16,6 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import { useGetInterviewDetail } from "@/hooks/interview";
 import { useSubmitInterview } from "./_hooks/hooks";
-import { is } from "zod/v4/locales";
 import Loading from "../_component/Loading";
 import { useRouter } from "next/navigation";
 
@@ -27,7 +26,7 @@ const InterviewPage = ({ interviewId }) => {
   const [userAnswer, setUserAnswer] = useState("");
   const [answers, setAnswers] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
-  const router=useRouter();
+  const router = useRouter();
 
   const {
     transcript,
@@ -137,15 +136,15 @@ const InterviewPage = ({ interviewId }) => {
     });
 
     try {
-     const result= await mutateAsync({ interviewId, answers: finalAnswers });
-     console.log(result);
-     if(result?.message){
-toast.success("Interview submitted successfully!");
-router.replace(`/feedback/${interviewId}`);
+      const result = await mutateAsync({ interviewId, answers: finalAnswers });
+      console.log(result);
+      if (result?.message) {
+        toast.success("Interview submitted successfully!");
+        router.replace(`/feedback/${interviewId}`);
 
-     }
-     
-      
+      }
+
+
     } catch (err) {
       toast.error("Failed to submit interview");
       console.error(err);
@@ -195,11 +194,41 @@ router.replace(`/feedback/${interviewId}`);
           </div>
         </div>
 
-        <div className="w-full h-3 bg-gray-700 rounded-full mt-4">
-          <div
-            className="h-full bg-gradient-to-r from-[#386bed] to-purple-500"
-            style={{ width: `${progress}%` }}
-          />
+        {/* Timeline Progress Bar */}
+        <div className="relative w-full flex items-center mt-6">
+          {questions.map((_, idx) => {
+            const isActive = idx === activeQuestionIndex;
+            const isCompleted = idx < activeQuestionIndex;
+
+            return (
+              <div
+                key={idx}
+                className="relative flex-1 flex items-center justify-center"
+              >
+                {/* Point */}
+                <div
+                  className={`z-10 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all
+            ${isActive
+                      ? "bg-[#386bed] text-white scale-110 shadow-lg"
+                      : isCompleted
+                        ? "bg-green-500 text-white"
+                        : "bg-gray-600 text-gray-300"}
+          `}
+                >
+                  {idx + 1}
+                </div>
+
+                {/* Connector line (only between points) */}
+                {idx !== questions.length - 1 && (
+                  <div
+                    className={`absolute top-1/2 left-1/2 w-full h-1 -translate-y-1/2 transition-all
+              ${isCompleted ? "bg-green-500" : "bg-gray-700"}
+            `}
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -274,13 +303,33 @@ router.replace(`/feedback/${interviewId}`);
           </div>
 
           <div className="flex gap-3">
+            {/* Previous Button */}
+            {activeQuestionIndex > 0 && (
+              <button
+                onClick={() => {
+                  if (listening) SpeechRecognition.stopListening();
+                  saveCurrentAnswer();
+
+                  const prev = activeQuestionIndex - 1;
+                  setActiveQuestionIndex(prev);
+
+                  const prevAnswer = answers.find(
+                    (a) => a.questionId === questions[prev].id
+                  );
+                  setUserAnswer(prevAnswer?.answer || "");
+                  resetTranscript();
+                }}
+                className="bg-[#111827] border border-white/10 px-6 rounded-lg"
+              >
+                Previous
+              </button>
+            )}
+
+            {/* Record / Stop Button */}
             <button
               onClick={saveUserAnswer}
-              className={`flex-1 py-3 rounded-lg font-bold flex justify-center gap-2 ${
-                listening
-                  ? "bg-red-500 animate-pulse"
-                  : "bg-[#386bed]"
-              }`}
+              className={`flex-1 py-3 rounded-lg font-bold flex justify-center gap-2 ${listening ? "bg-red-500 animate-pulse" : "bg-[#386bed]"
+                }`}
             >
               {listening ? (
                 <>
@@ -293,30 +342,26 @@ router.replace(`/feedback/${interviewId}`);
               )}
             </button>
 
+            {/* Next or End Interview Button */}
             {activeQuestionIndex === questions.length - 1 ? (
               <button
                 onClick={handleEndInterview}
                 disabled={isPending}
                 className="bg-red-500/10 border border-red-500 px-4 rounded-lg"
               >
-                {
-                  isPending ? <Loading/> :"End Interview"
-                }
-                
+                {isPending ? <Loading /> : "End Interview"}
               </button>
             ) : (
               <button
                 onClick={() => {
-                  if (listening)
-                    SpeechRecognition.stopListening();
+                  if (listening) SpeechRecognition.stopListening();
                   saveCurrentAnswer();
 
                   const next = activeQuestionIndex + 1;
                   setActiveQuestionIndex(next);
 
                   const nextAnswer = answers.find(
-                    (a) =>
-                      a.questionId === questions[next].id
+                    (a) => a.questionId === questions[next].id
                   );
                   setUserAnswer(nextAnswer?.answer || "");
                   resetTranscript();
