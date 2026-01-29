@@ -1,4 +1,3 @@
-import axios from "axios";
 import { axiosInstance } from "./axios";
 
 
@@ -106,3 +105,4 @@ export const updateProfile=async(userData)=>{
        throw error
     }
 }
+

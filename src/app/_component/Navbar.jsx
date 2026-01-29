@@ -99,13 +99,13 @@ export default function Navbar() {
                   key={item.name}
                   href={item.path}
                   className={`relative text-sm font-bold transition ${isActive
-                    ? "text-[#4F7DFF]"
-                    : "text-white hover:text-[#386bed]"
+                    ? "text-orange-500"
+                    : "text-white hover:text-[#4F7DFF]"
                     }`}
                 >
                   {item.name}
                   {isActive && (
-                    <span className="absolute left-0 -bottom-2 w-full h-[2px] bg-[#4F7DFF] rounded-full" />
+                    <span className="absolute left-0 -bottom-2 w-full h-[2px] bg-orange-500 rounded-full" />
                   )}
                 </Link>
               );
