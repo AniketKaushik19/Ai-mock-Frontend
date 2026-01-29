@@ -71,10 +71,10 @@ export default function Navbar() {
     return true;
   });
 
-  if (!mounted) return <div className="h-20 bg-Ternary" />;
+  if (!mounted) return <div className="h-20 bg-[#0D2B5B]" />;
 
   return (
-    <nav className="fixed md:relative top-0 left-0 w-full z-[999] border-b border-white/10 bg-Ternary">
+    <nav className="sticky top-0 left-0 w-full z-[999] border-b border-white/10 bg-[#0D2B5B]">
 
       {/* Desktop Navbar */}
       {!isOpen && (

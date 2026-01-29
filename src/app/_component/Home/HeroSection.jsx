@@ -37,7 +37,7 @@ export default function HeroSection() {
         <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
           <Button
             size="lg"
-            className="bg-[#386bed] hover:bg-[#2563EB] text-white px-8 py-6 text-lg rounded-full shadow-lg shadow-blue-900/20 transition-all hover:scale-105"
+            className="bg-Primary hover:bg-[#386bed]  text-white px-8 py-6 text-lg rounded-full shadow-lg hover:border-Primary transition-all hover:scale-105"
             onClick={()=>router.push('/dashboard')}
             
             
@@ -48,9 +48,9 @@ export default function HeroSection() {
           <Button
             variant="outline"
             size="lg"
-            className="border-[#386bed] text-[#386bed] hover:bg-[#386bed]/10 px-8 py-6 hover:text-white text-lg rounded-full transition-all"
+            className="bg-[#386bed] text-white px-8 py-6 hover:bg-Primary hover:text-white text-lg rounded-full transition-all border-none hover:scale-105 shadow-lg shadow-blue-900/10"
           >
-            How It Works
+           Analyze Your Resume
           </Button>
         </div>
       </motion.div>
