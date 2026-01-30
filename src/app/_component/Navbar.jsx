@@ -101,13 +101,13 @@ export default function Navbar() {
                   href={item.path}
                   className={`relative text-sm font-bold transition ${
                     isActive
-                      ? "text-[#4F7DFF]"
+                      ? "text-orange-500"
                       : "text-white hover:text-[#386bed]"
                   }`}
                 >
                   {item.name}
                   {isActive && (
-                    <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-[#4F7DFF]" />
+                    <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-orange-500" />
                   )}
                 </Link>
               );
