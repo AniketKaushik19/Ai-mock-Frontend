@@ -1,4 +1,3 @@
-import axios from "axios";
 import { axiosInstance } from "./axios";
 
 
@@ -97,3 +96,13 @@ export const resetPassword=async (userData) => {
       throw error
    }
 }
+
+export const updateProfile=async(userData)=>{
+    try {
+       const res=await axiosInstance.put('/profile/edit' , userData)
+       return res?.data
+    } catch (error) {
+       throw error
+    }
+}
+

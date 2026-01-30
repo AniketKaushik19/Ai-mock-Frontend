@@ -1,9 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@theme{
-  --color-Primary:#0B1C2D;   /*light*/
-  --color-Secondary:#112A46;  /*dark*/
-  --color-Ternary:#0D2B5B;  /*navbar*/
+
+@theme {
+  --color-Primary: #0B1C2D;
+  /*light*/
+  --color-Secondary: #112A46;
+  /*dark*/
+  --color-Ternary: #0D2B5B;
+  /*navbar*/
 
 }
 
@@ -120,10 +124,13 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

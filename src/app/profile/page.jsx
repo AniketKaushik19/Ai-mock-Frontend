@@ -9,6 +9,15 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 
 export default function ProfilePage() {
+  const { user,login } = useAuthStore();
+
+  const [mounted, setMounted] = useState(false);
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const { mutateAsync, isPending } = useUpdateProfile();
+
   const [profile, setProfile] = useState({
     name: "Abhishek Sharma",
     email: "abhishek@gmail.com",
@@ -33,9 +42,30 @@ export default function ProfilePage() {
     }
   };
 
-  const handleSave = () => {
-    console.log("Updated Profile:", profile);
-    // 🔗 Call API here
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isPending) return;
+
+    try {
+      const data = new FormData();
+      data.append("name",profile?.name)
+      data.append("college_name", profile?.college);
+      data.append("year_passing", profile?.yearOfPassing);
+      data.append("linkedin_url", profile?.linkedin);
+
+      if (image) data.append("img", image);
+     const result= await mutateAsync(data);
+     if(!result.success){
+     toast.error("Something went wrong ");
+      
+    }
+      login(result?.user);
+     
+      
+    
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

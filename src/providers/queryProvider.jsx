@@ -40,7 +40,7 @@ export const QueryProvider=({children})=>{
 
 return (
     <QueryClientProvider client={queryClient}>
-      <Navbar/>
+  
 {children}
         </QueryClientProvider>
 )     
