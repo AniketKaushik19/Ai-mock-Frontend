@@ -59,8 +59,7 @@ export default function Navbar() {
   }, [data, login]);
 
   const UserLoggedIn = mounted && !!user;
-  const isDesktop =
-    typeof window !== "undefined" && window.innerWidth >= 768;
+  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
 
   const filteredNavItems = navItems.filter((item) => {
     if (item.name === "Dashboard") return UserLoggedIn;
@@ -155,18 +154,17 @@ export default function Navbar() {
                   />
                 </div>
 
-               <AnimatePresence>
-  {hoverOpen && (
-    <motion.div
-      className="absolute right-0 top-14 z-50"
-      onMouseEnter={() => setHoverOpen(true)}
-      onMouseLeave={() => setHoverOpen(false)}
-    >
-      <ProfileHoverCard onClose={() => setHoverOpen(false)} />
-    </motion.div>
-  )}
-</AnimatePresence>
-
+                <AnimatePresence>
+                  {hoverOpen && (
+                    <motion.div
+                      className="absolute right-0 top-14 z-50"
+                      onMouseEnter={() => setHoverOpen(true)}
+                      onMouseLeave={() => setHoverOpen(false)}
+                    >
+                      <ProfileHoverCard onClose={() => setHoverOpen(false)} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             )}
           </div>
@@ -206,10 +204,7 @@ export default function Navbar() {
             className="fixed inset-0 z-[999] flex flex-col bg-[#0B1C2D] px-6 py-10 md:hidden"
           >
             <div className="flex justify-end">
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-white"
-              >
+              <button onClick={() => setIsOpen(false)} className="text-white">
                 <X size={32} />
               </button>
             </div>
