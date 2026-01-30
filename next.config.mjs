@@ -8,6 +8,11 @@ const nextConfig = {
         hostname: 'gurusharan.s3.tebi.io',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: '**',
+        pathname: '/**',
+      },
     ],
   },
 }
