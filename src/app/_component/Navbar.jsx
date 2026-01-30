@@ -99,7 +99,6 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.path}
-<<<<<<< HEAD
                   className={`relative text-sm font-bold transition ${isActive
                     ? "text-orange-500"
                     : "text-white hover:text-[#4F7DFF]"
@@ -108,17 +107,6 @@ export default function Navbar() {
                   {item.name}
                   {isActive && (
                     <span className="absolute left-0 -bottom-2 w-full h-[2px] bg-orange-500 rounded-full" />
-=======
-                  className={`relative text-sm font-bold transition ${
-                    isActive
-                      ? "text-[#4F7DFF]"
-                      : "text-white hover:text-[#386bed]"
-                  }`}
-                >
-                  {item.name}
-                  {isActive && (
-                    <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-[#4F7DFF]" />
->>>>>>> guru
                   )}
                 </Link>
               );
