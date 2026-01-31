@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { signup, login, OtpVerify, OtpResend, onboarding, forgotPassword, forgotOtpverify, forgotOtpResend, resetPassword, profile, logout, updateProfile } from "../libs/api"
+import { signup, login, OtpVerify, OtpResend, onboarding, forgotPassword, forgotOtpverify, forgotOtpResend, resetPassword, profile, logout, updateProfile, adminlogout } from "../libs/api"
 import toast from "react-hot-toast";
+import useAdminAuthStore from "../../store/adminAuthStore";
 
 
 
@@ -148,8 +149,9 @@ export const useResetPassword=()=>{
   })
 };
 export const useLogout=()=>{
+  const {admin}=useAdminAuthStore();
   return useMutation({
-    mutationFn:logout,
+    mutationFn:()=>(admin ? adminlogout() : logout()),
     onSuccess:(data)=>{
       toast.success("Logout Successfully");
     },

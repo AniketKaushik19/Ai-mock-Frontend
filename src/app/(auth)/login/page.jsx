@@ -8,6 +8,7 @@ import { uselogin } from "@/hooks/user";
 import Loading from "@/app/_component/Loading";
 import useAuthStore from "../../../../store/authStore";
 import { useAdminLogin } from "@/hooks/admin";
+import useAdminAuthStore from "../../../../store/adminAuthStore";
 
 const LoginPage = () => {
   const [userData, setUserData] = useState({
@@ -16,8 +17,9 @@ const LoginPage = () => {
   });
 
   const { mutateAsync: loginUser, isPending } = uselogin();
-  const {mutateAsync:adminLogin , isPending:adminPending}=useAdminLogin()
+  const {mutateAsync:adminLogin , isPending:adminPending}=useAdminLogin();
   const [showPassword, setShowPassword] = useState(false);
+  const {login:adminloginStore}=useAdminAuthStore();
   const [role, setRole] = useState("user");
 
 
@@ -47,8 +49,15 @@ const LoginPage = () => {
         }
       }
       else{
-         const res=await adminLogin(data)
-         console.log("Admin login details",res)
+        
+         const res=await adminLogin(data);
+        if(res.admin.id){
+          adminloginStore(res.admin);
+          router.replace('/admin');
+
+        }
+         
+         
       }
     }
     catch (error) {

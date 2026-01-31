@@ -1,5 +1,5 @@
-import axios from "axios";
 import { axiosInstance } from "./axios";
+
 
 
 export const signup = async (SignupData) => {
@@ -55,6 +55,14 @@ export const profile = async () => {
 export const logout = async () => {
    try {
       const res = await axiosInstance.post(`logout`);
+      return res?.data;
+   } catch (error) {
+      throw error
+   }
+}
+export const adminlogout = async () => {
+   try {
+      const res = await axiosInstance.post(`admin/logout`);
       return res?.data;
    } catch (error) {
       throw error
