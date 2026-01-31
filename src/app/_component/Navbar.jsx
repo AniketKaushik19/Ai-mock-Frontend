@@ -119,7 +119,7 @@ export default function Navbar() {
                   href="/login"
                   className={`text-sm font-bold ${
                     pathname === "/login"
-                      ? "text-[#4F7DFF]"
+                      ? "text-orange-500  underline"
                       : "text-white hover:text-[#386bed]"
                   }`}
                 >

@@ -97,7 +97,7 @@ export default function OnboardingPage() {
 
 
                     <div className="flex flex-col items-center gap-4">
-                        <div className="relative w-28 h-28 rounded-full overflow-hidden border border-white/20" onClick={() => fileInputRef.current?.click()}>
+                        <div className="relative w-28 h-28 rounded-full overflow-hidden border hover:cursor-pointer hover:scale-110 border-white/20" onClick={() => fileInputRef.current?.click()}>
                             <Image
                                 src={preview || '/image/avatar.png'}
                                 alt="Profile Preview"
