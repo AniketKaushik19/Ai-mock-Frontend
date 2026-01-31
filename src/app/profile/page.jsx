@@ -20,6 +20,7 @@ export default function ProfilePage() {
   const fileInputRef = useRef(null);
 
   const { mutateAsync, isPending } = useUpdateProfile();
+  //  huuuuu
 
   const [profile, setProfile] = useState({
     name: "",
