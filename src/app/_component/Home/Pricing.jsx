@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { Check, Zap } from "lucide-react";
+import { handlePayment } from "../checkoutButton";
+import Script from "next/script";
 
 const plans = [
     {
@@ -119,12 +121,14 @@ export function Pricing() {
                                     </li>
                                 ))}
                             </ul>
+                           <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
                             <button
                                 className={`w-full py-3 rounded-lg font-semibold transition-all ${plan.popular
                                         ? "bg-[#4F7DFF] text-white hover:bg-[#386bed] shadow-lg"
                                         : "bg-[#0B1C2D] border border-white/10 text-white hover:border-[#4F7DFF]"
                                     }`}
+                                    onClick={handlePayment}
                             >
                                 {plan.cta}
                             </button>
