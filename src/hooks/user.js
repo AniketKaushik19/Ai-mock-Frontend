@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { signup, login, OtpVerify, OtpResend, onboarding, forgotPassword, forgotOtpverify, forgotOtpResend, resetPassword, profile, logout, updateProfile } from "../libs/api"
+import { signup, login, OtpVerify, OtpResend, onboarding, forgotPassword, forgotOtpverify, forgotOtpResend, resetPassword, profile, logout } from "../libs/api"
 import toast from "react-hot-toast";
 
 
@@ -174,15 +174,3 @@ export const useGetProfile = (options = {}) => {
     },
   });
 };
-
-export const useUpdateProfile=()=>{
-   return useMutation({
-    mutationFn:updateProfile,
-    onSuccess:(data)=>{
-      toast.success("Profile Updated Successfully")
-    },
-    onError:(error)=>{
-      toast.error(error?.response?.data?.message || "Error while Updating Profile")
-    }
-  })
-}

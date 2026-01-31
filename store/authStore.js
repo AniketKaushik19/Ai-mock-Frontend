@@ -10,7 +10,14 @@ const useAuthStore = create(
 
       login:(data) => {
         set((state) => {
-          state.user =data;
+          state.user = {
+            name: data.name,
+            userId: data.id,
+            email: data.email,
+            isOnboarding:data.isBoarding,
+            img: data?.img || null
+            
+          };
           
         });
       },
