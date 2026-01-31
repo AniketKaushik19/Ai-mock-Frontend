@@ -7,45 +7,55 @@ import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 import { uselogin } from "@/hooks/user";
 import Loading from "@/app/_component/Loading";
 import useAuthStore from "../../../../store/authStore";
+import { useAdminLogin } from "@/hooks/admin";
 
 const LoginPage = () => {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
   });
-   
+
   const { mutateAsync: loginUser, isPending } = uselogin();
+  const {mutateAsync:adminLogin , isPending:adminPending}=useAdminLogin()
   const [showPassword, setShowPassword] = useState(false);
-  
+  const [role, setRole] = useState("user");
+
+
   const { login, isLoggedIn } = useAuthStore();
 
   const router = useRouter();
 
-  const handleSubmit =async(e) => {
+  const handleSubmit = async (e) => {
 
     e.preventDefault();
-    try{
-       if(!userData.email || !userData.password){
-          toast.error("Fill all required field")
-          return 
-       }
-       const data ={
-          email:userData.email,
-          password:userData.password
-       } 
-      const res= await loginUser(data);
-      console.log(res);
-      
-      if(res.user.id){
-        login(res.user);
-        router.replace('/dashboard')
+    try {
+      if (!userData.email || !userData.password) {
+        toast.error("Fill all required field")
+        return
+      }
+      const data = {
+        email: userData.email,
+        password: userData.password
+      }
+      if (role === "user") {
+        const res = await loginUser(data);
+        console.log(res);
+
+        if (res.user.id) {
+          login(res.user);
+          router.replace('/dashboard')
+        }
+      }
+      else{
+         const res=await adminLogin(data)
+         console.log("Admin login details",res)
       }
     }
-    catch(error){
-       console.log(error)
+    catch (error) {
+      console.log(error)
     }
     console.log("Login attempt:", { userData });
-    
+
   };
 
   const handleOnChange = (e) => {
@@ -56,19 +66,19 @@ const LoginPage = () => {
     }));
 
   };
-   const UserLoggedIn=isLoggedIn();
+  const UserLoggedIn = isLoggedIn();
 
-  useEffect(()=>{
-    if(UserLoggedIn){
+  useEffect(() => {
+    if (UserLoggedIn) {
       router.replace('/dashboard');
     }
 
-  },[UserLoggedIn])
+  }, [UserLoggedIn])
 
   return (
     // 1. MAIN DARK BACKGROUND
     <div className="min-h-screen relative flex items-center justify-center bg-[#0B0F19] overflow-hidden px-4">
-      
+
       {/* --- BACKGROUND DECORATION: Ambient Hero Glow --- */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none -z-10" />
 
@@ -101,7 +111,7 @@ const LoginPage = () => {
           </motion.h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            
+
             {/* Email Input */}
             <Input
               icon={<Mail size={18} className="text-gray-400" />}
@@ -128,7 +138,28 @@ const LoginPage = () => {
             />
 
             {/* Forgot Password */}
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+              <div className="flex gap-3">
+                {["user", "admin"].map((item) => (
+                  <label
+                    key={item}
+                    className={`border rounded-lg p-2 px-3 cursor-pointer transition
+        ${role === item ? "border-blue-600 bg-blue-50" : "border-gray-300 text-white"}
+      `}
+                  >
+                    <input
+                      type="radio"
+                      name="role"
+                      value={item}
+                      checked={role === item}
+                      onChange={() => setRole(item)}
+                      className="hidden"
+                    />
+                    <p className="font-medium capitalize">{item}</p>
+                  </label>
+                ))}
+              </div>
+
               <button
                 type="button"
                 onClick={() => router.push("/forget-password")}
@@ -145,10 +176,10 @@ const LoginPage = () => {
               whileTap={{ scale: 0.98 }}
               className="w-full py-3.5 bg-[#386bed] hover:bg-[#2563EB] text-white font-bold rounded-lg shadow-lg transition-all duration-300 flex items-center justify-center group"
             >
-              {isPending ? <Loading/> :
-             <>
-             Sign In <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />  
-             </>
+              {isPending ? <Loading /> :
+                <>
+                  Sign In <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </>
               }
             </motion.button>
           </form>
@@ -181,9 +212,9 @@ function Input({ icon, ...props }) {
     <div className="w-full">
       <div className="flex items-center border border-white/10 rounded-lg px-4 bg-[#0F172A]/50 transition-all focus-within:ring-2 focus-within:ring-indigo-500/50 focus-within:border-indigo-500">
         {icon}
-        <input 
-          {...props} 
-          className="w-full py-3 ml-3 bg-transparent outline-none text-white placeholder-gray-400" 
+        <input
+          {...props}
+          className="w-full py-3 ml-3 bg-transparent outline-none text-white placeholder-gray-400"
         />
       </div>
     </div>
