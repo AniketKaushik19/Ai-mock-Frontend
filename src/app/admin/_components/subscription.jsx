@@ -13,6 +13,8 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
+import { useCreateSubscription } from "@/hooks/subscription";
+
 const initialPlans = [
     {
         id: "1",
@@ -57,6 +59,7 @@ export default function SubscriptionManagement() {
         featureInput: "",
         features: [],
     });
+    const {mutateAsync:createPlan , isPending:createPlanPending}=useCreateSubscription()
 
     const activeCount = plans.filter((p) => p.status === "active").length;
 
@@ -77,10 +80,10 @@ export default function SubscriptionManagement() {
         });
     };
 
-    const handleCreate = () => {
+    const handleCreate = async() => {
         if (!form.name) return;
-
-        setPlans([
+        try {
+             setPlans([
             ...plans,
             {
                 id: Date.now().toString(),
@@ -90,8 +93,14 @@ export default function SubscriptionManagement() {
                 features: form.features,
             },
         ]);
-
-        setForm({ name: "", price: "", featureInput: "", features: [] });
+        const res= await createPlan(form)
+        if(res.success){
+            setForm({ name: "", price: "", featureInput: "", features: [] });
+        }
+        } catch (error) {
+            console.log(error)
+        }
+       
     };
 
     const toggleStatus = (id) => {
