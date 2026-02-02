@@ -15,7 +15,7 @@ export default function Sidebar({ activeSection, onSectionChange }) {
 
     return (
         <div className="w-64 bg-slate-900 text-white min-h-screen flex flex-col">
-            {/* Header */}
+            {/* Header
             <div className="p-6 border-b border-slate-800">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-indigo-600 rounded-lg">
@@ -26,7 +26,7 @@ export default function Sidebar({ activeSection, onSectionChange }) {
                         <p className="text-sm text-slate-400">Admin Dashboard</p>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             {/* Navigation */}
             <nav className="flex-1 p-4">

@@ -1,14 +1,9 @@
+'use client';
 import { useState } from "react";
-import {
-    Search,
-    MoreVertical,
-    DollarSign,
-    TrendingUp,
-    Users,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Plus, Trash2, CheckCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import {
     Table,
     TableBody,
@@ -17,222 +12,258 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
-const mockSubscriptions = [
+const initialPlans = [
     {
         id: "1",
-        userName: "John Doe",
-        userEmail: "john.doe@example.com",
-        plan: "Premium",
+        name: "Free",
+        price: 0,
         status: "active",
-        startDate: "2025-01-15",
-        renewalDate: "2025-02-15",
-        amount: 2499,
+        features: [
+            "1 Mock Interview",
+            "Basic Feedback",
+        ],
     },
     {
         id: "2",
-        userName: "Sarah Smith",
-        userEmail: "sarah.smith@example.com",
-        plan: "Free",
+        name: "Basic",
+        price: 999,
         status: "active",
-        startDate: "2025-01-20",
-        renewalDate: "-",
-        amount: 0,
+        features: [
+            "5 Mock Interviews",
+            "AI Feedback",
+            "Email Support",
+        ],
     },
     {
         id: "3",
-        userName: "Michael Johnson",
-        userEmail: "michael.j@example.com",
-        plan: "Basic",
-        status: "cancelled",
-        startDate: "2025-01-10",
-        renewalDate: "2025-02-10",
-        amount: 999,
+        name: "Premium",
+        price: 2499,
+        status: "inactive",
+        features: [
+            "Unlimited Interviews",
+            "Advanced AI Feedback",
+            "Resume Review",
+            "Priority Support",
+        ],
     },
 ];
 
-export default function Subscription() {
-    const [searchQuery, setSearchQuery] = useState("");
-    const [subscriptions] = useState(mockSubscriptions);
+export default function SubscriptionManagement() {
+    const [plans, setPlans] = useState(initialPlans);
+    const [form, setForm] = useState({
+        name: "",
+        price: "",
+        featureInput: "",
+        features: [],
+    });
 
-    const filteredSubscriptions = subscriptions.filter(
-        (sub) =>
-            sub.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            sub.userEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            sub.plan.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const activeCount = plans.filter((p) => p.status === "active").length;
 
-    const activeSubscriptions = subscriptions.filter(
-        (s) => s.status === "active"
-    ).length;
+    const addFeature = () => {
+        if (!form.featureInput.trim()) return;
 
-    const monthlyRevenue = subscriptions
-        .filter((s) => s.status === "active")
-        .reduce((sum, s) => sum + s.amount, 0);
+        setForm({
+            ...form,
+            features: [...form.features, form.featureInput.trim()],
+            featureInput: "",
+        });
+    };
 
-    const premiumUsers = subscriptions.filter(
-        (s) => s.plan === "Premium" && s.status === "active"
-    ).length;
+    const removeFeature = (index) => {
+        setForm({
+            ...form,
+            features: form.features.filter((_, i) => i !== index),
+        });
+    };
+
+    const handleCreate = () => {
+        if (!form.name) return;
+
+        setPlans([
+            ...plans,
+            {
+                id: Date.now().toString(),
+                name: form.name,
+                price: Number(form.price || 0),
+                status: "active",
+                features: form.features,
+            },
+        ]);
+
+        setForm({ name: "", price: "", featureInput: "", features: [] });
+    };
+
+    const toggleStatus = (id) => {
+        setPlans(
+            plans.map((p) =>
+                p.id === id
+                    ? { ...p, status: p.status === "active" ? "inactive" : "active" }
+                    : p
+            )
+        );
+    };
+
+    const handleDelete = (id) => {
+        setPlans(plans.filter((p) => p.id !== id));
+    };
 
     return (
-        <div className="p-8 bg-slate-50 min-h-screen">
+        <div className="p-8 bg-slate-950 min-h-screen text-slate-100">
             {/* Header */}
             <div className="mb-8">
-                <h2 className="text-3xl font-bold text-slate-900 mb-1">
-                    Plans & Subscriptions
-                </h2>
-                <p className="text-slate-600">
-                    Manage student plans, renewals, and revenue
+                <h2 className="text-3xl font-bold">Subscription Plans</h2>
+                <p className="text-slate-400">
+                    Create and manage subscription plans & features
                 </p>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white p-6 rounded-xl border border-slate-200">
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <p className="text-sm text-slate-500">Active Students</p>
-                            <p className="text-3xl font-bold">{activeSubscriptions}</p>
-                        </div>
-                        <Users className="size-12 text-indigo-600 opacity-20" />
-                    </div>
-                </div>
-
-                <div className="bg-white p-6 rounded-xl border border-slate-200">
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <p className="text-sm text-slate-500">Monthly Revenue</p>
-                            <p className="text-3xl font-bold">
-                                ₹{monthlyRevenue.toLocaleString()}
-                            </p>
-                        </div>
-                        <DollarSign className="size-12 text-teal-600 opacity-20" />
-                    </div>
-                </div>
-
-                <div className="bg-white p-6 rounded-xl border border-slate-200">
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <p className="text-sm text-slate-500">Premium Students</p>
-                            <p className="text-3xl font-bold">{premiumUsers}</p>
-                        </div>
-                        <TrendingUp className="size-12 text-purple-600 opacity-20" />
-                    </div>
-                </div>
+            {/* Active Count */}
+            <div className="mb-6">
+                <Badge className="bg-green-900/40 text-green-300">
+                    <CheckCircle className="size-3 mr-1" />
+                    Active Plans: {activeCount}
+                </Badge>
             </div>
 
-            {/* Search */}
-            <div className="bg-white p-6 rounded-xl border border-slate-200 mb-6">
-                <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-slate-400" />
+            {/* Create Plan */}
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 mb-8">
+                <h3 className="font-semibold mb-4">Create New Plan</h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                     <Input
-                        placeholder="Search students or plans..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
+                        className="bg-slate-950 border-slate-700 text-slate-100"
+                        placeholder="Plan Name"
+                        value={form.name}
+                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    />
+                    <Input
+                        className="bg-slate-950 border-slate-700 text-slate-100"
+                        placeholder="Price (₹)"
+                        type="number"
+                        value={form.price}
+                        onChange={(e) => setForm({ ...form, price: e.target.value })}
                     />
                 </div>
+
+                {/* Features Input */}
+                <div className="flex gap-2 mb-3">
+                    <Input
+                        className="bg-slate-950 border-slate-700 text-slate-100"
+                        placeholder="Add feature (e.g. Unlimited Interviews)"
+                        value={form.featureInput}
+                        onChange={(e) =>
+                            setForm({ ...form, featureInput: e.target.value })
+                        }
+                        onKeyDown={(e) => e.key === "Enter" && addFeature()}
+                    />
+                    <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={addFeature}
+                    >
+                        <Plus className="size-4" />
+                    </Button>
+                </div>
+
+                {/* Feature List */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                    {form.features.map((feature, index) => (
+                        <Badge className="bg-indigo-900/40 text-indigo-300 flex items-center gap-1 pr-1">
+                            {feature}
+                            <button
+                                type="button"
+                                onClick={() => removeFeature(index)}
+                                className="ml-1 rounded hover:bg-indigo-800 p-0.5"
+                            >
+                                <X className="size-3" />
+                            </button>
+                        </Badge>
+
+                    ))}
+                </div>
+
+                <Button
+                    onClick={handleCreate}
+                    className="bg-indigo-600 hover:bg-indigo-700 gap-2"
+                >
+                    <Plus className="size-4" />
+                    Add Plan
+                </Button>
             </div>
 
-            {/* Table */}
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            {/* Plans Table */}
+            <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
                 <Table>
                     <TableHeader>
-                        <TableRow>
-                            <TableHead>Student</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Plan</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Start</TableHead>
-                            <TableHead>Renewal</TableHead>
-                            <TableHead>Amount</TableHead>
-                            <TableHead className="text-right">Action</TableHead>
+                        <TableRow className="hover:bg-transparent">
+                            <TableHead className="text-slate-400">Plan</TableHead>
+                            <TableHead className="text-slate-400">Price</TableHead>
+                            <TableHead className="text-slate-400">Features</TableHead>
+                            <TableHead className="text-slate-400">Status</TableHead>
+                            <TableHead className="text-right text-slate-400">
+                                Actions
+                            </TableHead>
                         </TableRow>
                     </TableHeader>
 
                     <TableBody>
-                        {filteredSubscriptions.map((sub) => (
-                            <TableRow key={sub.id}>
+                        {plans.map((plan) => (
+                            <TableRow
+                                key={plan.id}
+                                className="hover:bg-slate-800/50"
+                            >
+                                <TableCell className="font-medium">
+                                    {plan.name}
+                                </TableCell>
+
                                 <TableCell>
-                                    <div className="flex items-center gap-3">
-                                        <div className="size-10 bg-indigo-600 rounded-full flex items-center justify-center text-white font-semibold">
-                                            {sub.userName.charAt(0)}
-                                        </div>
-                                        <span className="font-medium">{sub.userName}</span>
+                                    {plan.price === 0 ? "Free" : `₹${plan.price}`}
+                                </TableCell>
+
+                                <TableCell>
+                                    <div className="flex flex-wrap gap-1">
+                                        {plan.features.map((f, i) => (
+                                            <Badge
+                                                key={i}
+                                                className="bg-slate-800 text-slate-300"
+                                            >
+                                                {f}
+                                            </Badge>
+                                        ))}
                                     </div>
                                 </TableCell>
 
-                                <TableCell className="text-slate-600">
-                                    {sub.userEmail}
-                                </TableCell>
-
-                                <TableCell>
-                                    <Badge
-                                        variant="outline"
-                                        className={
-                                            sub.plan === "Premium"
-                                                ? "border-purple-600 text-purple-600 bg-purple-50"
-                                                : sub.plan === "Basic"
-                                                    ? "border-indigo-600 text-indigo-600 bg-indigo-50"
-                                                    : "border-slate-400 text-slate-600 bg-slate-50"
-                                        }
-                                    >
-                                        {sub.plan}
-                                    </Badge>
-                                </TableCell>
-
                                 <TableCell>
                                     <Badge
                                         className={
-                                            sub.status === "active"
-                                                ? "bg-green-100 text-green-800"
-                                                : sub.status === "cancelled"
-                                                    ? "bg-orange-100 text-orange-800"
-                                                    : "bg-red-100 text-red-800"
+                                            plan.status === "active"
+                                                ? "bg-green-900/40 text-green-300"
+                                                : "bg-slate-800 text-slate-400"
                                         }
                                     >
-                                        {sub.status}
+                                        {plan.status}
                                     </Badge>
                                 </TableCell>
 
-                                <TableCell className="text-slate-600">
-                                    {new Date(sub.startDate).toLocaleDateString()}
-                                </TableCell>
+                                <TableCell className="text-right flex justify-end gap-2">
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        className="text-slate-300"
+                                        onClick={() => toggleStatus(plan.id)}
+                                    >
+                                        Toggle
+                                    </Button>
 
-                                <TableCell className="text-slate-600">
-                                    {sub.renewalDate === "-"
-                                        ? "-"
-                                        : new Date(sub.renewalDate).toLocaleDateString()}
-                                </TableCell>
-
-                                <TableCell className="font-semibold">
-                                    {sub.amount > 0 ? `₹${sub.amount}` : "Free"}
-                                </TableCell>
-
-                                <TableCell className="text-right">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="sm">
-                                                <MoreVertical className="size-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuItem>View Student</DropdownMenuItem>
-                                            <DropdownMenuItem>Change Plan</DropdownMenuItem>
-                                            <DropdownMenuItem>Send Invoice</DropdownMenuItem>
-                                            {sub.status === "active" && (
-                                                <DropdownMenuItem className="text-red-600">
-                                                    Cancel Plan
-                                                </DropdownMenuItem>
-                                            )}
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        className="text-red-400"
+                                        onClick={() => handleDelete(plan.id)}
+                                    >
+                                        <Trash2 className="size-4" />
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
