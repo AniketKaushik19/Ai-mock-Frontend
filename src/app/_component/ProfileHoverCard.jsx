@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { LogOut } from 'lucide-react';
 import useAuthStore from '../../../store/authStore';
-import { useLogout } from '@/hooks/user';
+import { useUserLogout } from '@/hooks/user';
 import Loading from './Loading';
 import { useRouter } from 'next/navigation';
 
@@ -17,7 +17,7 @@ export default function ProfileHoverCard({
 }) {
   const router = useRouter();
   const { user, logout } = useAuthStore();
-  const { mutateAsync, isPending } = useLogout();
+  const { mutateAsync, isPending } = useUserLogout();
 
   const handleLogout = async () => {
     const result = await mutateAsync();
