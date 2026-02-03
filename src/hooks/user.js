@@ -148,7 +148,7 @@ export const useResetPassword=()=>{
     }
   })
 };
-export const useLogout=()=>{
+export const useUserLogout=()=>{
   return useMutation({
     mutationFn:logout,
     onSuccess:(data)=>{
