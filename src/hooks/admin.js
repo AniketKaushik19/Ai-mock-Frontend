@@ -1,6 +1,7 @@
-import { adminCreate, adminLogin } from "@/libs/adminApi";
+import { adminCreate, adminLogin, adminlogout, adminLogout } from "@/libs/adminApi";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+
 
 export const useAdminLogin=()=>{
      return useMutation({
@@ -27,3 +28,15 @@ export const useAdminCreate=()=>{
     }
    })
 }
+
+export const useAdminLogout=()=>{
+  return useMutation({
+    mutationFn:adminlogout,
+    onSuccess:(data)=>{
+      toast.success("Logout Successfully");
+    },
+    onError:(error)=>{
+      toast.error(error?.response?.data?.message || "Error in logout")
+    }
+  })
+};

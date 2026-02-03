@@ -148,7 +148,11 @@ export const useResetPassword=()=>{
     }
   })
 };
+<<<<<<< HEAD
 export const useUserLogout=()=>{
+=======
+export const useLogout=()=>{
+>>>>>>> 4f7103412179247c2678182226c08f958c6ec383
   return useMutation({
     mutationFn:logout,
     onSuccess:(data)=>{
@@ -160,6 +164,7 @@ export const useUserLogout=()=>{
   })
 };
 
+<<<<<<< HEAD
 export const useAdminLogout=()=>{
   return useMutation({
     mutationFn:adminlogout,
@@ -172,6 +177,20 @@ export const useAdminLogout=()=>{
   })
 };
 
+=======
+// export const useLogout=()=>{
+//   const {admin}=useAdminAuthStore();
+//   return useMutation({
+//     mutationFn:()=>(admin ? adminlogout() : logout()),
+//     onSuccess:(data)=>{
+//       toast.success("Logout Successfully");
+//     },
+//     onError:(error)=>{
+//       toast.error(error?.response?.data?.message || "Error in logout")
+//     }
+//   })
+// };
+>>>>>>> 4f7103412179247c2678182226c08f958c6ec383
 
 
 export const useGetProfile = (options = {}) => {
