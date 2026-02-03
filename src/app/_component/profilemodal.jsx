@@ -6,35 +6,12 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { LogOut } from 'lucide-react';
 import useAuthStore from '../../../store/authStore';
-import { useUserLogout,useAdminLogout } from '@/hooks/user';
+import { useLogout } from '@/hooks/user';
 import Loading from './Loading';
 import { useRouter } from 'next/navigation';
 
 export default function ProfileModal({ open, setOpen }) {
     const { user, logout: userLogout } = useAuthStore();
-<<<<<<< HEAD
-  const { admin, logout: adminLogout } = useAdminAuthStore();
-  const router = useRouter();
-    
-
-  const { mutateAsync:userMutate, isPending:userPending } = useUserLogout();
-  const { mutateAsync:adminMutate, isPending:adminPending } = useAdminLogout();
-
-  const isPending = userPending || adminPending;
-
-  const isAdmin = !!admin;
-  const profile = user || admin;
-   const handleLogout = async () => {
-  if (isPending) return;
-
-  try {
-    if (isAdmin) {
-      await adminMutate();
-      adminLogout();
-    } else {
-      await userMutate();
-      userLogout();
-=======
  
   const { mutateAsync, isPending } = useLogout();
   const profile = user
@@ -50,14 +27,9 @@ export default function ProfileModal({ open, setOpen }) {
       } 
     } catch (err) {
       console.error('Logout failed', err);
->>>>>>> 4f7103412179247c2678182226c08f958c6ec383
     }
 
-    setOpen(false);
-    router.replace('/');
-  } catch (error) {
-    console.error('Logout failed:', error);
-  }
+   
 };
 
     return (
