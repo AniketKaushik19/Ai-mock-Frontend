@@ -7,12 +7,12 @@ import { useGetAllInterviews } from '@/hooks/interview';
 import { useEffect } from 'react';
 import useAuthStore from '../../../store/authStore';
 import { useRouter } from 'next/navigation';
-
+import { useInterviewLimit } from '@/hooks/interview';
 
 
 export default function Dashboard() {
     const router = useRouter();
-
+    const {data:interveiwLimit , isPending}=useInterviewLimit()
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -23,7 +23,8 @@ export default function Dashboard() {
 
     const { data } = useGetAllInterviews();
     const { isLoggedIn } = useAuthStore();
-
+    
+   
 
     useEffect(() => {
         if (!isLoggedIn()) {
@@ -60,6 +61,7 @@ export default function Dashboard() {
                 <p className="text-[#CBD5E1]">
                     Create and start your AI mock interview
                 </p>
+                <span className='font-semibold bg-purple-700 rounded-2xl px-2 m-2' >Remaining interview limit: <span className='text-red-500 font-bold'> {interveiwLimit} </span></span>
             </motion.div>
 
             <AddNewInterview />

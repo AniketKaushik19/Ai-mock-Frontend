@@ -9,28 +9,21 @@ import useAuthStore from '../../../store/authStore';
 import { useLogout } from '@/hooks/user';
 import Loading from './Loading';
 import { useRouter } from 'next/navigation';
-import useAdminAuthStore from '../../../store/adminAuthStore';
 
 export default function ProfileModal({ open, setOpen }) {
     const { user, logout: userLogout } = useAuthStore();
-  const { admin, logout: adminLogout } = useAdminAuthStore();
-
+ 
   const { mutateAsync, isPending } = useLogout();
-
-  const isAdmin = !!admin;
-  const profile = user || admin;
-
+  const profile = user
+ const router=useRouter()
   const handleLogout = async () => {
     try {
-
       const result = await mutateAsync();
       if (result?.message ) {
-        if(isAdmin){
-          adminLogout();
-        }
         userLogout();
-        onClose?.();
+        // onClose?.();
         router.replace('/');
+        setOpen(false)
       } 
     } catch (err) {
       console.error('Logout failed', err);
@@ -54,7 +47,7 @@ export default function ProfileModal({ open, setOpen }) {
           </div>
 
           <h3 className="mt-4 text-xl font-bold">
-            Hi, {profile?.name || 'Admin'} 👋
+            Hi, {profile?.name} 👋
           </h3>
 
           {profile?.email && (
@@ -66,9 +59,9 @@ export default function ProfileModal({ open, setOpen }) {
 
      
         <div className="border-t border-white/10 my-6" />
-
+   
         <div className="flex flex-col gap-3">
-          {!isAdmin && (
+      
             <Button
               variant="outline"
               className="border-white/20 text-[#4F7DFF] hover:bg-white hover:text-Primary"
@@ -79,8 +72,7 @@ export default function ProfileModal({ open, setOpen }) {
             >
               View Profile
             </Button>
-          )}
-
+         
           <Button
             className="bg-[#4F7DFF] hover:bg-[#3A64E0] flex gap-2 items-center justify-center"
             onClick={handleLogout}

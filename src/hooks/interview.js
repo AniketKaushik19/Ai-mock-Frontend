@@ -1,5 +1,5 @@
 import { profile } from "@/libs/api";
-import { generateQuestion, getAllInterviews, getInterviewDetail } from "@/libs/interviewApi"
+import { generateQuestion, getAllInterviews, getInterviewDetail, getInterviewLimit } from "@/libs/interviewApi"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import toast from "react-hot-toast";
 
@@ -46,3 +46,16 @@ export const useGetInterviewDetail = (id) => {
       },
     });
   };
+
+export const useInterviewLimit = () => {
+  return useQuery({
+    queryKey: ['getInterviewLimit'],
+    retry:1,
+    queryFn: getInterviewLimit, 
+    onError: (error) => {
+      toast.error(
+        error?.response?.data?.message || 'Error while getting Limit'
+      );
+    },
+  });
+};
