@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation';
 
 export default function ProfileModal({ open, setOpen }) {
     const { user, logout: userLogout } = useAuthStore();
-<<<<<<< HEAD
   const { admin, logout: adminLogout } = useAdminAuthStore();
   const router = useRouter();
     
@@ -34,23 +33,6 @@ export default function ProfileModal({ open, setOpen }) {
     } else {
       await userMutate();
       userLogout();
-=======
- 
-  const { mutateAsync, isPending } = useLogout();
-  const profile = user
- const router=useRouter()
-  const handleLogout = async () => {
-    try {
-      const result = await mutateAsync();
-      if (result?.message ) {
-        userLogout();
-        // onClose?.();
-        router.replace('/');
-        setOpen(false)
-      } 
-    } catch (err) {
-      console.error('Logout failed', err);
->>>>>>> 4f7103412179247c2678182226c08f958c6ec383
     }
 
     setOpen(false);
