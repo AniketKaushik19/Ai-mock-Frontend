@@ -3,6 +3,10 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 
+const initialState = {
+  user: null,
+};
+
 const useAuthStore = create(
   persist(
     immer((set, get) => ({
@@ -15,12 +19,13 @@ const useAuthStore = create(
         });
       },
 
-      logout: () => {
+     logout: () => {
         set((state) => {
           state.user = null;
         });
-         useAuthStore.persist.clearStorage();
+        useAuthStore.persist.clearStorage();
       },
+
 
       isLoggedIn: () => {
         const { user } = get();

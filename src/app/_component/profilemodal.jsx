@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { LogOut } from 'lucide-react';
 import useAuthStore from '../../../store/authStore';
-import { useLogout } from '@/hooks/user';
+import { useUserLogout,useAdminLogout } from '@/hooks/user';
 import Loading from './Loading';
 import { useRouter } from 'next/navigation';
 import useAdminAuthStore from '../../../store/adminAuthStore';
@@ -14,28 +14,35 @@ import useAdminAuthStore from '../../../store/adminAuthStore';
 export default function ProfileModal({ open, setOpen }) {
     const { user, logout: userLogout } = useAuthStore();
   const { admin, logout: adminLogout } = useAdminAuthStore();
+  const router = useRouter();
+    
 
-  const { mutateAsync, isPending } = useLogout();
+  const { mutateAsync:userMutate, isPending:userPending } = useUserLogout();
+  const { mutateAsync:adminMutate, isPending:adminPending } = useAdminLogout();
+
+  const isPending = userPending || adminPending;
 
   const isAdmin = !!admin;
   const profile = user || admin;
+   const handleLogout = async () => {
+  if (isPending) return;
 
-  const handleLogout = async () => {
-    try {
-
-      const result = await mutateAsync();
-      if (result?.message ) {
-        if(isAdmin){
-          adminLogout();
-        }
-        userLogout();
-        onClose?.();
-        router.replace('/');
-      } 
-    } catch (err) {
-      console.error('Logout failed', err);
+  try {
+    if (isAdmin) {
+      await adminMutate();
+      adminLogout();
+    } else {
+      await userMutate();
+      userLogout();
     }
-  };
+
+    setOpen(false);
+    router.replace('/');
+  } catch (error) {
+    console.error('Logout failed:', error);
+  }
+};
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTitle />
@@ -73,7 +80,7 @@ export default function ProfileModal({ open, setOpen }) {
               variant="outline"
               className="border-white/20 text-[#4F7DFF] hover:bg-white hover:text-Primary"
               onClick={() => {
-                onClose?.();
+                setOpen(false);;
                 router.push('/profile');
               }}
             >
