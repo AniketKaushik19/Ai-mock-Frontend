@@ -7,8 +7,9 @@ import {
 
 export default function Sidebar({ activeSection, onSectionChange }) {
     const menuItems = [
-        { id: "admins", label: "Admin Management", icon: ShieldCheck },
         { id: "users", label: "Users", icon: Users },
+        { id: "admins", label: "Admin Management", icon: ShieldCheck },
+        
         { id: "subscriptions", label: "Plans & Payments", icon: CreditCard },
 
     ];
