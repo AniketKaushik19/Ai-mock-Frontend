@@ -18,3 +18,12 @@ export const getInterviewDetail = async (id) => {
     }
  }
 
+
+export const getInterviewLimit =async()=>{
+    try {
+       const res=await axiosInstance.get(`interview/limit`)
+       return res?.data
+    } catch (error) {
+       throw error
+    }
+}

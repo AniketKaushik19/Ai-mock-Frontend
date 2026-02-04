@@ -19,10 +19,11 @@ import {
 
 import ProfileModal from "./profilemodal";
 import ProfileHoverCard from "./ProfileHoverCard";
-
 import useAuthStore from "../../../store/authStore";
-import useAdminAuthStore from "../../../store/adminAuthStore";
 import { useGetProfile } from "@/hooks/user";
+import useAdminAuthStore from "../../../store/adminAuthStore";
+import AdminHoverCard from "./AdminHoverCard";
+
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -47,43 +48,37 @@ export default function Navbar() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [hoverOpen, setHoverOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  
 
-  const { user, login, logout: userLogout } = useAuthStore();
-  const { admin, logout: adminLogout } = useAdminAuthStore();
+  const { logout: adminLogout, admin } = useAdminAuthStore()
+  const { user, login, logout } = useAuthStore();
 
   const { data } = useGetProfile({
     enabled: mounted && !!user,
   });
 
-  useEffect(() => {
-    setMounted(true);
+  
+  
+  useEffect(() =>{setMounted(true)
   }, []);
 
   useEffect(() => {
-    if (data?.user && data.user.id !== user?.id) {
-      login(data.user);
-    }
-  }, [data, login, user?.id]);
+    if (data?.user) login(data.user);
+  }, [data, login]);
+  const UserLoggedIn = mounted && !!user;
+  const AdminLoggedIn = mounted && !!admin;
 
-  const isAuthenticated = mounted && (!!user || !!admin);
   const isDesktop =
     typeof window !== "undefined" && window.innerWidth >= 768;
 
-  const handleLogout = () => {
-    if (admin) adminLogout();
-    else userLogout();
-    setIsOpen(false);
-  };
-
   const filteredNavItems = navItems.filter((item) => {
-    if (item.name === "Dashboard") return isAuthenticated;
+    if (item.name === "Dashboard") return UserLoggedIn;
     return true;
   });
 
   const filteredMobileNav = mobileNavItems.filter((item) => {
-    if (item.name === "Dashboard") return isAuthenticated;
-    if (item.name === "Login" || item.name === "Signup")
-      return !isAuthenticated;
+    if (item.name === "Dashboard") return UserLoggedIn;
+    if (item.name === "Login" || item.name === "Signup") return !UserLoggedIn;
     return true;
   });
 
@@ -113,11 +108,10 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.path}
-                  className={`relative text-sm font-bold transition ${
-                    isActive
+                  className={`relative text-sm font-bold transition ${isActive
                       ? "text-orange-500"
                       : "text-white hover:text-[#386bed]"
-                  }`}
+                    }`}
                 >
                   {item.name}
                   {isActive && (
@@ -127,37 +121,18 @@ export default function Navbar() {
               );
             })}
 
-            {/* Admin Link */}
-            {admin && (
-              <Link
-                href="/admin"
-                className={`relative text-sm font-bold transition ${
-                  pathname === "/admin"
-                    ? "text-orange-500"
-                    : "text-white hover:text-[#386bed]"
-                }`}
-              >
-                Admin
-                {pathname === "/admin" && (
-                  <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-orange-500" />
-                )}
-              </Link>
-            )}
-
-            {/* Login / Signup */}
-            {!isAuthenticated && (
+            {!UserLoggedIn && !AdminLoggedIn && (
               <>
                 <Link
                   href="/login"
-                  className={`text-sm font-bold ${
-                    pathname === "/login"
+                  className={`text-sm font-bold ${pathname === "/login"
                       ? "text-orange-500"
                       : "text-white hover:text-[#386bed]"
-                  }`}
+                    }`}
                 >
                   Login
                 </Link>
-
+        
                 <Link
                   href="/signup"
                   className="rounded-md bg-[#386bed] px-6 py-2 font-bold text-white hover:bg-[#2b52b8]"
@@ -167,8 +142,9 @@ export default function Navbar() {
               </>
             )}
 
+
             {/* Avatar + Hover Card */}
-            {isAuthenticated && (
+            {UserLoggedIn && (
               <div
                 className="relative"
                 onMouseEnter={() => isDesktop && setHoverOpen(true)}
@@ -179,11 +155,7 @@ export default function Navbar() {
                   className="h-12 w-12 cursor-pointer overflow-hidden rounded-full border-2 border-[#4F7DFF] hover:scale-105 transition"
                 >
                   <Image
-                    src={
-                      user?.img ||
-                      admin?.img ||
-                      "/image/avatar.png"
-                    }
+                    src={user?.img || "/image/avatar.png"}
                     alt="Profile"
                     width={48}
                     height={48}
@@ -198,29 +170,57 @@ export default function Navbar() {
                       onMouseEnter={() => setHoverOpen(true)}
                       onMouseLeave={() => setHoverOpen(false)}
                     >
-                      <ProfileHoverCard
-                        onClose={() => setHoverOpen(false)}
-                      />
+                      <ProfileHoverCard onClose={() => setHoverOpen(false)} />
                     </motion.div>
                   )}
                 </AnimatePresence>
+
+              </div>
+            )}
+            {/* //Admin hover Card  */}
+            {AdminLoggedIn && (
+              <div
+                className="relative"
+                onMouseEnter={() => isDesktop && setHoverOpen(true)}
+                onMouseLeave={() => isDesktop && setHoverOpen(false)}
+              >
+                <div
+                  className="h-12 w-12 cursor-pointer overflow-hidden rounded-full border-2 border-[#4F7DFF] hover:scale-105 transition"
+                >
+                  <Image
+                    src={"/image/avatar.png"}
+                    alt="Profile"
+                    width={48}
+                    height={48}
+                    className="rounded-full object-cover"
+                  />
+                </div>
+
+                <AnimatePresence>
+                  {hoverOpen && (
+                    <motion.div
+                      className="absolute right-0 top-14 z-50"
+                      onMouseEnter={() => setHoverOpen(true)}
+                      onMouseLeave={() => setHoverOpen(false)}
+                    >
+                      <AdminHoverCard onClose={() => setHoverOpen(false)} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
               </div>
             )}
           </div>
 
           {/* Mobile Right */}
           <div className="md:hidden flex items-center gap-3">
-            {isAuthenticated && (
+            {UserLoggedIn && (
               <div
                 onClick={() => setProfileOpen(true)}
                 className="h-10 w-10 overflow-hidden rounded-full border-2 border-[#4F7DFF]"
               >
                 <Image
-                  src={
-                    user?.img ||
-                    admin?.img ||
-                    "/image/avatar.png"
-                  }
+                  src={user?.img || "/image/avatar.png"}
                   alt="Profile"
                   width={40}
                   height={40}
@@ -236,7 +236,7 @@ export default function Navbar() {
         </div>
       )}
 
-      {/* Mobile Menu */}
+      {/* Mobile Fullscreen Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -247,7 +247,10 @@ export default function Navbar() {
             className="fixed inset-0 z-[999] flex flex-col bg-[#0B1C2D] px-6 py-10 md:hidden"
           >
             <div className="flex justify-end">
-              <button onClick={() => setIsOpen(false)} className="text-white">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-white"
+              >
                 <X size={32} />
               </button>
             </div>
@@ -260,9 +263,8 @@ export default function Navbar() {
                     key={item.name}
                     href={item.path}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-4 text-4xl font-semibold ${
-                      isActive ? "text-[#4F7DFF]" : "text-white"
-                    }`}
+                    className={`flex items-center gap-4 text-4xl font-semibold ${isActive ? "text-[#4F7DFF]" : "text-white"
+                      }`}
                   >
                     <item.icon />
                     {item.name}
@@ -271,9 +273,12 @@ export default function Navbar() {
               })}
             </div>
 
-            {isAuthenticated && (
+            {UserLoggedIn && (
               <button
-                onClick={handleLogout}
+                onClick={() => {
+                  logout();
+                  setIsOpen(false);
+                }}
                 className="mt-auto flex items-center justify-center gap-3 rounded-xl bg-red-600 py-4 font-bold text-white"
               >
                 <LogOut />

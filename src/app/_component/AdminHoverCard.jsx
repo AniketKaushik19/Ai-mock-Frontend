@@ -1,24 +1,21 @@
-
-
 'use client';
 
-import { Dialog,DialogTitle, DialogContent } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { LogOut } from 'lucide-react';
-import useAuthStore from '../../../store/authStore';
-import { useUserLogout } from '@/hooks/user';
+import { Button } from '@/components/ui/button';
+import { useLogout } from '@/hooks/user';
 import Loading from './Loading';
 import { useRouter } from 'next/navigation';
+import useAdminAuthStore from '../../../store/adminAuthStore';
+import { useAdminLogout } from '@/hooks/admin';
 
-export default function ProfileHoverCard({
+export default function AdminHoverCard({
   onClose,
 }) {
   const router = useRouter();
-  const { user, logout } = useAuthStore();
-  const { mutateAsync, isPending } = useUserLogout();
-
+  const { admin, logout } = useAdminAuthStore();
+  const { mutateAsync, isPending } = useAdminLogout();
   const handleLogout = async () => {
     const result = await mutateAsync();
     if (result?.message) {
@@ -41,7 +38,7 @@ export default function ProfileHoverCard({
         <div className="flex flex-col items-center text-center">
           <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#4F7DFF]">
             <Image
-              src={user?.img || '/image/avatar.png'}
+              src={admin?.img || '/image/avatar.png'}
               alt="Profile"
               fill
               className="object-cover"
@@ -49,11 +46,11 @@ export default function ProfileHoverCard({
           </div>
 
           <h3 className="mt-4 text-xl font-bold">
-            Hi, {user?.name} 👋
+            Hi, {admin?.name|| "Admin"} 👋
           </h3>
 
           <p className="text-sm text-[#CBD5E1] mt-1">
-            {user?.email}
+            {admin?.email}
           </p>
         </div>
 
@@ -62,16 +59,6 @@ export default function ProfileHoverCard({
 
         {/* Actions */}
         <div className="flex flex-col gap-3">
-          <Button
-            variant="outline"
-            className="border-white/20 text-[#4F7DFF] hover:bg-white hover:text-Primary"
-            onClick={() => {
-              onClose?.();
-              router.push('/profile');
-            }}
-          >
-            View Profile
-          </Button>
 
           <Button
             className="bg-[#4F7DFF] hover:bg-[#3A64E0] flex gap-2"

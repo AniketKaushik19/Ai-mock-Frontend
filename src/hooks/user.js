@@ -148,10 +148,9 @@ export const useResetPassword=()=>{
     }
   })
 };
-export const useLogout=()=>{
-  const {admin}=useAdminAuthStore();
+export const useUserLogout=()=>{
   return useMutation({
-    mutationFn:()=>(admin ? adminlogout() : logout()),
+    mutationFn:logout,
     onSuccess:(data)=>{
       toast.success("Logout Successfully");
     },
@@ -160,6 +159,19 @@ export const useLogout=()=>{
     }
   })
 };
+
+// export const useLogout=()=>{
+//   const {admin}=useAdminAuthStore();
+//   return useMutation({
+//     mutationFn:()=>(admin ? adminlogout() : logout()),
+//     onSuccess:(data)=>{
+//       toast.success("Logout Successfully");
+//     },
+//     onError:(error)=>{
+//       toast.error(error?.response?.data?.message || "Error in logout")
+//     }
+//   })
+// };
 
 
 export const useGetProfile = (options = {}) => {

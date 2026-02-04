@@ -16,3 +16,12 @@ export const adminCreate=async(data)=>{
       throw error
    }
 }
+
+export const adminlogout = async () => {
+   try {
+      const res = await axiosInstance.post(`admin/logout`);
+      return res?.data;
+   } catch (error) {
+      throw error
+   }
+}

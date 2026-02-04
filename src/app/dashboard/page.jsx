@@ -7,12 +7,12 @@ import { useGetAllInterviews } from '@/hooks/interview';
 import { useEffect } from 'react';
 import useAuthStore from '../../../store/authStore';
 import { useRouter } from 'next/navigation';
-
+import { useInterviewLimit } from '@/hooks/interview';
 
 
 export default function Dashboard() {
     const router = useRouter();
-
+    const {data:interveiwLimit , isPending}=useInterviewLimit()
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -23,7 +23,8 @@ export default function Dashboard() {
 
     const { data } = useGetAllInterviews();
     const { isLoggedIn } = useAuthStore();
-
+    
+   
 
     useEffect(() => {
         if (!isLoggedIn()) {
@@ -52,14 +53,27 @@ export default function Dashboard() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="mb-8"
+                className="mb-8 flex justify-between items-center flex-wrap gap-4"
             >
-                <h1 className="text-3xl font-bold text-[#4F7DFF]">
-                    Dashboard
-                </h1>
-                <p className="text-[#CBD5E1]">
-                    Create and start your AI mock interview
-                </p>
+              
+                <span className='font-semibold bg-purple-700 rounded-2xl px-2 m-2' >Remaining interview limit: <span className='text-red-500 font-bold'> {interveiwLimit} </span></span>
+                <div>
+                    <h1 className="text-3xl font-bold text-[#4F7DFF]">
+                        Dashboard
+                    </h1>
+                    <p className="text-[#CBD5E1]">
+                        Create and start your AI mock interview
+                    </p>
+                </div>
+                <motion.a
+                    href="/dashboard/subscriptions"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="px-6 py-3 bg-gradient-to-r from-[#4F7DFF] to-purple-600 rounded-lg font-medium hover:from-[#3D6BE8] hover:to-purple-700 transition-all"
+                >
+                    View Subscriptions
+                </motion.a>
             </motion.div>
 
             <AddNewInterview />

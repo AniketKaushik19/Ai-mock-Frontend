@@ -198,7 +198,7 @@ export default function UserManagement() {
                                 </TableCell>
 
                                 <TableCell className="text-slate-600">
-                                    {new Date(u.joinedDate).toLocaleDateString()}
+                                    {u.joinedDate}
                                 </TableCell>
 
                                 <TableCell className="text-right">

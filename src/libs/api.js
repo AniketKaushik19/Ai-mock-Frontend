@@ -60,14 +60,7 @@ export const logout = async () => {
       throw error
    }
 }
-export const adminlogout = async () => {
-   try {
-      const res = await axiosInstance.post(`admin/logout`);
-      return res?.data;
-   } catch (error) {
-      throw error
-   }
-}
+
 
 export const forgotPassword = async (email) => {
    try {
