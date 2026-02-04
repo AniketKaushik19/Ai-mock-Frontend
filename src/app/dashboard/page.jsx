@@ -12,7 +12,17 @@ import { useInterviewLimit } from '@/hooks/interview';
 
 export default function Dashboard() {
     const router = useRouter();
-    const {data:interveiwLimit , isPending}=useInterviewLimit()
+    const { data: interveiwLimit, isPending } = useInterviewLimit();
+    const { setInterviewLimit } = useAuthStore();
+
+    useEffect(() => {
+        if (interveiwLimit) {
+            setInterviewLimit(interveiwLimit);
+        }
+    }, [interveiwLimit, setInterviewLimit]);
+
+    console.log(interveiwLimit);
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -23,8 +33,8 @@ export default function Dashboard() {
 
     const { data } = useGetAllInterviews();
     const { isLoggedIn } = useAuthStore();
-    
-   
+
+
 
     useEffect(() => {
         if (!isLoggedIn()) {
@@ -55,8 +65,8 @@ export default function Dashboard() {
                 transition={{ duration: 0.5 }}
                 className="mb-8 flex justify-between items-center flex-wrap gap-4"
             >
-              
-                <span className='font-semibold bg-purple-700 rounded-2xl px-2 m-2' >Remaining interview limit: <span className='text-red-500 font-bold'> {interveiwLimit} </span></span>
+
+                <span className='font-semibold bg-purple-700 rounded-2xl px-2 m-2' >Remaining interview limit: <span className='text-red-500 font-bold'> {interveiwLimit?.remaining ?? 0} </span></span>
                 <div>
                     <h1 className="text-3xl font-bold text-[#4F7DFF]">
                         Dashboard
@@ -87,7 +97,7 @@ export default function Dashboard() {
                 Previous Mock Interviews
             </motion.h2>
 
-            {/* Cards */}
+
             <motion.div
                 variants={containerVariants}
                 initial="hidden"
