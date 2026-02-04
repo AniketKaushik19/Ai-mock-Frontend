@@ -53,7 +53,7 @@ const LoginPage = () => {
          const res=await adminLogin(data);
         if(res.admin.id){
           adminloginStore(res.admin);
-          router.replace('/admin');
+          router.replace('/admin/users');
 
         }
          

@@ -141,7 +141,7 @@ export default function Navbar() {
                 </Link>
               </>
             )}
-
+            
 
             {/* Avatar + Hover Card */}
             {UserLoggedIn && (
@@ -177,6 +177,18 @@ export default function Navbar() {
 
               </div>
             )}
+            {AdminLoggedIn && (
+                   <Link
+               
+                  href={'/admin/users'}
+                  className={`relative text-sm font-bold transitio  ${pathname==="/admin/users" ? "text-orange-500":"text-white"}
+                    }`}
+                > Dashboard
+                {pathname==="/admin/users" &&   <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-orange-500" />}
+                  
+                </Link>
+            )}
+               
             {/* //Admin hover Card  */}
             {AdminLoggedIn && (
               <div
