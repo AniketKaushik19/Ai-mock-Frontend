@@ -1,9 +1,9 @@
+"use client";
 import { useState } from "react";
 import {
     Search,
     MoreVertical,
     UserCheck,
-    UserX,
     Mail,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -78,91 +78,94 @@ export default function UserManagement() {
     const totalInterviews = users.reduce((sum, u) => sum + u.interviews, 0);
 
     return (
-        <div className="p-8 bg-slate-50 min-h-screen">
+        <div className="p-8 bg-[#0B1C2D] min-h-screen text-white">
+
             {/* Header */}
             <div className="mb-8">
-                <h2 className="text-3xl font-bold text-slate-900 mb-1">
+                <h2 className="text-3xl font-bold text-white">
                     Student Management
                 </h2>
-                <p className="text-slate-600">
+                <p className="text-[#CBD5E1]">
                     Manage students, activity, and subscriptions
                 </p>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white p-6 rounded-xl border border-slate-200">
+                <div className="bg-[#112A46] p-6 rounded-xl border border-white/10">
                     <div className="flex justify-between items-center">
                         <div>
-                            <p className="text-sm text-slate-500">Total Students</p>
+                            <p className="text-sm text-[#CBD5E1]">Total Students</p>
                             <p className="text-3xl font-bold">{users.length}</p>
                         </div>
-                        <UserCheck className="size-12 text-indigo-600 opacity-20" />
+                        <UserCheck className="size-12 text-[#4F7DFF] opacity-20" />
                     </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl border border-slate-200">
+                <div className="bg-[#112A46] p-6 rounded-xl border border-white/10">
                     <div className="flex justify-between items-center">
                         <div>
-                            <p className="text-sm text-slate-500">Active Students</p>
+                            <p className="text-sm text-[#CBD5E1]">Active Students</p>
                             <p className="text-3xl font-bold">{activeStudents}</p>
                         </div>
-                        <UserCheck className="size-12 text-teal-600 opacity-20" />
+                        <UserCheck className="size-12 text-emerald-400 opacity-20" />
                     </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl border border-slate-200">
+                <div className="bg-[#112A46] p-6 rounded-xl border border-white/10">
                     <div className="flex justify-between items-center">
                         <div>
-                            <p className="text-sm text-slate-500">Total Interviews</p>
+                            <p className="text-sm text-[#CBD5E1]">Total Interviews</p>
                             <p className="text-3xl font-bold">{totalInterviews}</p>
                         </div>
-                        <Mail className="size-12 text-purple-600 opacity-20" />
+                        <Mail className="size-12 text-purple-400 opacity-20" />
                     </div>
                 </div>
             </div>
 
             {/* Search */}
-            <div className="bg-white p-6 rounded-xl border border-slate-200 mb-6">
+            <div className="bg-[#112A46] p-6 rounded-xl border border-white/10 mb-6">
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-slate-400" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-[#CBD5E1]" />
                     <Input
                         placeholder="Search students by name or email..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
+                        className="pl-10 bg-[#0B1C2D] border-white/10 text-white"
                     />
                 </div>
             </div>
 
             {/* Table */}
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-[#112A46] rounded-xl border border-white/10 overflow-hidden">
                 <Table>
                     <TableHeader>
-                        <TableRow>
-                            <TableHead>Student</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Plan</TableHead>
-                            <TableHead>Interviews</TableHead>
-                            <TableHead>Joined</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                        <TableRow className="hover:bg-transparent">
+                            <TableHead className="text-[#CBD5E1]">Student</TableHead>
+                            <TableHead className="text-[#CBD5E1]">Email</TableHead>
+                            <TableHead className="text-[#CBD5E1]">Status</TableHead>
+                            <TableHead className="text-[#CBD5E1]">Plan</TableHead>
+                            <TableHead className="text-[#CBD5E1]">Interviews</TableHead>
+                            <TableHead className="text-[#CBD5E1]">Joined</TableHead>
+                            <TableHead className="text-right text-[#CBD5E1]">
+                                Actions
+                            </TableHead>
                         </TableRow>
                     </TableHeader>
 
                     <TableBody>
                         {filteredUsers.map((u) => (
-                            <TableRow key={u.id}>
+                            <TableRow key={u.id} className="hover:bg-white/5">
                                 <TableCell>
                                     <div className="flex items-center gap-3">
-                                        <div className="size-10 bg-indigo-600 rounded-full flex items-center justify-center text-white font-semibold">
+                                        <div className="size-10 bg-[#4F7DFF] rounded-full flex items-center justify-center text-white font-semibold">
                                             {u.name.charAt(0)}
                                         </div>
                                         <span className="font-medium">{u.name}</span>
                                     </div>
                                 </TableCell>
 
-                                <TableCell className="text-slate-600">
+                                <TableCell className="text-[#CBD5E1]">
                                     {u.email}
                                 </TableCell>
 
@@ -170,8 +173,8 @@ export default function UserManagement() {
                                     <Badge
                                         className={
                                             u.status === "active"
-                                                ? "bg-green-100 text-green-800"
-                                                : "bg-slate-200 text-slate-700"
+                                                ? "bg-emerald-900/40 text-emerald-300"
+                                                : "bg-white/10 text-[#CBD5E1]"
                                         }
                                     >
                                         {u.status}
@@ -183,10 +186,10 @@ export default function UserManagement() {
                                         variant="outline"
                                         className={
                                             u.subscription === "Premium"
-                                                ? "border-purple-600 text-purple-600"
+                                                ? "border-purple-400 text-purple-400"
                                                 : u.subscription === "Basic"
-                                                    ? "border-indigo-600 text-indigo-600"
-                                                    : "border-slate-400 text-slate-600"
+                                                    ? "border-[#4F7DFF] text-[#4F7DFF]"
+                                                    : "border-white/30 text-[#CBD5E1]"
                                         }
                                     >
                                         {u.subscription}
@@ -197,18 +200,25 @@ export default function UserManagement() {
                                     {u.interviews}
                                 </TableCell>
 
-                                <TableCell className="text-slate-600">
+                                <TableCell className="text-[#CBD5E1]">
                                     {u.joinedDate}
                                 </TableCell>
 
                                 <TableCell className="text-right">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="sm">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-[#CBD5E1]"
+                                            >
                                                 <MoreVertical className="size-4" />
                                             </Button>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
+                                        <DropdownMenuContent
+                                            align="end"
+                                            className="bg-[#112A46] border-white/10 text-white"
+                                        >
                                             <DropdownMenuItem>View Profile</DropdownMenuItem>
                                             <DropdownMenuItem>Send Email</DropdownMenuItem>
                                             <DropdownMenuItem onClick={() => toggleStatus(u.id)}>
@@ -216,7 +226,7 @@ export default function UserManagement() {
                                                     ? "Deactivate Student"
                                                     : "Activate Student"}
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem className="text-red-600">
+                                            <DropdownMenuItem className="text-red-400">
                                                 Remove Student
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>

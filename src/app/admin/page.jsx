@@ -10,10 +10,7 @@ export default function App() {
 
     return (
         <div className="flex min-h-screen bg-slate-50">
-            <Sidebar
-                activeSection={activeSection}
-                onSectionChange={setActiveSection}
-            />
+
 
             <main className="flex-1 overflow-auto">
                 {activeSection === "admins" && <AdminManagement />}
