@@ -91,7 +91,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-Primary flex items-center justify-center px-4 py-6">
-      <Card className="w-full max-w-2xl bg-[#112A46] text-white border border-white/10">
+      <Card className="w-full max-w-2xl bg-Secondary text-white border border-white/10">
         <CardHeader>
           <CardTitle className="text-2xl text-center">My Profile</CardTitle>
         </CardHeader>

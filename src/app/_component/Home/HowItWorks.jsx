@@ -30,7 +30,7 @@ export default function HowItWorks() {
               key={i}
               className="group relative bg-[#1E293B] rounded-2xl p-8 border border-white/5 hover:border-[#386bed]/50 transition-all duration-300 hover:-translate-y-2"
             >
-              <div className="absolute -top-6 left-8 bg-[#386bed] text-white text-xl font-bold w-12 h-12 flex items-center justify-center rounded-xl shadow-lg">
+              <div className="absolute -top-6 left-8 bg-Button text-white text-xl font-bold w-12 h-12 flex items-center justify-center rounded-xl shadow-lg">
                 {step.number}
               </div>
               <h3 className="text-xl font-bold mt-6 mb-3 group-hover:text-[#60a5fa] transition-colors">

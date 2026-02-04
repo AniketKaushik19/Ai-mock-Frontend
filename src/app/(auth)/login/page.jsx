@@ -183,7 +183,7 @@ const LoginPage = () => {
               type="submit"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-3.5 bg-[#386bed] hover:bg-[#2563EB] text-white font-bold rounded-lg shadow-lg transition-all duration-300 flex items-center justify-center group"
+              className="w-full py-3.5 bg-Button hover:bg-[#2563EB] text-white font-bold rounded-lg shadow-lg transition-all duration-300 flex items-center justify-center group"
             >
               {isPending ? <Loading /> :
                 <>

@@ -185,7 +185,7 @@ const InterviewPage = ({ interviewId }) => {
       <div>
         <div className="flex justify-between bg-[#111827] p-5 rounded-lg">
           <div>
-            <h2 className="font-bold text-xl text-[#386bed]">
+            <h2 className="font-bold text-xl text-Button">
               Mock Interview Session
             </h2>
             <p className="text-sm text-gray-400">
@@ -209,7 +209,7 @@ const InterviewPage = ({ interviewId }) => {
                 <div
                   className={`z-10 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all
             ${isActive
-                      ? "bg-[#386bed] text-white scale-110 shadow-lg"
+                      ? "bg-Button text-white scale-110 shadow-lg"
                       : isCompleted
                         ? "bg-green-500 text-white"
                         : "bg-gray-600 text-gray-300"}
@@ -236,7 +236,7 @@ const InterviewPage = ({ interviewId }) => {
         <div>
           <div className="bg-[#111827] p-6 rounded-xl">
             <Volume2
-              className="cursor-pointer text-[#386bed]"
+              className="cursor-pointer text-Button"
               onClick={() =>
                 textToSpeech(activeQuestion.question)
               }
@@ -328,7 +328,7 @@ const InterviewPage = ({ interviewId }) => {
             {/* Record / Stop Button */}
             <button
               onClick={saveUserAnswer}
-              className={`flex-1 py-3 rounded-lg font-bold flex justify-center gap-2 ${listening ? "bg-red-500 animate-pulse" : "bg-[#386bed]"
+              className={`flex-1 py-3 rounded-lg font-bold flex justify-center gap-2 ${listening ? "bg-red-500 animate-pulse" : "bg-Button"
                 }`}
             >
               {listening ? (

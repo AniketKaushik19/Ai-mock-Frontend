@@ -39,7 +39,7 @@ export function Pricing() {
     return (
         <section
             id="pricing"
-            className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0B1C2D] text-white"
+            className="py-20 px-4 sm:px-6 lg:px-8 bg-Primary text-white"
         >
             <div className="max-w-7xl mx-auto">
                 {/* Test Mode Banner */}
@@ -90,7 +90,7 @@ export function Pricing() {
                                         isPremium
                                             ? "border-[#4F7DFF] shadow-xl scale-105"
                                             : "border-white/10 hover:border-[#4F7DFF]/50"
-                                    } bg-[#112A46] transition-all`}
+                                    } bg-Secondary transition-all`}
                                 >
                                     {isPremium && (
                                         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
@@ -131,8 +131,8 @@ export function Pricing() {
                                     <button
                                         className={`w-full py-3 rounded-lg font-semibold transition-all ${
                                             isPremium
-                                                ? "bg-[#4F7DFF] text-white hover:bg-[#386bed] shadow-lg"
-                                                : "bg-[#0B1C2D] border border-white/10 text-white hover:border-[#4F7DFF]"
+                                                ? "bg-[#4F7DFF] text-white hover:bg-Button shadow-lg"
+                                                : "bg-Primary border border-white/10 text-white hover:border-[#4F7DFF]"
                                         }`}
                                         onClick={() => handleSubscribe(plan)}
                                     >

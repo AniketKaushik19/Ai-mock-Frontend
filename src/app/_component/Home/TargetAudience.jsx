@@ -26,7 +26,7 @@ const advantage = [
 export default function TargetAudience() {
   return (
     <section className="container mx-auto px-6 py-24">
-      <h2 className="text-3xl md:text-4xl font-bold text-center text-[#386bed] mb-16">
+      <h2 className="text-3xl md:text-4xl font-bold text-center text-Button mb-16">
         Who Benefits From Our AI Platform?
       </h2>
 

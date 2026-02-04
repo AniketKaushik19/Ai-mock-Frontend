@@ -82,10 +82,10 @@ export default function Navbar() {
     return true;
   });
 
-  if (!mounted) return <div className="h-20 bg-[#0D2B5B]" />;
+  if (!mounted) return <div className="h-20 bg-Ternary" />;
 
   return (
-    <nav className="sticky top-0 z-[999] w-full bg-[#0D2B5B] border-b border-white/10">
+    <nav className="sticky top-0 z-[999] w-full bg-Ternary border-b border-white/10">
       {/* Desktop Navbar */}
       {!isOpen && (
         <div className="container mx-auto flex h-20 items-center justify-between px-4">
@@ -110,7 +110,7 @@ export default function Navbar() {
                   href={item.path}
                   className={`relative text-sm font-bold transition ${isActive
                       ? "text-orange-500"
-                      : "text-white hover:text-[#386bed]"
+                      : "text-white hover:text-Button"
                     }`}
                 >
                   {item.name}
@@ -127,7 +127,7 @@ export default function Navbar() {
                   href="/login"
                   className={`text-sm font-bold ${pathname === "/login"
                       ? "text-orange-500"
-                      : "text-white hover:text-[#386bed]"
+                      : "text-white hover:text-Button"
                     }`}
                 >
                   Login
@@ -135,7 +135,7 @@ export default function Navbar() {
         
                 <Link
                   href="/signup"
-                  className="rounded-md bg-[#386bed] px-6 py-2 font-bold text-white hover:bg-[#2b52b8]"
+                  className="rounded-md bg-Button px-6 py-2 font-bold text-white hover:bg-[#2b52b8]"
                 >
                   Signup
                 </Link>
@@ -244,7 +244,7 @@ export default function Navbar() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 140, damping: 22 }}
-            className="fixed inset-0 z-[999] flex flex-col bg-[#0B1C2D] px-6 py-10 md:hidden"
+            className="fixed inset-0 z-[999] flex flex-col bg-Primary px-6 py-10 md:hidden"
           >
             <div className="flex justify-end">
               <button

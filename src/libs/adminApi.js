@@ -25,3 +25,21 @@ export const adminlogout = async () => {
       throw error
    }
 }
+
+export const  getAllUser=async () => {
+   try{
+       const res = await axiosInstance.get("admin/getAllUser");
+            return res?.data;
+   }catch(error){
+      throw error
+   }
+}
+
+export const deleteUser=async (userId) => {
+   try {
+      const res=await axiosInstance.delete(`admin/deleteUser/${userId}`)
+      return res?.data
+   } catch (error) {
+      throw error 
+   }   
+}

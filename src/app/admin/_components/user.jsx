@@ -1,232 +1,143 @@
-import { useState } from "react";
-import {
-    Search,
-    MoreVertical,
-    UserCheck,
-    UserX,
-    Mail,
-} from "lucide-react";
+"use client";
+
+import { useEffect, useState } from "react";
+import { Search, MoreVertical } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
+
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const mockUsers = [
-    {
-        id: "1",
-        name: "John Doe",
-        email: "john.doe@example.com",
-        status: "active",
-        interviews: 15,
-        joinedDate: "2025-01-15",
-        subscription: "Premium",
-    },
-    {
-        id: "2",
-        name: "Sarah Smith",
-        email: "sarah.smith@example.com",
-        status: "active",
-        interviews: 8,
-        joinedDate: "2025-01-20",
-        subscription: "Free",
-    },
-    {
-        id: "3",
-        name: "Michael Johnson",
-        email: "michael.j@example.com",
-        status: "inactive",
-        interviews: 3,
-        joinedDate: "2025-01-10",
-        subscription: "Basic",
-    },
-];
+import { useDeleteUser, useGetAllUser } from "@/hooks/admin";
+import Loading from "@/app/_component/Loading";
 
 export default function UserManagement() {
-    const [searchQuery, setSearchQuery] = useState("");
-    const [users, setUsers] = useState(mockUsers);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [users, setUsers] = useState([]);
+  
+  const { data, isPending } = useGetAllUser();
+  const {mutateAsync,isPending:deletePending}=useDeleteUser()
+  const allUser = data?.allUser || [];
+  console.log(allUser);
+  
+  
+  useEffect(() => {
+    if (!Array.isArray(allUser)) return;
 
-    const filteredUsers = users.filter(
-        (u) =>
-            u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            u.email.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const mapped = allUser.map((u) => ({
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      status: u.subscription_name ? "active" : "inactive",
+      subscription: u.subscription_name || "Free",
+      interviews: Number(u.interview_attempts) || 0,
+      joinedDate: new Date(u.created_at).toLocaleDateString("en-IN"),
+    }));
 
-    const toggleStatus = (id) => {
-        setUsers(
-            users.map((u) =>
-                u.id === id
-                    ? { ...u, status: u.status === "active" ? "inactive" : "active" }
-                    : u
-            )
-        );
-    };
+    setUsers(mapped);
+  }, [allUser]);
 
-    const activeStudents = users.filter((u) => u.status === "active").length;
-    const totalInterviews = users.reduce((sum, u) => sum + u.interviews, 0);
+  const filteredUsers = users.filter(
+    (u) =>
+      u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-    return (
-        <div className="p-8 bg-slate-50 min-h-screen">
-            {/* Header */}
-            <div className="mb-8">
-                <h2 className="text-3xl font-bold text-slate-900 mb-1">
-                    Student Management
-                </h2>
-                <p className="text-slate-600">
-                    Manage students, activity, and subscriptions
-                </p>
-            </div>
+  if (isPending) {
+    return <div className="p-8">Loading...</div>;
+  }
+  const handleDelete=async(userId)=> {
+     await mutateAsync(userId)
+  }
+    const handleEmail = (email) => {
+    // Gmail compose link
+    const gmailUrl =
+      `https://mail.google.com/mail/?view=cm&fs=1&to=${email}`;
 
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white p-6 rounded-xl border border-slate-200">
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <p className="text-sm text-slate-500">Total Students</p>
-                            <p className="text-3xl font-bold">{users.length}</p>
-                        </div>
-                        <UserCheck className="size-12 text-indigo-600 opacity-20" />
-                    </div>
-                </div>
+    window.open(gmailUrl, "_blank"); // opens Gmail in a new tab
+  };
 
-                <div className="bg-white p-6 rounded-xl border border-slate-200">
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <p className="text-sm text-slate-500">Active Students</p>
-                            <p className="text-3xl font-bold">{activeStudents}</p>
-                        </div>
-                        <UserCheck className="size-12 text-teal-600 opacity-20" />
-                    </div>
-                </div>
 
-                <div className="bg-white p-6 rounded-xl border border-slate-200">
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <p className="text-sm text-slate-500">Total Interviews</p>
-                            <p className="text-3xl font-bold">{totalInterviews}</p>
-                        </div>
-                        <Mail className="size-12 text-purple-600 opacity-20" />
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="p-8">
+      <Input
+        placeholder="Search..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="mb-4"
+      />
 
-            {/* Search */}
-            <div className="bg-white p-6 rounded-xl border border-slate-200 mb-6">
-                <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-slate-400" />
-                    <Input
-                        placeholder="Search students by name or email..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
-                    />
-                </div>
-            </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Student</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Plan</TableHead>
+            <TableHead>Interviews</TableHead>
+            <TableHead>Joined</TableHead>
+            <TableHead />
+          </TableRow>
+        </TableHeader>
 
-            {/* Table */}
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Student</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Plan</TableHead>
-                            <TableHead>Interviews</TableHead>
-                            <TableHead>Joined</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
+        <TableBody>
+          {filteredUsers.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={7} className="text-center">
+                No users found
+              </TableCell>
+            </TableRow>
+          ) : (
+            filteredUsers.map((u) => (
+              <TableRow key={u.id}>
+                <TableCell>{u.name}</TableCell>
+                <TableCell>{u.email}</TableCell>
 
-                    <TableBody>
-                        {filteredUsers.map((u) => (
-                            <TableRow key={u.id}>
-                                <TableCell>
-                                    <div className="flex items-center gap-3">
-                                        <div className="size-10 bg-indigo-600 rounded-full flex items-center justify-center text-white font-semibold">
-                                            {u.name.charAt(0)}
-                                        </div>
-                                        <span className="font-medium">{u.name}</span>
-                                    </div>
-                                </TableCell>
+                <TableCell>
+                  <Badge>{u.status}</Badge>
+                </TableCell>
 
-                                <TableCell className="text-slate-600">
-                                    {u.email}
-                                </TableCell>
+                <TableCell>{u.subscription}</TableCell>
+                <TableCell>{u.interviews}</TableCell>
+                <TableCell>{u.joinedDate}</TableCell>
 
-                                <TableCell>
-                                    <Badge
-                                        className={
-                                            u.status === "active"
-                                                ? "bg-green-100 text-green-800"
-                                                : "bg-slate-200 text-slate-700"
-                                        }
-                                    >
-                                        {u.status}
-                                    </Badge>
-                                </TableCell>
-
-                                <TableCell>
-                                    <Badge
-                                        variant="outline"
-                                        className={
-                                            u.subscription === "Premium"
-                                                ? "border-purple-600 text-purple-600"
-                                                : u.subscription === "Basic"
-                                                    ? "border-indigo-600 text-indigo-600"
-                                                    : "border-slate-400 text-slate-600"
-                                        }
-                                    >
-                                        {u.subscription}
-                                    </Badge>
-                                </TableCell>
-
-                                <TableCell className="font-semibold">
-                                    {u.interviews}
-                                </TableCell>
-
-                                <TableCell className="text-slate-600">
-                                    {u.joinedDate}
-                                </TableCell>
-
-                                <TableCell className="text-right">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="sm">
-                                                <MoreVertical className="size-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuItem>View Profile</DropdownMenuItem>
-                                            <DropdownMenuItem>Send Email</DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => toggleStatus(u.id)}>
-                                                {u.status === "active"
-                                                    ? "Deactivate Student"
-                                                    : "Activate Student"}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem className="text-red-600">
-                                                Remove Student
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
-        </div>
-    );
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button size="sm" variant="ghost">
+                        <MoreVertical size={16} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem><button onClick={()=>handleEmail(u.email)} >Email</button></DropdownMenuItem>
+                      <DropdownMenuItem className={"bg-red-500 text-white"} >
+                        {deletePending ? <Loading/>:
+                        <button onClick={()=>{handleDelete(u.id)}}>Delete</button>
+                        }
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  );
 }

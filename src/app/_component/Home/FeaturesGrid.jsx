@@ -3,22 +3,22 @@ import { FileText, Sparkles, Clock, Lightbulb } from "lucide-react";
 export default function FeaturesGrid() {
   const features = [
     {
-      icon: <FileText className="h-8 w-8 text-[#386bed]" />,
+      icon: <FileText className="h-8 w-8 text-Button" />,
       title: "Personalized Questions",
       desc: "No generic scripts. We generate dynamic questions based on your specific job description.",
     },
     {
-      icon: <Sparkles className="h-8 w-8 text-[#386bed]" />,
+      icon: <Sparkles className="h-8 w-8 text-Button" />,
       title: "AI-Powered Rating",
       desc: "Receive an unbiased score out of 10 for every answer using advanced LLM analysis.",
     },
     {
-      icon: <Clock className="h-8 w-8 text-[#386bed]" />,
+      icon: <Clock className="h-8 w-8 text-Button" />,
       title: "24/7 Availability",
       desc: "Train anytime—late night or early morning—whenever you feel ready.",
     },
     {
-      icon: <Lightbulb className="h-8 w-8 text-[#386bed]" />,
+      icon: <Lightbulb className="h-8 w-8 text-Button" />,
       title: "Sample Answers",
       desc: "See exactly how a top-tier candidate would answer tough questions.",
     },

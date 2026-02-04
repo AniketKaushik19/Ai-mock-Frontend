@@ -8,7 +8,7 @@ import { Mail, Phone, MapPin, Send } from "lucide-react";
 
 export default function ContactPage() {
     return (
-        <div className="min-h-[88.8vh] bg-[#0B1C2D] px-6 py-24 text-white">
+        <div className="min-h-[88.8vh] bg-Primary px-6 py-24 text-white">
             <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
                 {/* Left Content */}
@@ -52,7 +52,7 @@ export default function ContactPage() {
                     initial={{ opacity: 0, x: 40 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="bg-[#112A46] border border-white/10 rounded-2xl p-8 shadow-xl"
+                    className="bg-Secondary border border-white/10 rounded-2xl p-8 shadow-xl"
                 >
                     <h2 className="text-2xl font-bold mb-6">
                         Send us a message
@@ -61,19 +61,19 @@ export default function ContactPage() {
                     <form className="space-y-5">
                         <Input
                             placeholder="Your Name"
-                            className="bg-[#0B1C2D] border-white/10 text-white"
+                            className="bg-Primary border-white/10 text-white"
                         />
 
                         <Input
                             type="email"
                             placeholder="Your Email"
-                            className="bg-[#0B1C2D] border-white/10 text-white"
+                            className="bg-Primary border-white/10 text-white"
                         />
 
                         <Textarea
                             rows={5}
                             placeholder="Your Message"
-                            className="bg-[#0B1C2D] border-white/10 text-white resize-none"
+                            className="bg-Primary border-white/10 text-white resize-none"
                         />
 
                         <Button className="w-full bg-[#4F7DFF] hover:bg-[#3A64E0] text-white text-lg py-6">

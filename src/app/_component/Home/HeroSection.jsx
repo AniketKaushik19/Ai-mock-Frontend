@@ -9,7 +9,7 @@ export default function HeroSection() {
     <section className="relative container mx-auto px-6 py-24 md:py-32 text-center">
 
 
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#386bed] opacity-10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-Button opacity-10 blur-[120px] rounded-full pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -17,7 +17,7 @@ export default function HeroSection() {
         transition={{ duration: 0.6 }}
         className="relative z-10"
       >
-        <span className="inline-block py-1 px-3 rounded-full bg-[#1e293b] border border-[#386bed]/30 text-[#386bed] text-sm font-semibold mb-6">
+        <span className="inline-block py-1 px-3 rounded-full bg-[#1e293b] border border-[#386bed]/30 text-Button text-sm font-semibold mb-6">
           🚀 AI-Powered Interview Coach
         </span>
 
@@ -37,7 +37,7 @@ export default function HeroSection() {
         <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
           <Button
             size="lg"
-            className="bg-[#386bed] hover:bg-[#386bed]  text-white px-8 py-6 text-lg rounded-full shadow-lg hover:border-Primary transition-all hover:scale-105"
+            className="bg-Button hover:bg-Button  text-white px-8 py-6 text-lg rounded-full shadow-lg hover:border-Primary transition-all hover:scale-105"
             onClick={() => router.push('/dashboard')}
 
 
@@ -48,7 +48,7 @@ export default function HeroSection() {
           {/* <Button
             variant="outline"
             size="lg"
-            className="bg-[#386bed] text-white px-8 py-6 hover:bg-Primary hover:text-white text-lg rounded-full transition-all border-none hover:scale-105 shadow-lg shadow-blue-900/10"
+            className="bg-Button text-white px-8 py-6 hover:bg-Primary hover:text-white text-lg rounded-full transition-all border-none hover:scale-105 shadow-lg shadow-blue-900/10"
           >
            Analyze Your Resume
           </Button> */}

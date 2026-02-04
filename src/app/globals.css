@@ -3,12 +3,13 @@
 
 @theme {
   --color-Primary: #0B1C2D;
-  /*light*/
-  --color-Secondary: #112A46;
   /*dark*/
+  --color-Secondary: #112A46;
+  /*light*/
   --color-Ternary: #0D2B5B;
   /*navbar*/
 
+  --color-Button:#386bed;
 }
 
 @custom-variant dark (&:is(.dark *));

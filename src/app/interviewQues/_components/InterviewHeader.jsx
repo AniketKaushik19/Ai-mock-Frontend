@@ -4,7 +4,7 @@ const InterviewHeader = ({ index, total }) => {
   return (
     <>
       <div className="bg-[#111827] p-5 rounded-lg">
-        <h2 className="text-xl font-bold text-[#386bed]">
+        <h2 className="text-xl font-bold text-Button">
           Mock Interview Session
         </h2>
         <p className="text-gray-400 text-sm">

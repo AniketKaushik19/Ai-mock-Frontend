@@ -161,7 +161,7 @@ export default function OnboardingPage() {
                     <Button
                         disabled={isPending}
                         type="submit"
-                        className="w-full bg-[#386bed] hover:bg-[#274fcf] text-white font-semibold"
+                        className="w-full bg-Button hover:bg-[#274fcf] text-white font-semibold"
                     >
                         {isPending ? <Loading /> : "Continue"}
                     </Button>

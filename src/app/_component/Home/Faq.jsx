@@ -52,7 +52,7 @@ export function Faq() {
     return (
         <section
             id="faq"
-            className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0B1C2D] text-white"
+            className="py-20 px-4 sm:px-6 lg:px-8 bg-Primary text-white"
         >
             <div className="max-w-4xl mx-auto">
 
@@ -79,13 +79,13 @@ export function Faq() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: index * 0.05 }}
-                            className="border border-[#4F7DFF] hover:border-[#4F7DFF] rounded-xl overflow-hidden bg-[#112A46]"
+                            className="border border-[#4F7DFF] hover:border-[#4F7DFF] rounded-xl overflow-hidden bg-Secondary"
                         >
                             <button
                                 onClick={() =>
                                     setOpenIndex(openIndex === index ? null : index)
                                 }
-                                className="w-full px-6 py-4 flex items-center justify-between hover:bg-[#0B1C2D] transition"
+                                className="w-full px-6 py-4 flex items-center justify-between hover:bg-Primary transition"
                             >
                                 <span className="text-left font-semibold">
                                     {faq.question}
@@ -103,7 +103,7 @@ export function Faq() {
                                     animate={{ height: "auto", opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
                                     transition={{ duration: 0.3 }}
-                                    className="px-6 py-4 bg-[#0B1C2D] border-t border-white/10"
+                                    className="px-6 py-4 bg-Primary border-t border-white/10"
                                 >
                                     <p className="text-[#CBD5E1] leading-relaxed">
                                         {faq.answer}

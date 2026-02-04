@@ -138,7 +138,7 @@ const Signup = ({ handleChange, formData, setShowOtp, errors, setErrors }) => {
 
             <button
               disabled={isPending}
-              className="w-full py-3.5 bg-[#386bed] hover:bg-[#2563EB] text-white font-bold rounded-lg flex items-center justify-center transition-all duration-300 shadow-lg disabled:opacity-70 disabled:cursor-not-allowed relative overflow-hidden group"
+              className="w-full py-3.5 bg-Button hover:bg-[#2563EB] text-white font-bold rounded-lg flex items-center justify-center transition-all duration-300 shadow-lg disabled:opacity-70 disabled:cursor-not-allowed relative overflow-hidden group"
             >
               {isPending ? (
                 <Loader2 className="animate-spin h-5 w-5" />

@@ -2,7 +2,7 @@ export default function Testimonial() {
   return (
     <section className="bg-[#1E293B] py-24 relative overflow-hidden">
       {/* Decorative quote mark */}
-      <div className="absolute top-10 left-10 text-[#386bed]/10 text-9xl font-serif font-bold select-none">
+      <div className="absolute top-10 left-10 text-Button/10 text-9xl font-serif font-bold select-none">
         “
       </div>
       
@@ -19,7 +19,7 @@ export default function Testimonial() {
         </blockquote>
 
         <div className="mt-8 flex flex-col items-center">
-          <div className="w-16 h-1 bg-[#386bed] rounded-full mb-4"></div>
+          <div className="w-16 h-1 bg-Button rounded-full mb-4"></div>
           <p className="font-bold text-white text-lg">Sarah J.</p>
           <p className="text-[#94A3B8] text-sm">Software Engineer @ TechCorp</p>
         </div>
