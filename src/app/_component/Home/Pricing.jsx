@@ -11,7 +11,7 @@ export function Pricing() {
     const { isLoggedIn } = useAuthStore();
     const { data: plans, isLoading } = useGetActiveSubscriptionPlans();
 
-    
+
     const parseFeatures = (features) => {
         if (!features) return [];
         if (Array.isArray(features)) return features;
@@ -28,10 +28,8 @@ export function Pricing() {
 
     const handleSubscribe = (plan) => {
         if (!isLoggedIn()) {
-            // Redirect to login page
             router.push('/login');
         } else {
-            // Redirect to dashboard subscriptions page
             router.push('/dashboard/subscriptions');
         }
     };
@@ -42,17 +40,7 @@ export function Pricing() {
             className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0B1C2D] text-white"
         >
             <div className="max-w-7xl mx-auto">
-                {/* Test Mode Banner */}
-                {process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID?.startsWith('rzp_test_') && (
-                    <div className="max-w-4xl mx-auto mb-8 bg-yellow-900/20 border border-yellow-600/40 rounded-xl p-4">
-                        <div className="flex items-center gap-3 justify-center">
-                            <Zap className="size-5 text-yellow-400" />
-                            <p className="text-sm text-yellow-200">
-                                <strong>Test Mode:</strong> No real payments will be processed
-                            </p>
-                        </div>
-                    </div>
-                )}
+
 
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -78,7 +66,7 @@ export function Pricing() {
                         {plans?.map((plan, index) => {
                             const features = parseFeatures(plan.features);
                             const isPremium = plan.name.toLowerCase().includes('premium');
-                            
+
                             return (
                                 <motion.div
                                     key={plan.subscription_id}
@@ -86,11 +74,10 @@ export function Pricing() {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                                    className={`relative p-8 rounded-2xl border ${
-                                        isPremium
+                                    className={`relative p-8 rounded-2xl border ${isPremium
                                             ? "border-[#4F7DFF] shadow-xl scale-105"
                                             : "border-white/10 hover:border-[#4F7DFF]/50"
-                                    } bg-[#112A46] transition-all`}
+                                        } bg-[#112A46] transition-all`}
                                 >
                                     {isPremium && (
                                         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
@@ -111,8 +98,8 @@ export function Pricing() {
                                         </div>
 
                                         <div className="text-[#CBD5E1]">
-                                            {plan.Monthly_limit 
-                                                ? `${plan.Monthly_limit} interviews/month` 
+                                            {plan.Monthly_limit
+                                                ? `${plan.Monthly_limit} interviews/month`
                                                 : 'Unlimited interviews'}
                                         </div>
                                     </div>
@@ -129,11 +116,10 @@ export function Pricing() {
                                     <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
                                     <button
-                                        className={`w-full py-3 rounded-lg font-semibold transition-all ${
-                                            isPremium
+                                        className={`w-full py-3 rounded-lg font-semibold transition-all ${isPremium
                                                 ? "bg-[#4F7DFF] text-white hover:bg-[#386bed] shadow-lg"
                                                 : "bg-[#0B1C2D] border border-white/10 text-white hover:border-[#4F7DFF]"
-                                        }`}
+                                            }`}
                                         onClick={() => handleSubscribe(plan)}
                                     >
                                         {plan.price === 0 ? 'Get Started' : 'Subscribe Now'}

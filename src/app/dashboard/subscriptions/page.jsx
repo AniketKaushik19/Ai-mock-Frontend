@@ -21,15 +21,12 @@ import useAuthStore from '../../../../store/authStore';
 export default function SubscriptionsPage() {
   const router = useRouter();
   const { user, isLoggedIn } = useAuthStore();
-
   const { data: plans, isLoading } = useGetActiveSubscriptionPlans();
   const { data: currentSubscription } = useGetUserSubscription(user?.id);
   const createOrderMutation = useCreateSubscriptionOrder();
   const verifyPaymentMutation = useVerifyPayment();
-
   const [processingPlanId, setProcessingPlanId] = useState(null);
 
-  const isTestMode = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID?.startsWith('rzp_test_');
 
   useEffect(() => {
     if (!isLoggedIn()) {
@@ -129,11 +126,10 @@ export default function SubscriptionsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1 }}
-        className={`relative bg-gradient-to-br ${
-          isPremium
-            ? 'from-purple-900/20 to-pink-900/20 border-purple-500/50'
-            : 'from-slate-900/50 to-slate-800/50 border-slate-700'
-        } border rounded-2xl p-8 hover:scale-105 transition-transform duration-300`}
+        className={`relative bg-gradient-to-br ${isPremium
+          ? 'from-purple-900/20 to-pink-900/20 border-purple-500/50'
+          : 'from-slate-900/50 to-slate-800/50 border-slate-700'
+          } border rounded-2xl p-8 hover:scale-105 transition-transform duration-300`}
       >
         {isPremium && (
           <div className="absolute -top-4 left-1/2 -translate-x-1/2">
@@ -150,9 +146,8 @@ export default function SubscriptionsPage() {
         )}
 
         <div
-          className={`inline-flex p-3 rounded-lg mb-4 ${
-            isPremium ? 'bg-purple-600/20' : 'bg-[#4F7DFF]/20'
-          }`}
+          className={`inline-flex p-3 rounded-lg mb-4 ${isPremium ? 'bg-purple-600/20' : 'bg-[#4F7DFF]/20'
+            }`}
         >
           <Icon
             className={`size-8 ${isPremium ? 'text-purple-400' : 'text-[#4F7DFF]'}`}
@@ -189,11 +184,10 @@ export default function SubscriptionsPage() {
         <Button
           onClick={() => handleSubscribe(plan)}
           disabled={isCurrent || processingPlanId === plan.subscription_id}
-          className={`w-full ${
-            isPremium
-              ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
-              : 'bg-[#4F7DFF] hover:bg-[#3D6BE8]'
-          } ${isCurrent ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`w-full ${isPremium
+            ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
+            : 'bg-[#4F7DFF] hover:bg-[#3D6BE8]'
+            } ${isCurrent ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           {isCurrent ? 'Current Plan' : plan.price === 0 ? 'Get Started' : 'Subscribe Now'}
         </Button>
@@ -203,27 +197,12 @@ export default function SubscriptionsPage() {
 
   return (
     <main className="min-h-screen bg-Primary text-white p-4 md:p-10">
-     
+
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
-     
-      {isTestMode && (
-        <div className="max-w-4xl mx-auto mb-6 bg-yellow-900/30 border border-yellow-600/50 rounded-xl p-4">
-          <div className="flex items-center gap-3">
-            <div className="bg-yellow-600/20 p-2 rounded-lg">
-              <Zap className="size-5 text-yellow-400" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-yellow-300">Test Mode Active</h3>
-              <p className="text-sm text-yellow-200/80">
-                No real money will be charged. Use test card: 5267 3181 8797 5449
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
- 
+
+
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

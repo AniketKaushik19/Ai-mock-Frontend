@@ -5,12 +5,14 @@ import { immer } from 'zustand/middleware/immer';
 
 const initialState = {
   user: null,
+  interviewLimit: null,
 };
 
 const useAuthStore = create(
   persist(
     immer((set, get) => ({
       user: null,
+      interviewLimit: null,
 
       login:(data) => {
         set((state) => {
@@ -19,9 +21,16 @@ const useAuthStore = create(
         });
       },
 
+      setInterviewLimit: (data) => {
+        set((state) => {
+          state.interviewLimit = data;
+        });
+      },
+
      logout: () => {
         set((state) => {
           state.user = null;
+          state.interviewLimit = null;
         });
         useAuthStore.persist.clearStorage();
       },
