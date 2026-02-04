@@ -1,5 +1,5 @@
-import { adminCreate, adminLogin, adminlogout, deleteUser, getAllUser } from "@/libs/adminApi";
-import { useMutation , useQuery,useQueryClient } from "@tanstack/react-query";
+import { adminCreate, adminLogin, adminlogout, deleteUser, getAllUser, updateAdmin, deleteAdmin, getAllAdmins } from "@/libs/adminApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 
@@ -32,7 +32,7 @@ export const useAdminCreate = () => {
 export const useAdminLogout = () => {
   return useMutation({
     mutationFn: adminlogout,
-    retry:0,
+    retry: 0,
     onSuccess: (data) => {
       toast.success("Logout Successfully");
     },
@@ -61,7 +61,6 @@ export const useDeleteUser = () => {
     mutationFn: (userId) => deleteUser(userId),
 
     onSuccess: () => {
-      // refetch users list after delete
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
 
@@ -70,3 +69,42 @@ export const useDeleteUser = () => {
     },
   });
 }
+export const useGetAllAdmins = () => {
+  return useQuery({
+    queryKey: ["admin"],
+    queryFn: getAllAdmins,
+    onError: (error) => {
+      toast.error(
+        error?.response?.data?.message || 'Error while Getting all Admins'
+      );
+    },
+  })
+};
+export const useAdminUpdate = () => {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateAdmin,
+    onSuccess: () => {
+      toast.success("Admin updated successfully");
+      qc.invalidateQueries({ queryKey: ["admins"] });
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Update failed");
+    },
+  });
+};
+export const useAdminDelete = () => {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteAdmin,
+    onSuccess: () => {
+      toast.success("Admin deleted successfully");
+      qc.invalidateQueries({ queryKey: ["admins"] });
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Delete failed");
+    },
+  });
+};
