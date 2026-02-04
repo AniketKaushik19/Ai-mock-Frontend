@@ -4,10 +4,29 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { CalendarClock, Briefcase, RefreshCcw, MessageSquare } from 'lucide-react';
+import useAuthStore from '../../../../store/authStore';
+import toast from 'react-hot-toast';
 
 export default function InterviewCard({ item }) {
   const router = useRouter();
+  const { interviewLimit } = useAuthStore();
   const jbrole = item?.job_role?.toUpperCase();
+
+  const handleStartAgain = () => {
+    // Check if user has reached their interview limit
+    if (interviewLimit?.remaining === 0 || interviewLimit?.isLimitReached) {
+      toast.error("You've reached your interview limit! Please upgrade your subscription.", {
+        duration: 4000,
+        icon: '🚫',
+      });
+      // Redirect to subscriptions page after a short delay
+      setTimeout(() => {
+        router.push('/dashboard/subscriptions');
+      }, 1500);
+      return;
+    }
+    router.push(`/startInterview/${item.id}`);
+  };
 
   return (
     <motion.div
@@ -62,7 +81,7 @@ export default function InterviewCard({ item }) {
 
         <Button
           className="w-full bg-[#4F7DFF] hover:bg-[#3A64E0] text-white flex items-center gap-2 transition-all"
-          onClick={() => router.push(`/startInterview/${item.id}`)}
+          onClick={handleStartAgain}
         >
           <RefreshCcw className="w-4 h-4" />
           Start Again

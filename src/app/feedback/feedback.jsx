@@ -22,25 +22,32 @@ const itemVariants = {
 };
 
 export default function FeedbackPage({ feedbackId }) {
-  const {data , isLoading}=useFeedback(feedbackId);
+  const { data, isLoading } = useFeedback(feedbackId);
+
   if (isLoading) {
-
-    return <div className="min-h-screen flex items-center justify-center bg-Primary">
-      <Loading /> 
-    </div>  ;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-Primary">
+        <Loading />
+      </div>
+    );
   }
-  
-  
 
-  
-  const questions =data?.questions || [];
+  if (!data) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-Primary text-white">
+        Feedback not available
+      </div>
+    );
+  }
 
- 
-  
+  const questions = Array.isArray(data.questions) ? data.questions : [];
 
-  const totalScore = data?.overallScore;
-  const maxScore = questions?.length * 10;
-  const percentage = (totalScore / maxScore) * 100;
+  const totalScore = Number(data.overallScore ?? 0);
+  const maxScore = questions.length * 10;
+
+
+  const percentage =
+    maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
 
   const getScoreColor = (score) => {
     if (score >= 8) return "bg-emerald-500";
@@ -56,7 +63,7 @@ export default function FeedbackPage({ feedbackId }) {
         animate="visible"
         className="mx-auto max-w-5xl space-y-6 sm:space-y-8"
       >
-        {/* Overall Score */}
+
         <motion.div variants={itemVariants}>
           <Card className="rounded-2xl bg-Secondary border border-white/10 shadow-lg">
             <CardHeader className="space-y-3">
@@ -66,7 +73,7 @@ export default function FeedbackPage({ feedbackId }) {
                 </CardTitle>
 
                 <Badge className="w-fit bg-[#4F7DFF] text-white text-sm sm:text-base">
-                  {totalScore} / {maxScore}
+                  {totalScore} / {maxScore || 0}
                 </Badge>
               </div>
 
@@ -82,11 +89,15 @@ export default function FeedbackPage({ feedbackId }) {
           </Card>
         </motion.div>
 
-        {/* Question Cards */}
-        {questions?.map((item, index) => (
-          <div
-            key={index}
-          >
+        {questions.length === 0 && (
+          <Card className="rounded-2xl bg-Secondary border border-white/10 p-6 text-center text-[#CBD5E1]">
+            No question feedback available.
+          </Card>
+        )}
+
+
+        {questions.map((item, index) => (
+          <motion.div key={item.questionId ?? index} variants={itemVariants}>
             <Card className="rounded-2xl bg-Secondary border border-white/10 shadow-md">
               <CardHeader className="space-y-2">
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -96,15 +107,15 @@ export default function FeedbackPage({ feedbackId }) {
 
                   <Badge
                     className={`w-fit text-white text-sm ${getScoreColor(
-                      item.score
+                      item.score ?? 0
                     )}`}
                   >
-                    {item?.score} / 10
+                    {item.score ?? 0} / 10
                   </Badge>
                 </div>
 
                 <p className="text-sm sm:text-base text-[#CBD5E1]">
-                  {item?.question}
+                  {item.question}
                 </p>
               </CardHeader>
 
@@ -116,7 +127,7 @@ export default function FeedbackPage({ feedbackId }) {
                     Your Answer
                   </h3>
                   <p className="rounded-xl bg-Primary p-3 sm:p-4 text-sm sm:text-base text-white border border-[#4F7DFF]">
-                    {item?.userAnswer || "User not given any answer."} 
+                    {item.userAnswer || "User did not provide an answer."}
                   </p>
                 </section>
 
@@ -125,7 +136,7 @@ export default function FeedbackPage({ feedbackId }) {
                     Correct Answer
                   </h3>
                   <p className="rounded-xl bg-Primary p-3 sm:p-4 text-sm sm:text-base text-white border border-emerald-400">
-                    {item?.correctAnswer}
+                    {item.correctAnswer}
                   </p>
                 </section>
 
@@ -134,12 +145,12 @@ export default function FeedbackPage({ feedbackId }) {
                     AI Feedback
                   </h3>
                   <p className="rounded-xl bg-Primary p-3 sm:p-4 text-sm sm:text-base text-white border border-fuchsia-400">
-                    {item?.feedback}
+                    {item.feedback}
                   </p>
                 </section>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
         ))}
       </motion.div>
     </div>

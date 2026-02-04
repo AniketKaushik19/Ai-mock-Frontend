@@ -14,9 +14,12 @@ import { useState } from "react";
 import { useGenerateQuestion } from "@/hooks/interview";
 import Loading from "@/app/_component/Loading";
 import { useRouter } from "next/navigation";
+import useAuthStore from "../../../../store/authStore";
+import toast from "react-hot-toast";
 
 export default function CreateInterviewModal({ open, setOpen }) {
   const router = useRouter();
+  const { interviewLimit } = useAuthStore();
   const [form, setForm] = useState({
     jobRole: "",
     jobDescription: "",
@@ -33,10 +36,15 @@ export default function CreateInterviewModal({ open, setOpen }) {
   };
 
   const handleSubmit = async () => {
+    // Double-check interview limit before submission
+    if (interviewLimit?.remaining === 0 || interviewLimit?.isLimitReached) {
+      toast.error("Interview limit reached! Please upgrade your subscription.");
+      setOpen(false);
+      router.push('/dashboard/subscriptions');
+      return;
+    }
 
     const result = await mutateAsync(form);
-
-
 
     setOpen(false);
     if (result) {

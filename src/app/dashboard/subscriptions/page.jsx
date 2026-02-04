@@ -20,7 +20,7 @@ import useAuthStore from '../../../../store/authStore';
 
 export default function SubscriptionsPage() {
   const router = useRouter();
-  const { user, isLoggedIn } = useAuthStore();
+  const { user, isLoggedIn, interviewLimit } = useAuthStore();
   const { data: plans, isLoading } = useGetActiveSubscriptionPlans();
   const { data: currentSubscription } = useGetUserSubscription(user?.id);
   const createOrderMutation = useCreateSubscriptionOrder();
@@ -141,7 +141,9 @@ export default function SubscriptionsPage() {
 
         {isCurrent && (
           <div className="absolute -top-4 right-4">
-            <Badge className="bg-green-600 text-white">Current Plan</Badge>
+            <Badge className={currentSubscription?.status === 'expired' ? 'bg-red-600 text-white' : 'bg-green-600 text-white'}>
+              {currentSubscription?.status === 'expired' ? 'Expired' : 'Current Plan'}
+            </Badge>
           </div>
         )}
 
@@ -183,13 +185,17 @@ export default function SubscriptionsPage() {
 
         <Button
           onClick={() => handleSubscribe(plan)}
-          disabled={isCurrent || processingPlanId === plan.subscription_id}
+          disabled={processingPlanId === plan.subscription_id}
           className={`w-full ${isPremium
             ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
             : 'bg-[#4F7DFF] hover:bg-[#3D6BE8]'
-            } ${isCurrent ? 'opacity-50 cursor-not-allowed' : ''}`}
+            }`}
         >
-          {isCurrent ? 'Current Plan' : plan.price === 0 ? 'Get Started' : 'Subscribe Now'}
+          {isCurrent && currentSubscription?.status === 'expired'
+            ? 'Renew Subscription'
+            : isCurrent
+              ? 'Extend Subscription'
+              : plan.price === 0 ? 'Get Started' : 'Subscribe Now'}
         </Button>
       </motion.div>
     );
@@ -220,27 +226,51 @@ export default function SubscriptionsPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="max-w-4xl mx-auto mb-8 bg-gradient-to-r from-green-900/20 to-emerald-900/20 border border-green-600/30 rounded-xl p-6"
+          className={`max-w-4xl mx-auto mb-8 rounded-xl p-6 ${currentSubscription.status === 'expired'
+            ? 'bg-gradient-to-r from-red-900/20 to-orange-900/20 border border-red-600/30'
+            : 'bg-gradient-to-r from-green-900/20 to-emerald-900/20 border border-green-600/30'
+            }`}
         >
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
-              <div className="bg-green-600/20 p-3 rounded-lg">
-                <Star className="size-6 text-green-400" />
+              <div className={`p-3 rounded-lg ${currentSubscription.status === 'expired' ? 'bg-red-600/20' : 'bg-green-600/20'
+                }`}>
+                <Star className={`size-6 ${currentSubscription.status === 'expired' ? 'text-red-400' : 'text-green-400'
+                  }`} />
               </div>
               <div>
-                <h3 className="font-semibold text-green-300">Active Subscription</h3>
+                <h3 className={`font-semibold ${currentSubscription.status === 'expired' ? 'text-red-300' : 'text-green-300'
+                  }`}>
+                  {currentSubscription.status === 'expired' ? 'Subscription Expired' : 'Active Subscription'}
+                </h3>
                 <p className="text-slate-300">{currentSubscription.name}</p>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-slate-400">Expires on</p>
-              <p className="text-slate-200 font-medium">
-                {currentSubscription.end_date
-                  ? new Date(currentSubscription.end_date).toLocaleDateString()
-                  : 'N/A'}
-              </p>
+            <div className="flex gap-6">
+              <div className="text-right">
+                <p className="text-sm text-slate-400">Interviews Remaining</p>
+                <p className={`font-semibold text-lg ${interviewLimit?.remaining === 0 ? 'text-red-400' : 'text-green-400'
+                  }`}>
+                  {interviewLimit?.remaining ?? 0} / {currentSubscription.Monthly_limit ?? 'Unlimited'}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-slate-400">
+                  {currentSubscription.status === 'expired' ? 'Expired on' : 'Expires on'}
+                </p>
+                <p className="text-slate-200 font-medium">
+                  {currentSubscription.end_date
+                    ? new Date(currentSubscription.end_date).toLocaleDateString()
+                    : 'N/A'}
+                </p>
+              </div>
             </div>
           </div>
+          {currentSubscription.status === 'expired' && (
+            <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded text-red-300 text-sm">
+              ⚠️ Your subscription has expired. Renew now to continue enjoying premium features!
+            </div>
+          )}
         </motion.div>
       )}
 
