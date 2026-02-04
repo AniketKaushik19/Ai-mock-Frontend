@@ -13,6 +13,8 @@ import { useInterviewLimit } from '@/hooks/interview';
 export default function Dashboard() {
     const router = useRouter();
     const { data: interveiwLimit, isPending } = useInterviewLimit();
+    console.log(interveiwLimit);
+
     const { setInterviewLimit } = useAuthStore();
 
     useEffect(() => {
