@@ -54,21 +54,6 @@ export const useGetAllUser = () => {
   })
 }
 
-export const useDeleteUser = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (userId) => deleteUser(userId),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-    },
-
-    onError: (error) => {
-      console.error("Delete user failed:", error);
-    },
-  });
-}
 export const useGetAllAdmins = () => {
   return useQuery({
     queryKey: ["admin"],

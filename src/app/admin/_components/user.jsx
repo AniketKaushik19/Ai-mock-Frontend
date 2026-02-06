@@ -31,7 +31,7 @@ import {
   CreditCard,
 } from "lucide-react";
 
-import { useDeleteUser, useGetAllUser } from "@/hooks/admin";
+import { useGetAllUser } from "@/hooks/admin";
 import Loading from "@/app/_component/Loading";
 
 export default function UserManagement() {
@@ -39,7 +39,6 @@ export default function UserManagement() {
   const [users, setUsers] = useState([]);
   
   const { data, isPending } = useGetAllUser();
-  const {mutateAsync,isPending:deletePending}=useDeleteUser()
   const allUser = data?.allUser || [];
   console.log(allUser);
   
@@ -67,10 +66,7 @@ export default function UserManagement() {
   );
 
   if (isPending) {
-    return <div className="p-8">Loading...</div>;
-  }
-  const handleDelete=async(userId)=> {
-     await mutateAsync(userId)
+    return <div className="p-8 bg-Secondary"><Loading/></div>;
   }
     const handleEmail = (email) => {
     // Gmail compose link
@@ -82,7 +78,7 @@ export default function UserManagement() {
 
 
   return (
-<div className="p-8 bg-[var(--color-Secondary)] min-h-screen">
+<div className="p-8 bg-Secondary min-h-screen">
   {/* Header */}
   <div className="flex items-center justify-between mb-6">
     <h2 className="text-2xl font-semibold text-white flex items-center gap-2">
@@ -103,7 +99,7 @@ export default function UserManagement() {
   {/* Table Card */}
   <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
     <Table>
-      <TableHeader className="bg-[var(--color-Primary)]">
+      <TableHeader className="bg-Primary">
         <TableRow>
           <TableHead className="text-white">Student</TableHead>
           <TableHead className="text-white">Email</TableHead>
@@ -188,19 +184,6 @@ export default function UserManagement() {
                       className="flex items-center gap-2"
                     >
                       <Mail size={14} /> Email
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem
-                      className="flex items-center gap-2 text-red-600 focus:text-red-600"
-                      onClick={() => handleDelete(u.id)}
-                    >
-                      {deletePending ? (
-                        <Loading />
-                      ) : (
-                        <>
-                          <Trash2 size={14} /> Delete
-                        </>
-                      )}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
