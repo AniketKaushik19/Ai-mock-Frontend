@@ -68,8 +68,7 @@ export default function Navbar() {
   const UserLoggedIn = mounted && !!user;
   const AdminLoggedIn = mounted && !!admin;
 
-  const isDesktop =
-    typeof window !== "undefined" && window.innerWidth >= 768;
+  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
 
   const filteredNavItems = navItems.filter((item) => {
     if (item.name === "Dashboard") return UserLoggedIn;
@@ -174,52 +173,6 @@ export default function Navbar() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-
-              </div>
-            )}
-            {AdminLoggedIn && (
-                   <Link
-               
-                  href={'/admin/users'}
-                  className={`relative text-sm font-bold transitio  ${pathname==="/admin/users" ? "text-orange-500":"text-white"}
-                    }`}
-                > Dashboard
-                {pathname==="/admin/users" &&   <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-orange-500" />}
-                  
-                </Link>
-            )}
-               
-            {/* //Admin hover Card  */}
-            {AdminLoggedIn && (
-              <div
-                className="relative"
-                onMouseEnter={() => isDesktop && setHoverOpen(true)}
-                onMouseLeave={() => isDesktop && setHoverOpen(false)}
-              >
-                <div
-                  className="h-12 w-12 cursor-pointer overflow-hidden rounded-full border-2 border-[#4F7DFF] hover:scale-105 transition"
-                >
-                  <Image
-                    src={"/image/avatar.png"}
-                    alt="Profile"
-                    width={48}
-                    height={48}
-                    className="rounded-full object-cover"
-                  />
-                </div>
-
-                <AnimatePresence>
-                  {hoverOpen && (
-                    <motion.div
-                      className="absolute right-0 top-14 z-50"
-                      onMouseEnter={() => setHoverOpen(true)}
-                      onMouseLeave={() => setHoverOpen(false)}
-                    >
-                      <AdminHoverCard onClose={() => setHoverOpen(false)} />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
               </div>
             )}
           </div>
@@ -259,10 +212,7 @@ export default function Navbar() {
             className="fixed inset-0 z-[999] flex flex-col bg-Primary px-6 py-10 md:hidden"
           >
             <div className="flex justify-end">
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-white"
-              >
+              <button onClick={() => setIsOpen(false)} className="text-white">
                 <X size={32} />
               </button>
             </div>

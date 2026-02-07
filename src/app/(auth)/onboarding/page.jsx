@@ -19,6 +19,9 @@ export default function OnboardingPage() {
     const { mutateAsync: onboarding, isPending } = useOnBoarding();
     const fileInputRef = useRef(null);
 
+
+
+
     useEffect(() => {
         if (!user) {
             router.replace('/');

@@ -31,7 +31,7 @@ export default function Hero() {
                     {/* Right Image */}
                     <div className="relative">
                         <Image
-                            src="/image/ai-poweredmockint.jpg"
+                            src="https://www.interviewnode.com/storage/ai-poweredmockint.jpg"
                             alt="Professional interview setting"
                             width={1080}
                             height={720}
