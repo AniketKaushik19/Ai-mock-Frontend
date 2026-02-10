@@ -107,4 +107,3 @@ export const updateProfile=async(userData)=>{
        throw error
     }
 }
-

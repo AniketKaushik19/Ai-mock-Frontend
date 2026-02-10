@@ -16,7 +16,6 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import { useGetInterviewDetail } from "@/hooks/interview";
 import { useSubmitInterview } from "./_hooks/hooks";
-import { is } from "zod/v4/locales";
 import Loading from "../_component/Loading";
 import { useRouter } from "next/navigation";
 
@@ -27,7 +26,7 @@ const InterviewPage = ({ interviewId }) => {
   const [userAnswer, setUserAnswer] = useState("");
   const [answers, setAnswers] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
-  const router=useRouter();
+  const router = useRouter();
 
   const {
     transcript,
@@ -137,15 +136,15 @@ const InterviewPage = ({ interviewId }) => {
     });
 
     try {
-     const result= await mutateAsync({ interviewId, answers: finalAnswers });
-     console.log(result);
-     if(result?.message){
-toast.success("Interview submitted successfully!");
-router.replace(`/feedback/${interviewId}`);
+      const result = await mutateAsync({ interviewId, answers: finalAnswers });
+      console.log(result);
+      if (result?.message) {
+        toast.success("Interview submitted successfully!");
+        router.replace(`/feedback/${interviewId}`);
 
-     }
-     
-      
+      }
+
+
     } catch (err) {
       toast.error("Failed to submit interview");
       console.error(err);
@@ -304,6 +303,29 @@ router.replace(`/feedback/${interviewId}`);
           </div>
 
           <div className="flex gap-3">
+            {/* Previous Button */}
+            {activeQuestionIndex > 0 && (
+              <button
+                onClick={() => {
+                  if (listening) SpeechRecognition.stopListening();
+                  saveCurrentAnswer();
+
+                  const prev = activeQuestionIndex - 1;
+                  setActiveQuestionIndex(prev);
+
+                  const prevAnswer = answers.find(
+                    (a) => a.questionId === questions[prev].id
+                  );
+                  setUserAnswer(prevAnswer?.answer || "");
+                  resetTranscript();
+                }}
+                className="bg-[#111827] border border-white/10 px-6 rounded-lg"
+              >
+                Previous
+              </button>
+            )}
+
+            {/* Record / Stop Button */}
             <button
               onClick={saveUserAnswer}
               className={`flex-1 py-3 rounded-lg font-bold flex justify-center gap-2 ${listening ? "bg-red-500 animate-pulse" : "bg-Button"
@@ -320,30 +342,26 @@ router.replace(`/feedback/${interviewId}`);
               )}
             </button>
 
+            {/* Next or End Interview Button */}
             {activeQuestionIndex === questions.length - 1 ? (
               <button
                 onClick={handleEndInterview}
                 disabled={isPending}
                 className="bg-red-500/10 border border-red-500 px-4 rounded-lg"
               >
-                {
-                  isPending ? <Loading/> :"End Interview"
-                }
-                
+                {isPending ? <Loading /> : "End Interview"}
               </button>
             ) : (
               <button
                 onClick={() => {
-                  if (listening)
-                    SpeechRecognition.stopListening();
+                  if (listening) SpeechRecognition.stopListening();
                   saveCurrentAnswer();
 
                   const next = activeQuestionIndex + 1;
                   setActiveQuestionIndex(next);
 
                   const nextAnswer = answers.find(
-                    (a) =>
-                      a.questionId === questions[next].id
+                    (a) => a.questionId === questions[next].id
                   );
                   setUserAnswer(nextAnswer?.answer || "");
                   resetTranscript();
@@ -362,80 +380,3 @@ router.replace(`/feedback/${interviewId}`);
 
 export default InterviewPage;
 
-
-// modular code fix all error 27-01-2026
-
-
-// "use client";
-
-// import { useGetInterviewDetail } from "@/hooks/interview";
-
-
-// import { useInterviewSession } from "./_hooks/useInterviewSession";
-// import InterviewHeader from "./_components/InterviewHeader";
-// import QuestionCard from "./_components/QuestionCard";
-// import AnswerInput from "./_components/AnswerInput";
-// import WebcamPanel from "./_components/WebcamPanel";
-// import ControlButtons from "./_components/ControlButtons";
-
-// const InterviewPage = ({ interviewId }) => {
-//   const { data } = useGetInterviewDetail(interviewId);
-//   const questions = data?.interview?.questions || [];
-//   const { mutateAsync } = useSubmitInterview();
-
-//   const session = useInterviewSession(questions);
-
-//   const handleEndInterview = async () => {
-//     await mutateAsync({
-//       interviewId,
-//       answers: questions.map((q) => ({
-//         questionId: q.id,
-//         answer:
-//           session.answers.find((a) => a.questionId === q.id)
-//             ?.answer || "",
-//       })),
-    
-//   })};
-
-//   if (!questions.length) return null;
-
-//   return (
-//     <div className="min-h-screen bg-[#0B0F19] text-white p-10">
-//       <InterviewHeader
-//         index={session.activeIndex}
-//         total={questions.length}
-//       />
-
-//       <div className="grid md:grid-cols-2 gap-8 mt-8">
-//         <div>
-//           <QuestionCard
-//             question={session.activeQuestion}
-//           />
-//           <AnswerInput
-//             value={session.userAnswer}
-//             setValue={session.setUserAnswer}
-//             setIsTyping={session.setIsTyping}
-//             listening={session.listening}
-//           />
-//         </div>
-
-//         <div>
-//           <WebcamPanel />
-//           <ControlButtons
-//             listening={session.listening}
-//             onRecord={session.recordToggle}
-//             onNext={() =>
-//               session.goToQuestion(session.activeIndex + 1)
-//             }
-//             onEnd={handleEndInterview}
-//             isLast={
-//               session.activeIndex === questions.length - 1
-//             }
-//           />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default InterviewPage;

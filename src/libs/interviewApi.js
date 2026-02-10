@@ -1,20 +1,12 @@
 import { axiosInstance } from "./axios";
 
 export const generateQuestion = async (Data) => {
-   try {
-      const res = await axiosInstance.post(`interview/generate`, Data)
-      return res?.data;  
-   } catch (error) {
-      throw error
-   }
+  const res = await axiosInstance.post(`interview/generate`, Data)
+  return res.data;
 }
 export const getAllInterviews = async () => {
-   try {
-      const res = await axiosInstance.get(`interview`)
-      return res?.data;     
-   } catch (error) {
-       throw error
-   }
+  const res = await axiosInstance.get(`interview`)
+  return res.data;
 }
 
 export const getInterviewDetail = async (id) => {

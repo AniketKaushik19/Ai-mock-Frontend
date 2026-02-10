@@ -9,6 +9,9 @@ export const useGenerateQuestion=()=>{
     
     onSuccess:(data)=>{
        toast.success("Question generated successfully");
+      
+       
+     
     },
     onError:(error)=>{
       toast.error(error?.response?.data?.message || "Error while generating questions");

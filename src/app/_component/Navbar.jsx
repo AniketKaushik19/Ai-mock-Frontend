@@ -68,7 +68,8 @@ export default function Navbar() {
   const UserLoggedIn = mounted && !!user;
   const AdminLoggedIn = mounted && !!admin;
 
-  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
+  const isDesktop =
+    typeof window !== "undefined" && window.innerWidth >= 768;
 
   const filteredNavItems = navItems.filter((item) => {
     if (item.name === "Dashboard") return UserLoggedIn;
@@ -258,7 +259,10 @@ export default function Navbar() {
             className="fixed inset-0 z-[999] flex flex-col bg-Primary px-6 py-10 md:hidden"
           >
             <div className="flex justify-end">
-              <button onClick={() => setIsOpen(false)} className="text-white">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-white"
+              >
                 <X size={32} />
               </button>
             </div>

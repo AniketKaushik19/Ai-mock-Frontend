@@ -85,13 +85,13 @@ const LoginPage = () => {
   }, [UserLoggedIn])
 
   return (
-    // MAIN DARK BACKGROUND
+    // 1. MAIN DARK BACKGROUND
     <div className="min-h-screen relative flex items-center justify-center bg-[#0B0F19] overflow-hidden px-4">
 
-      {/*  BACKGROUND DECORATION: Ambient Hero Glow */}
+      {/* --- BACKGROUND DECORATION: Ambient Hero Glow --- */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none -z-10" />
 
-      {/* BACKGROUND DECORATION: RIGHT WAVES*/}
+      {/* --- BACKGROUND DECORATION: RIGHT WAVES --- */}
       <div className="absolute top-0 right-0 h-full w-1/2 pointer-events-none opacity-20 z-0">
         <svg className="h-full w-full" viewBox="0 0 400 800" preserveAspectRatio="none">
           <path d="M400,0 C300,200 100,200 100,400 C100,600 300,600 400,800" stroke="white" strokeWidth="1" fill="none" />
@@ -99,7 +99,7 @@ const LoginPage = () => {
         </svg>
       </div>
 
-      {/* GLASSMORPHISM CARD */}
+      {/* 2. GLASSMORPHISM CARD */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -214,7 +214,7 @@ const LoginPage = () => {
   );
 };
 
-// HELPER COMPONENTS
+// --- HELPER COMPONENTS (Identical styling to Signup Page) ---
 
 function Input({ icon, ...props }) {
   return (
