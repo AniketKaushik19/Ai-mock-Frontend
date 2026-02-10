@@ -5,7 +5,8 @@ import Script from "next/script";
 import { useGetActiveSubscriptionPlans } from "@/hooks/useSubscription";
 import useAuthStore from "../../../../store/authStore";
 import { useRouter } from "next/navigation";
-
+import SectionBackground from "../SectionBackground";
+import { MotionScale } from "../MotionWrappers";
 export function Pricing() {
     const router = useRouter();
     const { isLoggedIn } = useAuthStore();
@@ -37,9 +38,11 @@ export function Pricing() {
     return (
         <section
             id="pricing"
-            className="py-20 px-4 sm:px-6 lg:px-8 bg-Primary text-white"
+            className="relative py-20 px-4 sm:px-6 lg:px-8 bg-Primary text-white overflow-hidden"
         >
-            <div className="max-w-7xl mx-auto">
+            <SectionBackground variant="spotlight" />
+            
+            <div className="relative z-10 max-w-7xl mx-auto">
 
 
                 <motion.div
@@ -68,12 +71,9 @@ export function Pricing() {
                             const isPremium = plan.name.toLowerCase().includes('premium');
 
                             return (
-                                <motion.div
+                                <MotionScale
                                     key={plan.subscription_id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                                    delay={index * 0.1}
                                     className={`relative p-8 rounded-2xl border ${isPremium
                                             ? "border-[#4F7DFF] shadow-xl scale-105"
                                             : "border-white/10 hover:border-[#4F7DFF]/50"
@@ -125,7 +125,7 @@ export function Pricing() {
                                     >
                                         {plan.price === 0 ? 'Get Started' : 'Subscribe Now'}
                                     </button>
-                                </motion.div>
+                                </MotionScale>
                             );
                         })}
                     </div>

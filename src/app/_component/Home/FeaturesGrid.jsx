@@ -1,4 +1,6 @@
 import { FileText, Sparkles, Clock, Lightbulb } from "lucide-react";
+import SectionBackground from "../SectionBackground";
+import { MotionStagger, MotionItem } from "../MotionWrappers";
 
 export default function FeaturesGrid() {
   const features = [
@@ -25,14 +27,16 @@ export default function FeaturesGrid() {
   ];
 
   return (
-    <section className="container mx-auto px-6 py-24">
-      <h2 className="text-3xl font-bold text-center mb-12">
+    <section className="relative container mx-auto px-6 py-24">
+      <SectionBackground variant="grid" />
+      
+      <h2 className="relative z-10 text-3xl font-bold text-center mb-12">
         Why Candidates Choose Us
       </h2>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <MotionStagger className="relative z-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {features.map((feature, i) => (
-          <div
+          <MotionItem
             key={i}
             className="rounded-xl border border-white/10 bg-[#0F172A] p-8 text-center hover:border-[#386bed] hover:shadow-[0_0_20px_rgba(56,107,237,0.15)] transition-all duration-300"
           >
@@ -43,9 +47,9 @@ export default function FeaturesGrid() {
             <p className="text-[#94A3B8] text-sm leading-relaxed">
               {feature.desc}
             </p>
-          </div>
+          </MotionItem>
         ))}
-      </div>
+      </MotionStagger>
     </section>
   );
 }
