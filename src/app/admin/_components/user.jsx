@@ -66,7 +66,12 @@ export default function UserManagement() {
   );
 
   if (isPending) {
-    return <div className="p-8 bg-Secondary"><Loading/></div>;
+    return<div className="min-h-screen bg-Secondary flex items-center justify-center">
+  <div className="scale-150 md:scale-200">
+    <Loading />
+  </div>
+</div>
+
   }
     const handleEmail = (email) => {
     // Gmail compose link

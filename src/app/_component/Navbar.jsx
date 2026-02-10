@@ -56,6 +56,7 @@ export default function Navbar() {
   const { data } = useGetProfile({
     enabled: mounted && !!user,
   });
+  
 
   
   
