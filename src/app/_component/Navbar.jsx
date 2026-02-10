@@ -107,7 +107,7 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.path}
-                  className={`relative text-sm font-bold transition ${isActive
+                  className={`relative text-sm font-bold transition ${isActive 
                       ? "text-orange-500"
                       : "text-white hover:text-Button"
                     }`}

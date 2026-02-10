@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import  { QueryProvider } from "@/providers/queryProvider";
 import Navbar from "./_component/Navbar";
+import Footer from "./_component/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,8 @@ export default function RootLayout({ children }) {
           <Navbar />
 
           {children}
+
+          <Footer />
 
         </QueryProvider>
 

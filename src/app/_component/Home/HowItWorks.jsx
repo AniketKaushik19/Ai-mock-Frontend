@@ -1,3 +1,6 @@
+import SectionBackground from "./SectionBackground";
+import { MotionSlide } from "./MotionWrappers";
+
 export default function HowItWorks() {
   const steps = [
     {
@@ -18,17 +21,21 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section className="bg-[#0F172A] py-24 border-y border-white/5">
-      <div className="container mx-auto px-6">
+    <section className="relative bg-[#0F172A] py-24 border-y border-white/5 overflow-hidden">
+      <SectionBackground variant="wave" />
+      
+      <div className="relative z-10 container mx-auto px-6">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
           From Practice to Hired in 3 Steps
         </h2>
 
         <div className="grid md:grid-cols-3 gap-8">
           {steps.map((step, i) => (
-            <div
-              key={i}
-              className="group relative bg-[#1E293B] rounded-2xl p-8 border border-white/5 hover:border-[#386bed]/50 transition-all duration-300 hover:-translate-y-2"
+            <MotionSlide 
+                key={i} 
+                direction={i % 2 === 0 ? "left" : "right"}
+                delay={i * 0.2}
+                className="group relative bg-[#1E293B] rounded-2xl p-8 border border-white/5 hover:border-[#386bed]/50 transition-all duration-300 hover:-translate-y-2"
             >
               <div className="absolute -top-6 left-8 bg-Button text-white text-xl font-bold w-12 h-12 flex items-center justify-center rounded-xl shadow-lg">
                 {step.number}
@@ -39,7 +46,7 @@ export default function HowItWorks() {
               <p className="text-[#94A3B8] leading-relaxed">
                 {step.desc}
               </p>
-            </div>
+            </MotionSlide>
           ))}
         </div>
       </div>

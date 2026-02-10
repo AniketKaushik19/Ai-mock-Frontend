@@ -28,7 +28,7 @@ export default function ResumeAnalysisResultPage() {
             <motion.button
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                onClick={() => router.back()}
+                onClick={() => router.push("/dashboard/resume-analyzer")}
                 className="flex items-center gap-2 mb-6 text-gray-300 hover:text-blue-400 transition-colors z-20 relative"
             >
                 <ArrowLeft size={20} /> Back to Upload

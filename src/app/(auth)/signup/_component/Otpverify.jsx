@@ -87,10 +87,10 @@ export default function OtpVerify({ formData }) {
   return (
     // MAIN DARK BACKGROUND
     <div className="min-h-screen relative flex items-center justify-center bg-[#0B0F19] overflow-hidden px-4">
-      {/* --- BACKGROUND DECORATION: Ambient Glow --- */}
+      {/* BACKGROUND DECORATION: Ambient Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none -z-10" />
 
-      {/* --- BACKGROUND DECORATION: RIGHT WAVES --- */}
+      {/* BACKGROUND DECORATION: RIGHT WAVES */}
       <div className="absolute top-0 right-0 h-full w-1/2 pointer-events-none opacity-20 z-0">
         <svg
           className="h-full w-full"

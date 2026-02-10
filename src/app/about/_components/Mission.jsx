@@ -1,10 +1,14 @@
 import { Target, Users, Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import SectionBackground from "../../_component/Home/SectionBackground";
+import { MotionStagger, MotionItem } from "../../_component/Home/MotionWrappers";
 
 export function Mission() {
     return (
-        <section className="py-20 bg-[#0B1C2D] text-white">
-            <div className="container mx-auto px-4">
+        <section className="relative py-20 bg-[#0B1C2D] text-white overflow-hidden">
+            <SectionBackground variant="grid" />
+            
+            <div className="relative z-10 container mx-auto px-4">
 
                 {/* Heading */}
                 <div className="max-w-3xl mx-auto text-center mb-16">
@@ -21,27 +25,33 @@ export function Mission() {
                 </div>
 
                 {/* Cards */}
-                <div className="grid md:grid-cols-3 gap-8">
+                <MotionStagger className="grid md:grid-cols-3 gap-8">
 
-                    <MissionCard
-                        icon={<Target className="w-6 h-6 text-[#386bed]" />}
-                        title="Personalized Learning"
-                        desc="Our AI adapts to your industry, experience level, and target roles to provide tailored interview questions and feedback."
-                    />
+                    <MotionItem>
+                        <MissionCard
+                            icon={<Target className="w-6 h-6 text-[#386bed]" />}
+                            title="Personalized Learning"
+                            desc="Our AI adapts to your industry, experience level, and target roles to provide tailored interview questions and feedback."
+                        />
+                    </MotionItem>
 
-                    <MissionCard
-                        icon={<Sparkles className="w-6 h-6 text-[#4F7DFF]" />}
-                        title="Real-Time Feedback"
-                        desc="Get instant, actionable insights on your responses, body language, and communication skills to continuously improve."
-                    />
+                    <MotionItem>
+                        <MissionCard
+                            icon={<Sparkles className="w-6 h-6 text-[#4F7DFF]" />}
+                            title="Real-Time Feedback"
+                            desc="Get instant, actionable insights on your responses, body language, and communication skills to continuously improve."
+                        />
+                    </MotionItem>
 
-                    <MissionCard
-                        icon={<Users className="w-6 h-6 text-[#4F7DFF]" />}
-                        title="Accessible to All"
-                        desc="We're committed to making high-quality interview preparation accessible to job seekers everywhere, regardless of background."
-                    />
+                    <MotionItem>
+                        <MissionCard
+                            icon={<Users className="w-6 h-6 text-[#4F7DFF]" />}
+                            title="Accessible to All"
+                            desc="We're committed to making high-quality interview preparation accessible to job seekers everywhere, regardless of background."
+                        />
+                    </MotionItem>
 
-                </div>
+                </MotionStagger>
 
             </div>
         </section>
