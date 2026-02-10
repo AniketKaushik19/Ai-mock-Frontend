@@ -126,7 +126,7 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   className={`text-sm font-bold ${pathname === "/login"
-                      ? "text-orange-500"
+                      ? "text-purple-500"
                       : "text-white hover:text-Button"
                     }`}
                 >
@@ -181,10 +181,10 @@ export default function Navbar() {
                    <Link
                
                   href={'/admin/users'}
-                  className={`relative text-sm font-bold transitio  ${pathname==="/admin/users" ? "text-orange-500":"text-white"}
+                  className={`relative text-sm font-bold transitio  ${pathname==="/admin/users" ? "text-purple-500":"text-white"}
                     }`}
                 > Dashboard
-                {pathname==="/admin/users" &&   <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-orange-500" />}
+                {pathname==="/admin/users" &&   <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-purple-500" />}
                   
                 </Link>
             )}
