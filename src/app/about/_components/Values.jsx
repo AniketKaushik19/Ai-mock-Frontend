@@ -1,4 +1,6 @@
 import { Heart, Shield, Lightbulb, Zap } from "lucide-react";
+import SectionBackground from "@/app/_component/SectionBackground";
+import { MotionStagger, MotionItem } from "@/app/_component/MotionWrappers";
 
 const values = [
     {
@@ -29,8 +31,10 @@ const values = [
 
 export function Values() {
     return (
-        <section className="py-20 bg-[#0B1C2D] text-white">
-            <div className="container mx-auto px-4">
+        <section className="relative py-20 bg-[#0B1C2D] text-white overflow-hidden">
+            <SectionBackground variant="wave" />
+            
+            <div className="relative z-10 container mx-auto px-4">
 
                 {/* Heading */}
                 <div className="max-w-3xl mx-auto text-center mb-16">
@@ -45,9 +49,9 @@ export function Values() {
                 </div>
 
                 {/* Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <MotionStagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {values.map((value) => (
-                        <div
+                        <MotionItem
                             key={value.title}
                             className="text-center bg-[#112A46] border border-white/10 rounded-2xl p-6 hover:border-[#4F7DFF] hover:shadow-lg hover:shadow-[#4F7DFF]/10 transition"
                         >
@@ -62,9 +66,9 @@ export function Values() {
                             <p className="text-[#CBD5E1] leading-relaxed">
                                 {value.description}
                             </p>
-                        </div>
+                        </MotionItem>
                     ))}
-                </div>
+                </MotionStagger>
 
             </div>
         </section>
