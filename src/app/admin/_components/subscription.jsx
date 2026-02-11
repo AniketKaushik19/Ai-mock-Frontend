@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { Plus, Trash2, CheckCircle, X, Edit2 } from "lucide-react";
+import { Plus, Trash2, CheckCircle, X, Edit2, CreditCard, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -31,7 +31,7 @@ export default function SubscriptionManagement() {
 
     const [editingId, setEditingId] = useState(null);
 
-  
+
     const parseFeatures = (features) => {
         if (!features) return [];
 
@@ -53,18 +53,18 @@ export default function SubscriptionManagement() {
     const plans = plansData || [];
     const activeCount = plans.filter((p) => p.isActive === 1).length;
 
-    
-    const {mutate: createMutation, isLoading: isCreating} = useCreateSubscriptionPlan();
 
-    const {mutate: editMutation, isLoading: isEditing} = useEditSubscriptionPlan();
+    const { mutate: createMutation, isLoading: isCreating } = useCreateSubscriptionPlan();
 
-    const {mutate: deleteMutation, isLoading: isDeleting} = useDeleteSubscriptionPlan();
+    const { mutate: editMutation, isLoading: isEditing } = useEditSubscriptionPlan();
 
-  
+    const { mutate: deleteMutation, isLoading: isDeleting } = useDeleteSubscriptionPlan();
 
-    const {mutate: toggleStatusMutation, isLoading: isToggling} = useToggleSubscriptionPlan();
 
-    
+
+    const { mutate: toggleStatusMutation, isLoading: isToggling } = useToggleSubscriptionPlan();
+
+
     const addFeature = () => {
         if (!form.featureInput.trim()) return;
 
@@ -110,7 +110,7 @@ export default function SubscriptionManagement() {
             return;
         }
 
-       
+
         const featuresString = JSON.stringify(form.features);
 
         const planData = {
@@ -152,20 +152,25 @@ export default function SubscriptionManagement() {
 
 
     return (
-        <div className="p-8 bg-slate-950 min-h-screen text-white">
-            <h2 className="text-3xl font-bold mb-1">Subscription Plans</h2>
-            <p className="text-slate-400 mb-6">
+        <div className="p-8 bg-Secondary min-h-screen">
+            {/* Header */}
+            <h2 className="text-2xl font-semibold text-white mb-1 flex items-center gap-2">
+                <CreditCard size={22} />
+                Subscription Plans
+            </h2>
+
+            <p className="text-gray-300 mb-4">
                 Create and manage subscription plans & features
             </p>
 
-            <Badge className="bg-green-900/40 text-green-300 mb-6">
+            <Badge className="bg-green-100 text-green-700 mb-6">
                 <CheckCircle className="size-3 mr-1" />
                 Active Plans: {activeCount}
             </Badge>
 
-           
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 mb-8">
-                <h3 className="font-semibold mb-4">
+            {/* Create / Edit Card */}
+            <div className="bg-white border rounded-xl p-6 mb-8 shadow-sm">
+                <h3 className="font-semibold text-gray-800 mb-4">
                     {editingId ? "Edit Plan" : "Create New Plan"}
                 </h3>
 
@@ -190,10 +195,7 @@ export default function SubscriptionManagement() {
                         type="number"
                         value={form.monthlyLimit}
                         onChange={(e) =>
-                            setForm({
-                                ...form,
-                                monthlyLimit: e.target.value,
-                            })
+                            setForm({ ...form, monthlyLimit: e.target.value })
                         }
                     />
                 </div>
@@ -203,10 +205,7 @@ export default function SubscriptionManagement() {
                         placeholder="Add feature"
                         value={form.featureInput}
                         onChange={(e) =>
-                            setForm({
-                                ...form,
-                                featureInput: e.target.value,
-                            })
+                            setForm({ ...form, featureInput: e.target.value })
                         }
                         onKeyDown={(e) => e.key === "Enter" && addFeature()}
                     />
@@ -217,7 +216,10 @@ export default function SubscriptionManagement() {
 
                 <div className="flex flex-wrap gap-2 mb-4">
                     {form.features.map((feature, index) => (
-                        <Badge key={index} className="flex items-center gap-1">
+                        <Badge
+                            key={index}
+                            className="bg-gray-200 text-gray-700 flex items-center gap-1"
+                        >
                             {feature}
                             <X
                                 className="size-3 cursor-pointer"
@@ -227,20 +229,25 @@ export default function SubscriptionManagement() {
                     ))}
                 </div>
 
-                <Button onClick={handleSubmit} className="bg-indigo-600">
+                <Button
+                    onClick={handleSubmit}
+                    className="bg-Primary text-white flex items-center gap-2 disabled:opacity-60"
+                >
+                    {isCreating && (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                    )}
                     {editingId ? "Update Plan" : "Add Plan"}
                 </Button>
             </div>
 
-       
-            <div className="bg-slate-900 border border-slate-800 rounded-xl text-white overflow-hidden">
+            <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
                 {isLoading ? (
-                    <div className="p-8 text-center text-slate-400">
+                    <div className="p-8 text-center text-gray-500">
                         Loading plans...
                     </div>
                 ) : (
                     <Table>
-                        <TableHeader>
+                        <TableHeader className="bg-Primary">
                             <TableRow>
                                 <TableHead className="text-white">Plan</TableHead>
                                 <TableHead className="text-white">Price</TableHead>
@@ -260,84 +267,83 @@ export default function SubscriptionManagement() {
                                 return (
                                     <TableRow
                                         key={plan.subscription_id}
+                                        className="hover:bg-slate-50 transition"
                                     >
-                                        <TableCell className="text-white">{plan.name}</TableCell>
-                                        <TableCell className="text-white">
-                                            {plan.price === 0
-                                                ? "Free"
-                                                : `₹${plan.price}`}
+                                        <TableCell className="font-medium text-gray-800">
+                                            {plan.name}
                                         </TableCell>
-                                        <TableCell>
+
+                                        <TableCell className="text-gray-700">
+                                            {plan.price === 0 ? "Free" : `₹${plan.price}`}
+                                        </TableCell>
+
+                                        <TableCell className="text-gray-700">
                                             {plan.Monthly_limit || "Unlimited"}
                                         </TableCell>
-                                        <TableCell className="text-white">
+
+                                        <TableCell>
                                             <div className="flex flex-wrap gap-1">
-                                                {features.length > 0 ? (
+                                                {features.length ? (
                                                     features.map((f, i) => (
-                                                        <Badge key={i}>
+                                                        <Badge
+                                                            key={i}
+                                                            className="bg-gray-200 text-gray-700"
+                                                        >
                                                             {f}
                                                         </Badge>
                                                     ))
                                                 ) : (
-                                                    <span className="text-slate-500 text-sm">
+                                                    <span className="text-gray-400 text-sm">
                                                         No features
                                                     </span>
                                                 )}
                                             </div>
                                         </TableCell>
-                                        <TableCell className="text-white">
-                                            <Badge>
-                                                {plan.isActive === 1
-                                                    ? "Active"
-                                                    : "Inactive"}
+
+                                        <TableCell>
+                                            <Badge
+                                                className={
+                                                    plan.isActive === 1
+                                                        ? "bg-green-100 text-green-700"
+                                                        : "bg-gray-200 text-gray-600"
+                                                }
+                                            >
+                                                {plan.isActive === 1 ? "Active" : "Inactive"}
                                             </Badge>
                                         </TableCell>
+
                                         <TableCell className="text-right flex gap-2 justify-end">
                                             <Button
                                                 size="sm"
                                                 variant="ghost"
-                                                onClick={() =>
-                                                    handleEdit(plan)
-                                                }
+                                                onClick={() => handleEdit(plan)}
                                             >
-                                                <Edit2 className="size-4" />
+                                                <Edit2 className="size-4 text-gray-600" />
                                             </Button>
+
                                             <Button
                                                 size="sm"
                                                 variant="ghost"
                                                 onClick={() =>
-                                                    toggleStatusMutation(
-                                                        plan,
-                                                        {
-                                                            onSuccess: () => {
-                                                                toast.success("Status updated!");
-                                                            },
-                                                            onError: (error) => {
-                                                                toast.error(error.response?.data?.message || "Failed to update status");
-                                                            },
-                                                        }
-                                                    )
+                                                    toggleStatusMutation(plan, {
+                                                        onSuccess: () =>
+                                                            toast.success("Status updated!"),
+                                                    })
                                                 }
                                             >
                                                 Toggle
                                             </Button>
+
                                             <Button
                                                 size="sm"
                                                 variant="ghost"
-                                                className="text-red-400"
+                                                className="text-red-600"
                                                 onClick={() => {
                                                     if (confirm("Delete this plan?")) {
-                                                        deleteMutation(
-                                                            plan.subscription_id,
-                                                            {
-                                                                onSuccess: () => {
-                                                                    toast.success("Plan deleted!");
-                                                                },
-                                                                onError: (error) => {
-                                                                    toast.error(error.response?.data?.message || "Failed to delete");
-                                                                },
-                                                            }
-                                                        );
+                                                        deleteMutation(plan.subscription_id, {
+                                                            onSuccess: () =>
+                                                                toast.success("Plan deleted!"),
+                                                        });
                                                     }
                                                 }}
                                             >
