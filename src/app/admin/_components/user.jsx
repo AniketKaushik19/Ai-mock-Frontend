@@ -46,17 +46,17 @@ export default function UserManagement() {
 
   useEffect(() => {
     if (!Array.isArray(allUser)) return;
-
-    const mapped = allUser.map((u) => ({
-      id: u.id,
-      name: u.name,
-      email: u.email,
-      status: u.subscription_name ? "active" : "inactive",
-      subscription: u.subscription_name || "Free",
-      interviews: Number(u.interview_attempts) || 0,
-      joinedDate: new Date(u.created_at).toLocaleDateString("en-IN"),
-    }));
-
+    const mapped = allUser
+      .filter((u) => u.subscription_name && u.subscription_name !== "Free")
+      .map((u) => ({
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        status: u.subscription_name ? "active" : "inactive",
+        subscription: u.subscription_name || "Free",
+        interviews: Number(u.interview_attempts) || 0,
+        joinedDate: new Date(u.created_at).toLocaleDateString("en-IN"),
+      }));
     setUsers(mapped);
   }, [allUser]);
 

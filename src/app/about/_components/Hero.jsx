@@ -56,7 +56,7 @@ export default function Hero() {
                     >
                         <div className="absolute -inset-1 bg-gradient-to-r from-[#4F7DFF] to-purple-600 rounded-2xl blur opacity-20 animate-pulse"></div>
                         <Image
-                            src="https://www.interviewnode.com/storage/ai-poweredmockint.jpg"
+                            src="/image/ai-poweredmockint.jpg"
                             alt="Professional interview setting"
                             width={1080}
                             height={720}

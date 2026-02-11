@@ -15,6 +15,7 @@ import {
   Phone,
   LogIn,
   UserPlus,
+  File,
 } from "lucide-react";
 
 import ProfileModal from "./profilemodal";
@@ -30,6 +31,7 @@ const navItems = [
   { name: "About", path: "/about" },
   { name: "Contact Us", path: "/contact" },
   { name: "Dashboard", path: "/dashboard" },
+   { name: "Resume Analyzer", path: "/resume-analyzer"},
 ];
 
 const mobileNavItems = [
@@ -37,6 +39,7 @@ const mobileNavItems = [
   { name: "About", path: "/about", icon: Info },
   { name: "Contact Us", path: "/contact", icon: Phone },
   { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
+  { name: "Resume Analyzer", path: "/resume-analyzer", icon: File },
   { name: "Login", path: "/login", icon: LogIn },
   { name: "Signup", path: "/signup", icon: UserPlus },
 ];
