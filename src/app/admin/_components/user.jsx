@@ -53,7 +53,7 @@ export default function UserManagement() {
         name: u.name,
         email: u.email,
         status: u.subscription_name ? "active" : "inactive",
-        subscription: u.subscription_name || "Free",
+        subscription: u.subscription_name.charAt(0).toUpperCase() + u.subscription_name.slice(1),
         interviews: Number(u.interview_attempts) || 0,
         joinedDate: new Date(u.created_at).toLocaleDateString("en-IN"),
       }));
