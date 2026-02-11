@@ -52,7 +52,7 @@ export default function ResumeUploader({ onAnalyze, isAnalyzing }) {
 
   return (
     <div className="w-full max-w-3xl mx-auto bg-white/10 dark:bg-black/30 p-8 rounded-2xl border border-white/20 dark:border-white/10 backdrop-blur-md shadow-2xl transition-all relative overflow-hidden group">
-      {/* Ambient Glow */}
+      
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 pointer-events-none" />
       <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-blue-500/20 transition-colors duration-500" />
       

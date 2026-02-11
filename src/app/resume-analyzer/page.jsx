@@ -7,31 +7,36 @@ import ResumeBackground from "./_component/ResumeBackground";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useResumeAnalyser } from "@/hooks/resume";
+import useResumeStore from "../../../store/ResumeStore";
 
 export default function ResumeAnalyzer() {
   const router = useRouter();
+  const {setResume} =useResumeStore();
 
   const { mutateAsync, isPending } = useResumeAnalyser()
 
   const handleAnalyze = async (resume) => {
-    const fileInput = document.querySelector('input[type="file"]');
-    const file = fileInput.files[0]; // This is your "Aniket CV.pdf"
-
-    const formData = new FormData();
-    formData.append("resume", file); // "resume" is the key you want
-    console.log(formData);
+   
+    const formdata=new FormData();
+    if(resume.file){
+      formdata.append("resume",resume.file);
+    }else{
+      formdata.append("resume",resume.text);
+    }
     
-    // Send to backend using fetch
-    // fetch("/upload", {
-    //   method: "POST",
-    //   body: formData
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log("Upload success:", data);
-    //   })
+   
+    const result=await mutateAsync(formdata);
+    console.log(result);
+    
+   if (result.success && result.analysis
+) {
+  setResume(result.analysis
+);
+  router.push("/resume-analyzer/result");
+} else {
+  console.error("No data returned from API");
+}
 
-    // await mutateAsync(resume);
   }
   return (
     <ResumeBackground showScanningLine={isPending}>

@@ -13,7 +13,7 @@ export const useGetActiveSubscriptionPlans = () => {
   });
 };
 
-// Get user's current active subscription
+
 export const useGetUserSubscription = (userId) => {
   return useQuery({
     queryKey: ['user-subscription', userId],

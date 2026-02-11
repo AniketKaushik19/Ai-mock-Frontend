@@ -26,6 +26,8 @@ export default function SubscriptionsPage() {
   const createOrderMutation = useCreateSubscriptionOrder();
   const verifyPaymentMutation = useVerifyPayment();
   const [processingPlanId, setProcessingPlanId] = useState(null);
+  console.log(currentSubscription);
+  
 
 
   useEffect(() => {
