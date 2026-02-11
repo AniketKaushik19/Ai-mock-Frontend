@@ -1,8 +1,8 @@
 import { axiosInstance } from "./axios";
 
-export const resumeAnalyse=async (formData) => {
+export const resumeAnalyse=async (resume) => {
     try {
-        const res=await axiosInstance.post(`resume/analyse`,formData)
+        const res=await axiosInstance.post(`resume/analyze`,resume)
         return res?.data
     } catch (error) {
         throw error
