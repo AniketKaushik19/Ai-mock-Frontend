@@ -54,15 +54,12 @@ export default function SubscriptionManagement() {
     const activeCount = plans.filter((p) => p.isActive === 1).length;
 
 
-    const { mutate: createMutation, isLoading: isCreating } = useCreateSubscriptionPlan();
+    const { mutate: createMutation, isPending: isCreating } = useCreateSubscriptionPlan();
+    const { mutate: editMutation, isPending: isEditing } = useEditSubscriptionPlan();
+    const isSubmitting = isCreating || isEditing;
 
-    const { mutate: editMutation, isLoading: isEditing } = useEditSubscriptionPlan();
-
-    const { mutate: deleteMutation, isLoading: isDeleting } = useDeleteSubscriptionPlan();
-
-
-
-    const { mutate: toggleStatusMutation, isLoading: isToggling } = useToggleSubscriptionPlan();
+    const { mutate: deleteMutation, isPending: isDeleting } = useDeleteSubscriptionPlan();
+    const { mutate: toggleStatusMutation, isPending: isToggling } = useToggleSubscriptionPlan();
 
 
     const addFeature = () => {
@@ -169,13 +166,14 @@ export default function SubscriptionManagement() {
             </Badge>
 
             {/* Create / Edit Card */}
-            <div className="bg-white border rounded-xl p-6 mb-8 shadow-sm">
-                <h3 className="font-semibold text-gray-800 mb-4">
+            <div className="bg-Ternary border rounded-xl p-6 mb-8 shadow-sm">
+                <h3 className="font-semibold text-white mb-4">
                     {editingId ? "Edit Plan" : "Create New Plan"}
                 </h3>
 
-                <div className="grid md:grid-cols-3 gap-4 mb-4">
+                <div className="grid md:grid-cols-3 gap-4 mb-4  text-white">
                     <Input
+                        className="bg-white text-slate-950"
                         placeholder="Plan Name"
                         value={form.name}
                         onChange={(e) =>
@@ -183,6 +181,7 @@ export default function SubscriptionManagement() {
                         }
                     />
                     <Input
+                        className="bg-white text-slate-950"
                         placeholder="Price (₹)"
                         type="number"
                         value={form.price}
@@ -191,6 +190,7 @@ export default function SubscriptionManagement() {
                         }
                     />
                     <Input
+                        className="bg-white text-slate-950"
                         placeholder="Monthly Limit"
                         type="number"
                         value={form.monthlyLimit}
@@ -200,8 +200,9 @@ export default function SubscriptionManagement() {
                     />
                 </div>
 
-                <div className="flex gap-2 mb-3">
+                <div className="flex  gap-2 mb-3 text-slate-950">
                     <Input
+                        className="bg-white"
                         placeholder="Add feature"
                         value={form.featureInput}
                         onChange={(e) =>
@@ -231,12 +232,17 @@ export default function SubscriptionManagement() {
 
                 <Button
                     onClick={handleSubmit}
+                    disabled={isSubmitting}
                     className="bg-Primary text-white flex items-center gap-2 disabled:opacity-60"
                 >
-                    {isCreating && (
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                    {isSubmitting ? (
+                        <Loader2 className="animate-spin w-5 h-5 text-white" />
+                    ) : (
+                        <>
+                            <Plus className="h-4 w-4" />
+                            <span>{editingId ? "Update Plan" : "Add Plan"}</span>
+                        </>
                     )}
-                    {editingId ? "Update Plan" : "Add Plan"}
                 </Button>
             </div>
 
