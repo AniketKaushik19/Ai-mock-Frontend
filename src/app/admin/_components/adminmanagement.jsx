@@ -32,7 +32,7 @@ import {
 
 export default function AdminManagement() {
     const { data, isLoading, } = useGetAllAdmins();
-    const allAdmins = data?.admin || [];
+    const allAdmins = data || [];
 
     const createAdmin = useAdminCreate();
     const updateAdmin = useAdminUpdate();
@@ -41,7 +41,6 @@ export default function AdminManagement() {
 
     const [admins, setAdmins] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-
     const [form, setForm] = useState({
         id: null,
         name: "",
@@ -54,15 +53,18 @@ export default function AdminManagement() {
     useEffect(() => {
         if (!Array.isArray(allAdmins)) return;
 
-        const mapped = allAdmins.map((a) => ({
-            id: a.id,
-            name: a.name,
-            email: a.email,
-            role: a.role || "Admin",
-            joinedDate: a.created_at
-                ? new Date(a.created_at).toLocaleDateString("en-IN")
-                : "-",
-        }));
+        const mapped = allAdmins
+            .filter((a) => a.role !== "super_admin") 
+            .map((a) => ({
+                id: a.id,
+                name: a.name,
+                email: a.email,
+                role: a.role || "Admin",
+                joinedDate: a.created_at
+                    ? new Date(a.created_at).toLocaleDateString("en-IN")
+                    : "-",
+            }));
+
 
         setAdmins(mapped);
     }, [allAdmins]);

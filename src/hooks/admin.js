@@ -17,11 +17,13 @@ export const useAdminLogin = () => {
 }
 
 export const useAdminCreate = () => {
+  const queryClient=useQueryClient()
   return useMutation({
     mutationFn: adminCreate,
 
     onSuccess: (data) => {
       toast.success("Admin Created successfully");
+      queryClient.invalidateQueries("admin")
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Error while Ccreating Admin");
@@ -72,7 +74,7 @@ export const useAdminUpdate = () => {
     mutationFn: updateAdmin,
     onSuccess: () => {
       toast.success("Admin updated successfully");
-      qc.invalidateQueries({ queryKey: ["admins"] });
+      qc.invalidateQueries({ queryKey: ["admin"] });
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Update failed");
@@ -86,7 +88,7 @@ export const useAdminDelete = () => {
     mutationFn: deleteAdmin,
     onSuccess: () => {
       toast.success("Admin deleted successfully");
-      qc.invalidateQueries({ queryKey: ["admins"] });
+      qc.invalidateQueries({ queryKey: ["admin"] });
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Delete failed");

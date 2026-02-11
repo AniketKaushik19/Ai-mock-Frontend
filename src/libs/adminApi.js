@@ -37,12 +37,13 @@ export const getAllUser = async () => {
 
 export const getAllAdmins = async () => {
    try {
-      const res = await axiosInstance.get("/admin");
+      const res = await axiosInstance.get("/admin/list");
       return res.data.admins;
    } catch (error) {
       throw error;
    }
 };
+
 export const updateAdmin = async ({ adminId, data }) => {
    try {
       const res = await axiosInstance.put(`/admin/${adminId}`, data);
