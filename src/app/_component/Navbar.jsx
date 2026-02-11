@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -31,7 +32,7 @@ const navItems = [
   { name: "About", path: "/about" },
   { name: "Contact Us", path: "/contact" },
   { name: "Dashboard", path: "/dashboard" },
-   { name: "Resume Analyzer", path: "/resume-analyzer"},
+  { name: "Resume Analyzer", path: "/resume-analyzer" },
 ];
 
 const mobileNavItems = [
@@ -46,12 +47,13 @@ const mobileNavItems = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [hoverOpen, setHoverOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  
+
 
   const { logout: adminLogout, admin } = useAdminAuthStore()
   const { user, login, logout } = useAuthStore();
@@ -60,9 +62,10 @@ export default function Navbar() {
     enabled: mounted && !!user,
   });
 
-  
-  
-  useEffect(() =>{setMounted(true)
+
+
+  useEffect(() => {
+    setMounted(true)
   }, []);
 
   useEffect(() => {
@@ -79,11 +82,25 @@ export default function Navbar() {
     return true;
   });
 
-  const filteredMobileNav = mobileNavItems.filter((item) => {
-    if (item.name === "Dashboard") return UserLoggedIn;
-    if (item.name === "Login" || item.name === "Signup") return !UserLoggedIn;
-    return true;
-  });
+  const filteredMobileNav = mobileNavItems.map((item) => {
+
+    if (item.name === "Dashboard") {
+      if (AdminLoggedIn) {
+        return { ...item, path: "/admin/users" };
+      }
+      if (UserLoggedIn) {
+        return item;
+      }
+      return null;
+    }
+
+    if (item.name === "Login" || item.name === "Signup") {
+      return !UserLoggedIn && !AdminLoggedIn ? item : null;
+    }
+
+    return item;
+  })
+    .filter(Boolean);
 
   if (!mounted) return <div className="h-20 bg-Ternary" />;
 
@@ -112,8 +129,8 @@ export default function Navbar() {
                   key={item.name}
                   href={item.path}
                   className={`relative text-sm font-bold transition ${isActive
-                      ? "text-purple-500"
-                      : "text-white hover:text-Button"
+                    ? "text-purple-500"
+                    : "text-white hover:text-Button"
                     }`}
                 >
                   {item.name}
@@ -129,13 +146,13 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   className={`text-sm font-bold ${pathname === "/login"
-                      ? "text-purple-500"
-                      : "text-white hover:text-Button"
+                    ? "text-purple-500"
+                    : "text-white hover:text-Button"
                     }`}
                 >
                   Login
                 </Link>
-        
+
                 <Link
                   href="/signup"
                   className="rounded-md bg-Button px-6 py-2 font-bold text-white hover:bg-[#2b52b8]"
@@ -144,7 +161,7 @@ export default function Navbar() {
                 </Link>
               </>
             )}
-            
+
 
             {/* Avatar + Hover Card */}
             {UserLoggedIn && (
@@ -181,17 +198,17 @@ export default function Navbar() {
               </div>
             )}
             {AdminLoggedIn && (
-                   <Link
-               
-                  href={'/admin/users'}
-                  className={`relative text-sm font-bold transitio  ${pathname==="/admin/users" ? "text-purple-500":"text-white"}
+              <Link
+
+                href={'/admin/users'}
+                className={`relative text-sm font-bold transitio  ${pathname === "/admin/users" ? "text-purple-500" : "text-white"}
                     }`}
-                > Dashboard
-                {pathname==="/admin/users" &&   <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-purple-500" />}
-                  
-                </Link>
+              > Dashboard
+                {pathname === "/admin/users" && <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-purple-500" />}
+
+              </Link>
             )}
-               
+
             {/* //Admin hover Card  */}
             {AdminLoggedIn && (
               <div
@@ -288,10 +305,16 @@ export default function Navbar() {
               })}
             </div>
 
-            {UserLoggedIn && (
+            {(UserLoggedIn || AdminLoggedIn) && (
               <button
                 onClick={() => {
-                  logout();
+                  if (AdminLoggedIn) {
+                    adminLogout();
+                    router.push('/'); // Redirect admin to home
+                  } else {
+                    logout();
+                    router.push('/'); // Redirect user to home
+                  }
                   setIsOpen(false);
                 }}
                 className="mt-auto flex items-center justify-center gap-3 rounded-xl bg-red-600 py-4 font-bold text-white"
