@@ -1,6 +1,6 @@
 import { FileText, Sparkles, Clock, Lightbulb } from "lucide-react";
-import SectionBackground from "./SectionBackground";
-import { MotionStagger, MotionItem } from "./MotionWrappers";
+import SectionBackground from "../SectionBackground";
+import { MotionStagger, MotionItem } from "../MotionWrappers";
 
 export default function FeaturesGrid() {
   const features = [

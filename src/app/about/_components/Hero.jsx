@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import SectionBackground from "../../_component/Home/SectionBackground";
+import SectionBackground from "@/app/_component/SectionBackground";
 
 export default function Hero() {
     return (

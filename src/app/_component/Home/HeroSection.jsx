@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import HeroBackgroundWrapper from "./HeroBackgroundWrapper";
+import HeroBackgroundWrapper from "../HeroBackgroundWrapper";
 
 export default function HeroSection() {
   const router = useRouter();
@@ -48,7 +48,7 @@ export default function HeroSection() {
               variant="outline"
               size="lg"
               className="bg-purple-600 text-white px-8 py-6 hover:bg-Primary hover:text-white text-lg rounded-full transition-all border-none hover:scale-105 shadow-lg shadow-blue-900/10"
-               onClick={() => router.push('/dashboard/resume-analyzer')}
+               onClick={() => router.push('/resume-analyzer')}
             >
              Analyze Your Resume
             </Button>

@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
-import SectionBackground from "./SectionBackground";
-import { MotionStagger, MotionItem } from "./MotionWrappers";
+import SectionBackground from "../SectionBackground";
+import { MotionStagger, MotionItem } from "../MotionWrappers";
 
 const faqs = [
     {

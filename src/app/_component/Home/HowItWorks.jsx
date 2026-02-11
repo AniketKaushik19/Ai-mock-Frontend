@@ -1,5 +1,5 @@
-import SectionBackground from "./SectionBackground";
-import { MotionSlide } from "./MotionWrappers";
+import SectionBackground from "../SectionBackground";
+import { MotionSlide } from "../MotionWrappers";
 
 export default function HowItWorks() {
   const steps = [

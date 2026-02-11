@@ -5,8 +5,8 @@ import Script from "next/script";
 import { useGetActiveSubscriptionPlans } from "@/hooks/useSubscription";
 import useAuthStore from "../../../../store/authStore";
 import { useRouter } from "next/navigation";
-import SectionBackground from "./SectionBackground";
-import { MotionScale } from "./MotionWrappers";
+import SectionBackground from "../SectionBackground";
+import { MotionScale } from "../MotionWrappers";
 export function Pricing() {
     const router = useRouter();
     const { isLoggedIn } = useAuthStore();

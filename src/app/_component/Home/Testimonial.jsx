@@ -1,6 +1,5 @@
 import { Quote } from "lucide-react";
-import SectionBackground from "./SectionBackground";
-import { MotionScale } from "./MotionWrappers";
+import SectionBackground from "../SectionBackground";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 

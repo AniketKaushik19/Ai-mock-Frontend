@@ -1,6 +1,6 @@
 import { Heart, Shield, Lightbulb, Zap } from "lucide-react";
-import SectionBackground from "../../_component/Home/SectionBackground";
-import { MotionStagger, MotionItem } from "../../_component/Home/MotionWrappers";
+import SectionBackground from "@/app/_component/SectionBackground";
+import { MotionStagger, MotionItem } from "@/app/_component/MotionWrappers";
 
 const values = [
     {

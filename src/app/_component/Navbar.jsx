@@ -107,14 +107,14 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.path}
-                  className={`relative text-sm font-bold transition ${isActive 
-                      ? "text-orange-500"
+                  className={`relative text-sm font-bold transition ${isActive
+                      ? "text-purple-500"
                       : "text-white hover:text-Button"
                     }`}
                 >
                   {item.name}
                   {isActive && (
-                    <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-orange-500" />
+                    <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-purple-500" />
                   )}
                 </Link>
               );
@@ -125,7 +125,7 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   className={`text-sm font-bold ${pathname === "/login"
-                      ? "text-orange-500"
+                      ? "text-purple-500"
                       : "text-white hover:text-Button"
                     }`}
                 >
@@ -173,6 +173,52 @@ export default function Navbar() {
                     </motion.div>
                   )}
                 </AnimatePresence>
+
+              </div>
+            )}
+            {AdminLoggedIn && (
+                   <Link
+               
+                  href={'/admin/users'}
+                  className={`relative text-sm font-bold transitio  ${pathname==="/admin/users" ? "text-purple-500":"text-white"}
+                    }`}
+                > Dashboard
+                {pathname==="/admin/users" &&   <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-purple-500" />}
+                  
+                </Link>
+            )}
+               
+            {/* //Admin hover Card  */}
+            {AdminLoggedIn && (
+              <div
+                className="relative"
+                onMouseEnter={() => isDesktop && setHoverOpen(true)}
+                onMouseLeave={() => isDesktop && setHoverOpen(false)}
+              >
+                <div
+                  className="h-12 w-12 cursor-pointer overflow-hidden rounded-full border-2 border-[#4F7DFF] hover:scale-105 transition"
+                >
+                  <Image
+                    src={"/image/avatar.png"}
+                    alt="Profile"
+                    width={48}
+                    height={48}
+                    className="rounded-full object-cover"
+                  />
+                </div>
+
+                <AnimatePresence>
+                  {hoverOpen && (
+                    <motion.div
+                      className="absolute right-0 top-14 z-50"
+                      onMouseEnter={() => setHoverOpen(true)}
+                      onMouseLeave={() => setHoverOpen(false)}
+                    >
+                      <AdminHoverCard onClose={() => setHoverOpen(false)} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
               </div>
             )}
           </div>
