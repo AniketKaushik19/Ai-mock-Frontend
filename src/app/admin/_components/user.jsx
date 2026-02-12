@@ -126,9 +126,9 @@ export default function UserManagement() {
                 </TableCell>
               </TableRow>
             ) : (
-              filteredUsers.map((u) => (
+              filteredUsers.map((u,index) => (
                 <TableRow
-                  key={u.id}
+                  key={index}
                   className="hover:bg-slate-50 transition"
                 >
                   {/* Student */}

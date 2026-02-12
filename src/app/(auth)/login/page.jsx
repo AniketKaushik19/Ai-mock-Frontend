@@ -183,7 +183,7 @@ const LoginPage = () => {
               whileTap={{ scale: 0.98 }}
               className="w-full py-3.5 bg-Button hover:bg-[#2563EB] text-white font-bold rounded-lg shadow-lg transition-all duration-300 flex items-center justify-center group"
             >
-              {isPending ? <Loading /> :
+              {isPending || adminPending ? <Loading /> :
                 <>
                   Sign In <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </>
