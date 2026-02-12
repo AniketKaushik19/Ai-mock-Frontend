@@ -116,14 +116,15 @@ export function Pricing() {
                                     <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
                                     <button
-                                        className={`w-full py-3 rounded-lg font-semibold transition-all ${
+                                        className={`w-full py-3 rounded-lg font-semibold transition-all disabled:bg-gray-900 disabled:text-gray-500 disabled:hover:border-none ${
                                             isPremium
                                                 ? "bg-[#4F7DFF] text-white hover:bg-Button shadow-lg"
                                                 : "bg-Primary border border-white/10 text-white hover:border-[#4F7DFF]"
                                         }`}
+                                        disabled={plan.price ==0}
                                         onClick={() => handleSubscribe(plan)}
                                     >
-                                        {plan.price === 0 ? 'Get Started' : 'Subscribe Now'}
+                                        {plan.price == 0 ? 'Get Started' : 'Subscribe Now'}
                                     </button>
                                 </MotionScale>
                             );
