@@ -6,18 +6,33 @@ import { useEffect, useState } from "react";
 export default function NoNetProvider({ children }) {
   const [isOnline, setIsOnline] = useState(true);
 
+  const checkInternet = async () => {
+    if (!navigator.onLine) {
+      setIsOnline(false);
+      return;
+    }
+
+    try {
+      // Try lightweight request to your own site
+      await fetch("/", { method: "HEAD", cache: "no-store" });
+      setIsOnline(true);
+    } catch (error) {
+      setIsOnline(false);
+    }
+  };
+
   useEffect(() => {
-    setIsOnline(navigator.onLine);
+    checkInternet();
 
-    const goOnline = () => setIsOnline(true);
-    const goOffline = () => setIsOnline(false);
+    const interval = setInterval(checkInternet, 5000); // check every 5 sec
 
-    window.addEventListener("online", goOnline);
-    window.addEventListener("offline", goOffline);
+    window.addEventListener("online", checkInternet);
+    window.addEventListener("offline", () => setIsOnline(false));
 
     return () => {
-      window.removeEventListener("online", goOnline);
-      window.removeEventListener("offline", goOffline);
+      clearInterval(interval);
+      window.removeEventListener("online", checkInternet);
+      window.removeEventListener("offline", () => setIsOnline(false));
     };
   }, []);
 
