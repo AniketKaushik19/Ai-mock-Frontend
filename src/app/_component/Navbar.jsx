@@ -279,8 +279,8 @@ export default function Navbar() {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 140, damping: 22 }}
-            className="fixed inset-0 z-[999] flex flex-col bg-Primary px-6 py-10 md:hidden"
+            transition={{ type: "spring", stiffness: 100, damping: 10 }}
+            className="fixed h-screen inset-0 z-50 flex flex-col bg-Primary px-6 py-10 overflow-y-hidden md:hidden"
           >
             <div className="flex justify-end">
               <button

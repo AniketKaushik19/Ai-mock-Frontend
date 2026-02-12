@@ -181,7 +181,7 @@ const InterviewPage = ({ interviewId }) => {
     ((activeQuestionIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-white px-10 py-10 flex flex-col gap-8">
+    <div className="min-h-screen bg-[#0B0F19] text-white px-2 md:px-10  py-10 flex flex-col gap-8">
       <div>
         <div className="flex justify-between bg-[#111827] p-5 rounded-lg">
           <div>
@@ -232,8 +232,8 @@ const InterviewPage = ({ interviewId }) => {
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8">
-        <div>
+      <div className="grid md:grid-cols-2 gap-8 overflow-x-hidden justify-center">
+        <div className="">
           <div className="bg-[#111827] p-6 rounded-xl">
             <Volume2
               className="cursor-pointer text-Button"
