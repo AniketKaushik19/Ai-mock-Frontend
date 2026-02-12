@@ -85,29 +85,27 @@ const LoginPage = () => {
   }, [UserLoggedIn])
 
   return (
-    // 1. MAIN DARK BACKGROUND
+   
     <div className="min-h-screen relative flex items-center justify-center bg-[#0B0F19] overflow-hidden px-4">
 
-      {/* --- BACKGROUND DECORATION: Ambient Hero Glow --- */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none -z-10" />
+      
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none -z-10" />
 
-      {/* --- BACKGROUND DECORATION: RIGHT WAVES --- */}
+     
       <div className="absolute top-0 right-0 h-full w-1/2 pointer-events-none opacity-20 z-0">
         <svg className="h-full w-full" viewBox="0 0 400 800" preserveAspectRatio="none">
           <path d="M400,0 C300,200 100,200 100,400 C100,600 300,600 400,800" stroke="white" strokeWidth="1" fill="none" />
           <path d="M420,0 C320,200 120,200 120,400 C120,600 320,600 420,800" stroke="white" strokeWidth="1" fill="none" />
         </svg>
       </div>
-
-      {/* 2. GLASSMORPHISM CARD */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="w-full max-w-md bg-[#111827]/70 backdrop-blur-xl p-8 sm:p-10 rounded-2xl shadow-2xl relative z-10 border border-white/10 overflow-hidden"
       >
-        {/* GLARE EFFECT */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50 pointer-events-none" />
+      
+        <div className="absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-transparent opacity-50 pointer-events-none" />
 
         <div className="relative z-20">
           <motion.h2
@@ -121,7 +119,7 @@ const LoginPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
 
-            {/* Email Input */}
+            
             <Input
               icon={<Mail size={18} className="text-gray-400" />}
               type="email"
@@ -133,7 +131,7 @@ const LoginPage = () => {
               required
             />
 
-            {/* Password Input */}
+            
             <PasswordInput
               icon={<Lock size={18} className="text-gray-400" />}
               id="password"

@@ -20,22 +20,36 @@ export const SignUpSchema = z
     path: ["confirmPassword"],
   });
 
+export const ForgotPasswordSchema = z.object({
+  email: z.string().email("Enter a valid email address."),
+});
 
-  export  const validateField = (name, value,setErrors) => {
-   
-    if (name === "confirmPassword") return;
+export const ResetPasswordSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"],
+  });
 
-    const fieldSchema = SignUpSchema.shape[name];
-    if (!fieldSchema) return;
 
-    const result = fieldSchema.safeParse(value);
+export const validateField = (name, value, setErrors) => {
 
-    if (result.success) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: result.error.issues[0]?.message,
-      }));
-    }
-  };
+  if (name === "confirmPassword") return;
+
+  const fieldSchema = SignUpSchema.shape[name];
+  if (!fieldSchema) return;
+
+  const result = fieldSchema.safeParse(value);
+
+  if (result.success) {
+    setErrors((prev) => ({ ...prev, [name]: undefined }));
+  } else {
+    setErrors((prev) => ({
+      ...prev,
+      [name]: result.error.issues[0]?.message,
+    }));
+  }
+};

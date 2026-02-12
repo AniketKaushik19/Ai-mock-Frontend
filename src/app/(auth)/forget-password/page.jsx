@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useForgotOtpResend, useForgotOtpVerify, useForgotPassword, useResetPassword } from "@/hooks/user";
+import { ForgotPasswordSchema, ResetPasswordSchema } from "@/utils/validation";
+import { User, Eye, EyeOff } from "lucide-react";
 
 const MotionButton = motion(Button);
 
@@ -31,6 +33,10 @@ export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
@@ -50,6 +56,15 @@ export default function ForgotPasswordPage() {
 
   const handleRequestOtp = async (e) => {
     e.preventDefault();
+
+    // Validate email
+    const result = ForgotPasswordSchema.safeParse({ email });
+    if (!result.success) {
+      setErrors({ email: result.error.formErrors.fieldErrors.email?.[0] });
+      return;
+    }
+    setErrors({});
+
     try {
       const res = await forgotPassword({ email });
       if (!res) {
@@ -63,7 +78,7 @@ export default function ForgotPasswordPage() {
         setOtp("");
         setIsOtpVerified(false);
       }
-    } 
+    }
     catch (error) {
       toast.error("Failed to send OTP");
     }
@@ -81,7 +96,7 @@ export default function ForgotPasswordPage() {
         setOtp("");
         setIsOtpVerified(false);
       }
-    }  catch (error) {
+    } catch (error) {
       toast.error("Resend failed");
     }
   };
@@ -104,6 +119,19 @@ export default function ForgotPasswordPage() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     if (!isOtpVerified) return;
+
+    // Validate passwords
+    const result = ResetPasswordSchema.safeParse({ password: newPassword, confirmPassword });
+    if (!result.success) {
+      const fieldErrors = result.error.flatten().fieldErrors;
+      setErrors({
+        password: fieldErrors.password?.[0],
+        confirmPassword: fieldErrors.confirmPassword?.[0],
+      });
+      return;
+    }
+    setErrors({});
+
     try {
       const res = await resetPassword({ email, newPassword });
       if (res.message) {
@@ -140,8 +168,11 @@ export default function ForgotPasswordPage() {
               type="email"
               placeholder="m@example.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (errors.email) setErrors({ ...errors, email: undefined });
+              }}
+              error={errors.email}
             />
 
             <button
@@ -212,13 +243,30 @@ export default function ForgotPasswordPage() {
 
             {isOtpVerified && (
               <>
-                <Input
-                  icon={<Lock size={18} className="text-gray-400" />}
-                  type="password"
+                <PasswordInput
+                  label="New Password"
                   placeholder="New Password"
+                  show={showPassword}
+                  toggle={() => setShowPassword(!showPassword)}
                   value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  required
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                    if (errors.password) setErrors({ ...errors, password: undefined });
+                  }}
+                  error={errors.password}
+                />
+
+                <PasswordInput
+                  label="Confirm Password"
+                  placeholder="Confirm New Password"
+                  show={showConfirmPassword}
+                  toggle={() => setShowConfirmPassword(!showConfirmPassword)}
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: undefined });
+                  }}
+                  error={errors.confirmPassword}
                 />
 
                 <MotionButton
@@ -256,14 +304,46 @@ export default function ForgotPasswordPage() {
 
 // --- HELPER COMPONENTS (Consistent Dark/Glass Theme) ---
 
-function Input({ icon, className = "", ...props }) {
+function Input({ icon, error, className = "", ...props }) {
   return (
-    <div className="flex items-center px-4 bg-[#0F172A]/50 border border-white/10 rounded-lg focus-within:ring-2 focus-within:ring-indigo-500/50">
-      {icon}
-      <input
-        {...props}
-        className={`w-full py-3 ml-3 bg-transparent outline-none text-white placeholder-gray-500 ${className}`}
-      />
+    <div className="w-full">
+      <div className={`flex items-center px-4 bg-[#0F172A]/50 border rounded-lg transition-all focus-within:ring-2 focus-within:ring-indigo-500/50 focus-within:border-indigo-500 ${error ? "border-red-500/50 bg-red-500/10" : "border-white/10"}`}>
+        {icon}
+        <input
+          {...props}
+          className={`w-full py-3 ml-3 bg-transparent outline-none text-white placeholder-gray-500 ${className}`}
+        />
+      </div>
+      {error && (
+        <p className="text-xs text-red-400 mt-1 ml-1 font-medium">{error}</p>
+      )}
+    </div>
+  );
+}
+
+function PasswordInput({ label, show, toggle, error, ...props }) {
+  return (
+    <div className="w-full">
+      <div
+        className={`flex items-center border rounded-lg px-4 relative bg-[#0F172A]/50 transition-all focus-within:ring-2 focus-within:ring-indigo-500/50 focus-within:border-indigo-500 ${error ? "border-red-500/50 bg-red-500/10" : "border-white/10"}`}
+      >
+        <Lock size={18} className="text-gray-400" />
+        <input
+          type={show ? "text" : "password"}
+          {...props}
+          className="w-full py-3 ml-3 pr-10 bg-transparent outline-none text-white placeholder-gray-500"
+        />
+        <button
+          type="button"
+          onClick={toggle}
+          className="absolute right-4 text-gray-400 hover:text-indigo-400 transition-colors"
+        >
+          {show ? <EyeOff size={18} /> : <Eye size={18} />}
+        </button>
+      </div>
+      {error && (
+        <p className="text-xs text-red-400 mt-1 ml-1 font-medium">{error}</p>
+      )}
     </div>
   );
 }
