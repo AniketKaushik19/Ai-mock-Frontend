@@ -299,7 +299,7 @@ export default function Navbar() {
                     key={item.name}
                     href={item.path}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-4 text-xl justify-center-safe  font-semibold ${isActive ? "text-[#4F7DFF]" : "text-white"
+                    className={`flex items-center gap-4 text-3xl justify-center-safe  font-semibold ${isActive ? "text-[#4F7DFF]" : "text-white"
                       }`}
                   >
                     <item.icon />
