@@ -19,13 +19,13 @@ export async function proxy(req) {
   
   
 
-  if (!res) {
-    if (pathname === "/" || pathname === "/signup" || pathname === "/login") {
-      return NextResponse.next();
-    }
+  // if (!res) {
+  //   if (pathname === "/" || pathname === "/signup" || pathname === "/login") {
+  //     return NextResponse.next();
+  //   }
 
-    return NextResponse.redirect(new URL("/signup", req.url));
-  }
+  //   return NextResponse.redirect(new URL("/signup", req.url));
+  // }
 
   if (res?.isBoarding === 0) {
     if (pathname !== "/onboarding") {

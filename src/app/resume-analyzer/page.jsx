@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 import ResumeUploader from "./_component/ResumeUploader";
 import ResumeBackground from "./_component/ResumeBackground";
 
@@ -8,12 +8,20 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useResumeAnalyser } from "@/hooks/resume";
 import useResumeStore from "../../../store/ResumeStore";
+import useAuthStore from "../../../store/authStore";
 
 export default function ResumeAnalyzer() {
   const router = useRouter();
   const {setResume} =useResumeStore();
+   const { isLoggedIn } = useAuthStore();
 
-  const { mutateAsync, isPending } = useResumeAnalyser()
+  const { mutateAsync, isPending } = useResumeAnalyser();
+
+    useEffect(() => {
+          if (!isLoggedIn()) {
+              router.replace('/login');
+          };
+      }, []);
 
   const handleAnalyze = async (resume) => {
    

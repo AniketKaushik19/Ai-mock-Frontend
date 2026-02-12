@@ -118,10 +118,13 @@ export default function SubscriptionsPage() {
   };
 
   const PlanCard = memo(({ plan, index }) => {
+    console.log(plan);
+    
     const Icon = getPlanIcon(plan.name);
     const features = parseFeatures(plan.features);
     const isCurrent = isCurrentPlan(plan.subscription_id);
-    const isPremium = plan.name.toLowerCase().includes('premium');
+    const isPremium = plan?.price>0;
+    const isFree = plan?.price==0;
 
     return (
       <motion.div
@@ -162,7 +165,7 @@ export default function SubscriptionsPage() {
 
         <div className="mb-6">
           <span className="text-4xl font-bold">
-            {plan.price === 0 ? 'Free' : `₹${plan.price}`}
+            {plan.price == 0 ? 'Free' : `₹${plan.price}`}
           </span>
           {plan.price > 0 && <span className="text-slate-400 ml-2">/month</span>}
         </div>
@@ -187,17 +190,20 @@ export default function SubscriptionsPage() {
 
         <Button
           onClick={() => handleSubscribe(plan)}
-          disabled={processingPlanId === plan.subscription_id}
-          className={`w-full ${isPremium
-            ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
-            : 'bg-[#4F7DFF] hover:bg-[#3D6BE8]'
-            }`}
+  disabled={processingPlanId === plan.subscription_id || isFree}
+  className={`w-full ${
+    isFree
+      ? "bg-gray-500 text-gray-300 cursor-not-allowed hover:none"
+      : isPremium
+      ? "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+      : "bg-[#4F7DFF] hover:bg-[#3D6BE8]"
+  }`}
         >
           {isCurrent && currentSubscription?.status === 'expired'
             ? 'Renew Subscription'
             : isCurrent
               ? 'Extend Subscription'
-              : plan.price === 0 ? 'Get Started' : 'Subscribe Now'}
+              : plan.price == 0 ? 'Get Started' : 'Subscribe Now'}
         </Button>
       </motion.div>
     );
