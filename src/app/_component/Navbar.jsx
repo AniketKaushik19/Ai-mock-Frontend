@@ -61,7 +61,7 @@ export default function Navbar() {
   const { data } = useGetProfile({
     enabled: mounted && !!user,
   });
-  
+
 
 
 
@@ -299,11 +299,22 @@ export default function Navbar() {
                     key={item.name}
                     href={item.path}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-4 text-3xl justify-center-safe  font-semibold ${isActive ? "text-[#4F7DFF]" : "text-white"
-                      }`}
-                  >
-                    <item.icon />
-                    {item.name}
+                    className={`
+                      flex items-center 
+                      gap-2 sm:gap-3 md:gap-4
+                      text-base sm:text-lg md:text-xl
+                      justify-start md:justify-center
+                      px-3 py-2 md:px-4 md:py-3
+                      rounded-lg
+                      transition-all duration-200
+                      font-semibold
+                      ${isActive ? "text-[#4F7DFF]" : "text-white hover:text-[#4F7DFF]"}
+                    `}
+                     >
+                       <item.icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <span className="hidden sm:inline">
+                      {item.name}
+                    </span>
                   </Link>
                 );
               })}
