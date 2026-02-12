@@ -1,163 +1,206 @@
-"use client";
-
-import { CheckCircle, XCircle, Target } from "lucide-react";
 import { motion } from "framer-motion";
+
+/* ===================== MAIN ===================== */
 
 export default function AnalysisResult({ result }) {
   if (!result) return null;
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
+  const {
+    atsScore = 0,
+    summary = "",
+    strengths = [],
+    weaknesses = [],
+    improvementSuggestions = [],
+    missingSkills = [],
+  } = result;
 
   return (
-    <motion.div 
-      className="w-full max-w-4xl mx-auto space-y-6"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      
-      {/* Score Card */}
-      <motion.div 
-        variants={itemVariants}
-        className="bg-white/10 dark:bg-black/40 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20 dark:border-white/10 flex flex-col md:flex-row items-center gap-8 justify-between relative overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 pointer-events-none" />
-        
-        <div className="text-center md:text-left z-10">
-            <h2 className="text-2xl font-bold text-white mb-2">Resume Score</h2>
-            <p className="text-gray-300">Based on typical ATS factors</p>
-        </div>
-        <div className="relative w-32 h-32 flex items-center justify-center z-10">
-            <svg className="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 128 128">
-                <circle
-                    cx="64"
-                    cy="64"
-                    r="56"
-                    stroke="currentColor"
-                    strokeWidth="12"
-                    fill="transparent"
-                    className="text-gray-700/50"
-                />
-                <motion.circle
-                    cx="64"
-                    cy="64"
-                    r="56"
-                    stroke="currentColor"
-                    strokeWidth="12"
-                    fill="transparent"
-                    strokeDasharray={351.86}
-                    strokeDashoffset={351.86}
-                    strokeLinecap="round"
-                    animate={{ strokeDashoffset: 351.86 - (351.86 * result.score) / 100 }}
-                    transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
-                    className="text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]"
-                />
-            </svg>
-            <motion.span 
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5, type: "spring" }}
-              className="absolute text-3xl font-bold text-white"
-            >
-              {result.score}
-            </motion.span>
-        </div>
-      </motion.div>
+    <div className="grid gap-10">
+      {/* TOP SECTION */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* CIRCULAR ATS */}
+        <GlassCard className="md:col-span-1 flex items-center justify-center">
+          <CircularScore score={atsScore} />
+        </GlassCard>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Strengths */}
-        <motion.div 
-          variants={itemVariants}
-          className="bg-green-500/10 backdrop-blur-md border border-green-500/20 rounded-2xl p-6 relative overflow-hidden"
-        >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            
-            <div className="flex items-center gap-2 mb-4 relative z-10">
-                <CheckCircle className="text-green-400" />
-                <h3 className="text-lg font-bold text-green-300">Strengths</h3>
-            </div>
-            <ul className="space-y-3 relative z-10">
-                {result.strengths.map((item, index) => (
-                    <motion.li 
-                      key={index} 
-                      className="flex items-start gap-2 text-green-200/90"
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3 + index * 0.1 }}
-                    >
-                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-400 shrink-0 shadow-[0_0_5px_rgba(74,222,128,0.5)]" />
-                        {item}
-                    </motion.li>
-                ))}
-            </ul>
-        </motion.div>
-
-        {/* Weaknesses */}
-        <motion.div 
-          variants={itemVariants}
-          className="bg-red-500/10 backdrop-blur-md border border-red-500/20 rounded-2xl p-6 relative overflow-hidden"
-        >
-             <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-
-            <div className="flex items-center gap-2 mb-4 relative z-10">
-                <XCircle className="text-red-400" />
-                <h3 className="text-lg font-bold text-red-300">Improvements</h3>
-            </div>
-            <ul className="space-y-3 relative z-10">
-                {result.weaknesses.map((item, index) => (
-                    <motion.li 
-                      key={index} 
-                      className="flex items-start gap-2 text-red-200/90"
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3 + index * 0.1 }}
-                    >
-                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-400 shrink-0 shadow-[0_0_5px_rgba(248,113,113,0.5)]" />
-                        {item}
-                    </motion.li>
-                ))}
-            </ul>
-        </motion.div>
+        {/* SUMMARY */}
+        <GlassCard className="md:col-span-2">
+          <h2 className="section-title">AI Summary</h2>
+          <p className="text-gray-300 leading-relaxed mt-3">
+            {summary}
+          </p>
+        </GlassCard>
       </div>
 
-      {/* Keywords */}
-      <motion.div 
-        variants={itemVariants}
-        className="bg-purple-500/10 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-purple-500/20 relative overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-blue-500/5 pointer-events-none" />
+      {/* STRENGTHS / WEAKNESSES */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <DiagramList
+          title="Strengths"
+          items={strengths}
+          gradient="from-green-400 to-emerald-500"
+        />
 
-        <div className="flex items-center gap-2 mb-4 relative z-10">
-            <Target className="text-purple-400" />
-            <h3 className="text-lg font-bold text-purple-200">Keywords Detected</h3>
-        </div>
-        <div className="flex flex-wrap gap-2 relative z-10">
-            {result.keywords.map((keyword, index) => (
-                <motion.span 
-                  key={index} 
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.4 + index * 0.05 }}
-                  className="px-3 py-1 bg-purple-500/20 border border-purple-500/30 text-purple-200 rounded-full text-sm font-medium hover:bg-purple-500/30 transition-colors cursor-default"
-                >
-                    {keyword}
-                </motion.span>
-            ))}
-        </div>
-      </motion.div>
+        <DiagramList
+          title="Weaknesses"
+          items={weaknesses}
+          gradient="from-red-400 to-pink-500"
+        />
+      </div>
+
+      {/* IMPROVEMENTS */}
+      <DiagramList
+        title="Improvement Suggestions"
+        items={improvementSuggestions}
+        gradient="from-blue-400 to-cyan-500"
+      />
+
+      {/* SKILLS */}
+      <SkillOrbit skills={missingSkills} />
+    </div>
+  );
+}
+
+/* ===================== UI BLOCKS ===================== */
+
+function GlassCard({ children, className = "" }) {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      className={`rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl p-6 shadow-[0_0_40px_rgba(99,102,241,0.15)] ${className}`}
+    >
+      {children}
     </motion.div>
   );
 }
+
+/* ===================== CIRCULAR ATS ===================== */
+
+function CircularScore({ score }) {
+  const radius = 70;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (score / 100) * circumference;
+
+  return (
+    <div className="relative w-[180px] h-[180px] flex items-center justify-center">
+      <svg
+        width="180"
+        height="180"
+        className="-rotate-90"
+      >
+        {/* Background circle */}
+        <circle
+          cx="90"
+          cy="90"
+          r={radius}
+          stroke="rgba(255,255,255,0.1)"
+          strokeWidth="12"
+          fill="none"
+        />
+
+        {/* Progress circle */}
+        <motion.circle
+          cx="90"
+          cy="90"
+          r={radius}
+          stroke="url(#grad)"
+          strokeWidth="12"
+          fill="none"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={circumference}
+          animate={{ strokeDashoffset: offset }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        />
+
+        <defs>
+          <linearGradient id="grad">
+            <stop offset="0%" stopColor="#6366f1" />
+            <stop offset="100%" stopColor="#a855f7" />
+          </linearGradient>
+        </defs>
+      </svg>
+
+      {/* Center Text */}
+      <div className="absolute flex flex-col items-center justify-center">
+        <span className="text-4xl font-bold text-white">
+          {score}
+        </span>
+        <span className="text-xs tracking-widest text-gray-400 mt-1">
+          ATS SCORE
+        </span>
+      </div>
+    </div>
+  );
+}
+
+
+
+function DiagramList({ title, items, gradient }) {
+  if (!items || items.length === 0) return null;
+
+  return (
+    <GlassCard>
+      <h2 className="section-title mb-5">{title}</h2>
+
+      <div className="space-y-4">
+        {items.map((item, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className="flex items-start gap-4"
+          >
+            <span
+              className={`w-2 h-2 mt-2 rounded-full bg-gradient-to-r ${gradient}`}
+            />
+            <p className="text-gray-300">{item}</p>
+          </motion.div>
+        ))}
+      </div>
+    </GlassCard>
+  );
+}
+
+
+
+function SkillOrbit({ skills }) {
+  if (!skills || skills.length === 0) return null;
+
+  return (
+    <GlassCard>
+      <h2 className="section-title mb-6">Missing Skills</h2>
+
+      <div className="flex flex-wrap gap-4 justify-center">
+        {skills.map((skill, index) => (
+          <motion.span
+            key={index}
+            whileHover={{ scale: 1.15 }}
+            className="px-5 py-2 rounded-full text-sm font-medium
+                       bg-gradient-to-r from-purple-500/30 to-indigo-500/30
+                       border border-purple-400/30 text-purple-200
+                       shadow-[0_0_20px_rgba(168,85,247,0.35)]"
+          >
+            {skill}
+          </motion.span>
+        ))}
+      </div>
+    </GlassCard>
+  );
+}
+
+/* ===================== UTIL ===================== */
+
+const sectionTitleStyle =
+  "text-lg font-semibold tracking-wide text-white";
+
+function SectionTitle({ children }) {
+  return <h2 className={sectionTitleStyle}>{children}</h2>;
+}
+
+/* Tailwind helper */
+const styles = `
+.section-title {
+  @apply text-lg font-semibold tracking-wide text-white;
+}
+`;

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import SectionBackground from "@/app/_component/SectionBackground";
+import img from "../../../../public/image/ai-poweredmockint.jpg";
 
 export default function Hero() {
     return (
@@ -56,7 +57,7 @@ export default function Hero() {
                     >
                         <div className="absolute -inset-1 bg-gradient-to-r from-[#4F7DFF] to-purple-600 rounded-2xl blur opacity-20 animate-pulse"></div>
                         <Image
-                            src="https://www.interviewnode.com/storage/ai-poweredmockint.jpg"
+                            src={img}
                             alt="Professional interview setting"
                             width={1080}
                             height={720}

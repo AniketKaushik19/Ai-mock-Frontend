@@ -39,9 +39,11 @@ export default function UserManagement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState([]);
 
+
   const { data, isPending } = useGetAllUser();
   const allUser = data?.allUser || [];
   console.log(allUser);
+
 
   useEffect(() => {
     if (!Array.isArray(allUser)) return;
@@ -52,7 +54,7 @@ export default function UserManagement() {
         name: u.name,
         email: u.email,
         status: u.subscription_name ? "active" : "inactive",
-        subscription: u.subscription_name || "Free",
+        subscription: u.subscription_name.charAt(0).toUpperCase() + u.subscription_name.slice(1),
         interviews: Number(u.interview_attempts) || 0,
         joinedDate: new Date(u.created_at).toLocaleDateString("en-IN"),
       }));
@@ -71,7 +73,13 @@ export default function UserManagement() {
         <Loader2 className="animate-spin  w-12 h-12 text-white " />
       </div>
     );
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-Secondary">
+        <Loader2 className="animate-spin  w-12 h-12 text-white " />
+      </div>
+    );
   }
+
 
   const handleEmail = (email) => {
     // Gmail compose link

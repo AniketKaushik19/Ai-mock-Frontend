@@ -9,11 +9,15 @@ export default function AboutPage() {
     return (
         <div className="min-h-screen bg-[#0B1C2D] px-0 py-0 text-white">
             <Hero />
-            <Mission />
-
-            <Values />
-
-            <Team />
+            <section id="mission">
+                <Mission />
+            </section>
+            <section id="values">
+                <Values />
+            </section>
+            <section id="team">
+                <Team />
+            </section>
         </div>
 
     );

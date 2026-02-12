@@ -26,6 +26,8 @@ export default function SubscriptionsPage() {
   const createOrderMutation = useCreateSubscriptionOrder();
   const verifyPaymentMutation = useVerifyPayment();
   const [processingPlanId, setProcessingPlanId] = useState(null);
+  console.log(currentSubscription);
+  
 
 
   useEffect(() => {
@@ -74,7 +76,7 @@ export default function SubscriptionsPage() {
         amount: orderData.order.amount,
         currency: orderData.order.currency,
         name: 'AI Mock Interview',
-        description: `${plan.name} Subscription`,
+        description: `${plan.name.charAt(0).toUpperCase() + plan.name.slice(1)} Subscription`,
         order_id: orderData.order.id,
         handler: async function (response) {
           try {

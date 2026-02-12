@@ -3,9 +3,9 @@ import React from 'react'
 
 const Loading = () => {
   return (
-  
-                <Loader2 className="animate-spin h-5 w-5" />
-              
+
+    <Loader2 className="animate-spin h-5 w-5" />
+
   )
 }
 

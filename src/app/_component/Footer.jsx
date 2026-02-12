@@ -28,7 +28,7 @@ export default function Footer() {
             {/* Social links are external, so standard <a> tags are preferred here */}
             <div className="flex gap-4">
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/company/countryedu-private-limited/"
                 target="_blank"
                 rel="noreferrer"
                 className="hover:text-white transition-colors"
@@ -52,7 +52,7 @@ export default function Footer() {
                 <Facebook className="w-5 h-5" />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/countryedu_/"
                 target="_blank"
                 rel="noreferrer"
                 className="hover:text-white transition-colors"
@@ -68,7 +68,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/#features"
+                  href="#features"
                   className="hover:text-white transition-colors"
                 >
                   Features
@@ -76,7 +76,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/#pricing"
+                  href="#pricing"
                   className="hover:text-white transition-colors"
                 >
                   Pricing
@@ -84,7 +84,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/testimonials"
+                  href="#testimonials"
                   className="hover:text-white transition-colors"
                 >
                   Testimonials
@@ -92,7 +92,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/faq"
+                  href="#faq"
                   className="hover:text-white transition-colors"
                 >
                   FAQ
@@ -115,18 +115,18 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/careers"
+                  href="/about#mission"
                   className="hover:text-white transition-colors"
                 >
-                  Careers
+                  Mission
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/blog"
+                  href="/about#team"
                   className="hover:text-white transition-colors"
                 >
-                  Blog
+                  Team
                 </Link>
               </li>
               <li>
@@ -146,7 +146,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/privacy"
+                  href="/"
                   className="hover:text-white transition-colors"
                 >
                   Privacy Policy
@@ -154,7 +154,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/terms"
+                  href="/"
                   className="hover:text-white transition-colors"
                 >
                   Terms of Service
@@ -170,7 +170,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/gdpr"
+                  href="/"
                   className="hover:text-white transition-colors"
                 >
                   GDPR

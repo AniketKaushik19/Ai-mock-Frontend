@@ -1,18 +1,22 @@
 import { NextResponse } from "next/server";
 import { getProfile } from "@/actions";
 
-const ALWAYS_PUBLIC = ["/signup", "/login","/contact" , "/about" ,"/"];
+const ALWAYS_PUBLIC = ["/signup", "/login","/contact" , "/about" ,"/",];
 
 export async function proxy(req) {
   const { pathname } = req.nextUrl;
+
+  if (pathname.startsWith("/admin")) {
+    return NextResponse.next();
+  }
 
   if (ALWAYS_PUBLIC.includes(pathname)) {
     return NextResponse.next();
   }
 
   const user = await getProfile();
-  const res=await user.user
-  console.log(res.isBoarding);
+  const res=await user?.user || null;
+  
   
 
   if (!res) {

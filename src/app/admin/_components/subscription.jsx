@@ -116,13 +116,14 @@ export default function SubscriptionManagement() {
     });
   };
 
-  const handleSubmit = () => {
-    if (!form.name || !form.price) {
-      toast.error("Name and price are required");
-      return;
-    }
+    const handleSubmit = () => {
+        if (!form.name || !form.price) {
+            toast.error("Name and price are required");
+            return;
+        }
 
-    const featuresString = JSON.stringify(form.features);
+
+        const featuresString = JSON.stringify(form.features);
 
     const planData = {
       name: form.name,
