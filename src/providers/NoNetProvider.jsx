@@ -1,0 +1,27 @@
+'use client'
+
+import OfflinePage from "@/app/_component/NoNetPage";
+import { useEffect, useState } from "react";
+
+export default function NoNetProvider({ children }) {
+  const [isOnline, setIsOnline] = useState(true);
+
+  useEffect(() => {
+    setIsOnline(navigator.onLine);
+
+    const goOnline = () => setIsOnline(true);
+    const goOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
+  }, []);
+
+  if (!isOnline) return <OfflinePage />;
+
+  return <>{children}</>;
+}
