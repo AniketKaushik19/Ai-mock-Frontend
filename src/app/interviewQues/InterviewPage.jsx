@@ -328,7 +328,7 @@ const InterviewPage = ({ interviewId }) => {
             {/* Record / Stop Button */}
             <button
               onClick={saveUserAnswer}
-              className={`flex-1 py-3 rounded-lg font-bold flex justify-center gap-2 ${listening ? "bg-red-500 animate-pulse" : "bg-Button"
+              className={`flex-1 py-3 rounded-lg font-bold p-2 flex justify-center gap-2 ${listening ? "bg-red-500 animate-pulse" : "bg-Button"
                 }`}
             >
               {listening ? (
