@@ -302,7 +302,7 @@ export default function Navbar() {
                     className={`
                       flex items-center 
                       gap-2 sm:gap-3 md:gap-4
-                      text-base sm:text-lg md:text-xl
+                      text-2xl
                       justify-start md:justify-center
                       px-3 py-2 md:px-4 md:py-3
                       rounded-lg
@@ -312,7 +312,7 @@ export default function Navbar() {
                     `}
                      >
                        <item.icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                    <span className="hidden sm:inline">
+                    <span >
                       {item.name}
                     </span>
                   </Link>
