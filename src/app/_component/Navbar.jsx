@@ -80,6 +80,7 @@ export default function Navbar() {
 
   const filteredNavItems = navItems.filter((item) => {
     if (item.name === "Dashboard") return UserLoggedIn;
+    if (item.name === "Resume Analyzer" && AdminLoggedIn) return false;
     return true;
   });
 
@@ -94,6 +95,8 @@ export default function Navbar() {
       }
       return null;
     }
+
+    if (item.name === "Resume Analyzer" && AdminLoggedIn) return null;
 
     if (item.name === "Login" || item.name === "Signup") {
       return !UserLoggedIn && !AdminLoggedIn ? item : null;
