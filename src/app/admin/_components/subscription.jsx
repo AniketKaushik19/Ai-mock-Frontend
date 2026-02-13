@@ -73,11 +73,13 @@ export default function SubscriptionManagement() {
     };
 
     const removeFeature = (index) => {
+        console.log("Removing feature at index:", index);
         setForm((prev) => ({
             ...prev,
             features: prev.features.filter((_, i) => i !== index),
         }));
     };
+
 
     const resetForm = () => {
         setForm({
@@ -222,12 +224,19 @@ export default function SubscriptionManagement() {
                             className="bg-gray-200 text-gray-700 flex items-center gap-1"
                         >
                             {feature}
-                            <X
-                                className="size-3 cursor-pointer"
-                                onClick={() => removeFeature(index)}
-                            />
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    removeFeature(index);
+                                }}
+                            >
+                                <X className="size-3 cursor-pointer" />
+                            </button>
+
                         </Badge>
                     ))}
+
                 </div>
 
                 <Button
@@ -340,21 +349,7 @@ export default function SubscriptionManagement() {
                                                 Toggle
                                             </Button>
 
-                                            <Button
-                                                size="sm"
-                                                variant="ghost"
-                                                className="text-red-600"
-                                                onClick={() => {
-                                                    if (confirm("Delete this plan?")) {
-                                                        deleteMutation(plan.subscription_id, {
-                                                            onSuccess: () =>
-                                                                toast.success("Plan deleted!"),
-                                                        });
-                                                    }
-                                                }}
-                                            >
-                                                <Trash2 className="size-4" />
-                                            </Button>
+
                                         </TableCell>
                                     </TableRow>
                                 );
