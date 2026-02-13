@@ -6,18 +6,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import useAuthStore from "../../../store/authStore";
 import { useUpdateProfile } from "@/hooks/user";
 import Loading from "../_component/Loading";
+import { useRouter } from "next/navigation";
+
 
 export default function ProfilePage() {
-  const { user, login, interviewLimit } = useAuthStore();
+  const { user, login } = useAuthStore();
 
   const [mounted, setMounted] = useState(false);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
+  const router=useRouter()
 
   const { mutateAsync, isPending } = useUpdateProfile();
 
@@ -79,7 +81,7 @@ export default function ProfilePage() {
 
       }
       login(result?.user);
-
+      router.replace('/dashboard')
 
 
     } catch (err) {
@@ -158,31 +160,6 @@ export default function ProfilePage() {
               />
             </div>
           </div>
-
-
-          <div className="border border-white/10 rounded-lg p-4 bg-white/5">
-            <h3 className="text-lg font-semibold mb-3">Interview Limit</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex flex-col items-center p-3 bg-blue-500/10 rounded-lg border border-blue-500/30">
-                <span className="text-sm text-white/70">Monthly Limit</span>
-                <span className="text-2xl font-bold text-blue-400">{interviewLimit?.limit ?? 'N/A'}</span>
-              </div>
-              <div className="flex flex-col items-center p-3 bg-green-500/10 rounded-lg border border-green-500/30">
-                <span className="text-sm text-white/70">Remaining</span>
-                <span className="text-2xl font-bold text-green-400">{interviewLimit?.remaining ?? 'N/A'}</span>
-              </div>
-              <div className="flex flex-col items-center p-3 bg-orange-500/10 rounded-lg border border-orange-500/30">
-                <span className="text-sm text-white/70">Used</span>
-                <span className="text-2xl font-bold text-orange-400">{interviewLimit?.used ?? 'N/A'}</span>
-              </div>
-            </div>
-            {interviewLimit?.isLimitReached && (
-              <div className="mt-3 p-2 bg-red-500/10 border border-red-500/30 rounded text-red-400 text-sm text-center">
-                ⚠️ You have reached your monthly interview limit
-              </div>
-            )}
-          </div>
-
 
           <Button
             onClick={handleSubmit} disabled={isPending}

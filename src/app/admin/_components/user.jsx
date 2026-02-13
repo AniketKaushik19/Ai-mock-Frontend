@@ -41,8 +41,6 @@ export default function UserManagement() {
 
   const { data, isPending } = useGetAllUser();
   const allUser = data?.allUser || [];
-  console.log(allUser);
-
 
   useEffect(() => {
     if (!Array.isArray(allUser)) return;

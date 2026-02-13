@@ -76,9 +76,6 @@ export default function OnboardingPage() {
             login(result.user);
             router.replace("/");
 
-
-
-
         } catch (error) {
             console.log(error)
         }

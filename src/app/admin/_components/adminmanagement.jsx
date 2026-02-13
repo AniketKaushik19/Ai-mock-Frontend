@@ -106,13 +106,13 @@ export default function AdminManagement() {
         }
     };
 
-    // if (isLoading) {
-    //     return (
-    //         <div className="min-h-screen flex items-center justify-center bg-Secondary">
-    //             <Loader2 className="w-12 h-12 animate-spin text-white" />
-    //         </div>
-    //     );
-    // }
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-Secondary">
+                <Loader2 className="w-12 h-12 animate-spin text-white" />
+            </div>
+        );
+    }
 
     return (
         <div className="p-8 bg-Secondary min-h-screen">

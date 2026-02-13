@@ -41,7 +41,6 @@ const LoginPage = () => {
       }
       if (role === "user") {
         const res = await loginUser(data);
-        console.log(res);
 
         if (res.user.id) {
           login(res.user);
@@ -63,7 +62,6 @@ const LoginPage = () => {
     catch (error) {
       console.log(error)
     }
-    console.log("Login attempt:", { userData });
 
   };
 
@@ -182,6 +180,7 @@ const LoginPage = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="w-full py-3.5 bg-Button hover:bg-[#2563EB] text-white font-bold rounded-lg shadow-lg transition-all duration-300 flex items-center justify-center group"
+              disabled={isPending || adminPending}
             >
               {isPending || adminPending ? <Loading /> :
                 <>
