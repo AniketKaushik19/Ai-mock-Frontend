@@ -46,6 +46,13 @@ const teamMembers = [
         image: "/image/riteshimage.jpg",
         bio: "Full Stack Developer with a passion for building scalable web applications.",
     },
+    {
+        name: "Devansh Mishra",
+        role: "Full Stack Developer",
+        initials: "RM",
+        image: "/image/devansh.jpeg",
+        bio: "Full Stack Developer with a passion for building scalable web applications.",
+    },
 ];
 
 
