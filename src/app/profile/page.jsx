@@ -306,7 +306,6 @@ export default function ProfilePage() {
                       </Badge>
                     </motion.div>
                   </div>
-
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     {isEditing ? (
                       <div className="flex gap-2">
